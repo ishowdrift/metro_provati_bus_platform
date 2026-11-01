@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
   const { language } = useLanguage();
 
   return (
-    <footer className="bg-slate-950 text-slate-300 pt-10 pb-12 sm:pt-16 sm:pb-14 border-t-4 border-red-600">
+    <footer className="border-t-2 border-[#C92232] bg-[#211F1F] pt-12 pb-12 text-stone-300 sm:pt-16 sm:pb-14">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
           {/* Brand Info & Transit Mission */}
@@ -36,8 +36,8 @@ export const Footer: React.FC = () => {
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">
               {language === 'bn'
-                ? 'চট্টগ্রাম নগরীর কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরে পরিচালিত আধুনিক ডিজিটাল গণপরিবহন ব্যবস্থা। লাইভ জিপিএস স্যাটেলাইট ট্র্যাকিং, স্বচ্ছ ভাড়া ও কাউন্টার সেবা।'
-                : 'Pioneering digital bus transit across Chattogram corridor from Kaptai Rastar Matha to Katgor with live satellite telemetry and transparent fares.'}
+                ? 'চট্টগ্রাম নগরীর কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরের রুট, ভাড়া, কাউন্টার ও যাত্রীসেবার তথ্য এক জায়গায়।'
+                : 'Route, fare, counter and passenger-service information for the Kaptai Rastar Matha to Katgor corridor in Chattogram.'}
             </p>
             <div className="flex items-center gap-2 text-xs text-red-400 font-semibold">
               <ShieldCheck className="w-4 h-4 text-red-500 flex-shrink-0" />
@@ -192,12 +192,12 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Official Ratification Disclaimer */}
-        <div className="mt-8 p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs text-slate-400 flex items-start gap-3">
+        <div className="mt-8 border-l-2 border-amber-500 bg-white/[0.04] px-4 py-4 text-xs text-stone-400 flex items-start gap-3 sm:px-5">
           <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
           <p className="leading-relaxed">
             {language === 'bn'
-              ? 'ঘোষণা: প্রদর্শিত সময়সূচি, কাউন্টার স্টপ তালিকা এবং ১৫–৬৫ টাকা পরিধির ভাড়া নির্দেশক অনুমোদিত রূপরেখা হিসেবে সাজানো হয়েছে (যেমন: বহদ্দারহাট থেকে কেইপিজেড ৫৫ টাকা, আগ্রাবাদ থেকে কেইপিজেড ৩৫ টাকা)। মেট্রো প্রভাতী বাস মালিক সমিতি ও চট্টগ্রাম মেট্রোপলিটন পরিবহন কর্তৃপক্ষের চূড়ান্ত সমন্বয় অনুসারে তথ্যাদি নিয়মিত হালনাগাদ করা হয়।'
-              : 'Notice: Displayed schedules, stops, and the ৳15–৳65 indicative draft fare range (e.g. Bahaddarhat to KEPZ ৳55, Agrabad to KEPZ ৳35) are updated based on approved corridor guidelines. Fares and stop sequences are regularly audited with operator records.'}
+              ? 'ঘোষণা: ওয়েবসাইটে প্রদর্শিত সময়সূচি, স্টপ ও ভাড়ার তথ্য নির্দেশক খসড়া হিসেবে দেখানো হতে পারে। যাত্রার আগে কাউন্টারে বর্তমান সময়সূচি, চূড়ান্ত ভাড়া ও সেবার প্রাপ্যতা নিশ্চিত করুন।'
+              : 'Notice: Schedules, stops and fare figures displayed on this website may be indicative draft information. Confirm current services, schedules and final fares at a counter before travelling.'}
           </p>
         </div>
 
