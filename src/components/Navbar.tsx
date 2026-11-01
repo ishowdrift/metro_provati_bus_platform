@@ -56,12 +56,12 @@ export const Navbar: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-red-100 shadow-xs transition-all">
+    <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 backdrop-blur-xl transition-colors">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Brand Logo & Wordmark */}
-          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus:ring-2 focus:ring-red-500 rounded-xl p-1">
-            <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl overflow-hidden ring-2 ring-red-500/20 shadow-xs group-hover:scale-105 transition-transform duration-200 bg-white flex items-center justify-center p-0.5">
+          <Link href="/" className="group flex items-center gap-3 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#C92232]">
+            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden bg-white transition-transform duration-200 group-hover:scale-[1.03] sm:h-12 sm:w-12">
               <Image
                 src="/logo.png"
                 alt="মেট্রো প্রভাতী লোগো"
@@ -74,14 +74,14 @@ export const Navbar: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-black text-lg sm:text-xl text-slate-900 tracking-tight">
+                <span className="text-lg font-black tracking-[-0.04em] text-stone-950 sm:text-xl">
                   মেট্রো প্রভাতী
                 </span>
-                <span className="text-[9px] sm:text-[10px] uppercase font-extrabold tracking-wider px-1.5 py-0.5 rounded bg-red-50 text-red-700 border border-red-200">
+                <span className="border-l border-stone-300 pl-2 text-[9px] font-bold uppercase tracking-[0.16em] text-[#C92232] sm:text-[10px]">
                   চট্টগ্রাম
                 </span>
               </div>
-              <p className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-wider hidden sm:block">
+              <p className="hidden text-[9px] font-semibold uppercase tracking-[0.19em] text-stone-500 sm:block sm:text-[10px]">
                 Metro Probati • Transit Intelligence
               </p>
             </div>
@@ -95,10 +95,10 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded-xl text-sm font-bold transition-all duration-150 ${
+                  className={`border-b-2 px-2.5 py-3 text-[12px] font-bold transition-colors duration-150 xl:px-3 ${
                     isActive
-                      ? 'bg-red-50 text-red-600 border border-red-200 shadow-xs'
-                      : 'text-slate-700 hover:text-red-600 hover:bg-red-50/60'
+                      ? 'border-[#C92232] text-[#C92232]'
+                      : 'border-transparent text-stone-600 hover:border-stone-300 hover:text-[#C92232]'
                   }`}
                 >
                   {link.label}
@@ -184,7 +184,7 @@ export const Navbar: React.FC = () => {
             {/* Primary Action Button: Book Ticket */}
             <Link
               href="/tickets"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 active:scale-95 text-white text-xs font-extrabold shadow-md shadow-red-600/25 transition-all focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="flex items-center gap-2 bg-[#C92232] px-4 py-2.5 text-xs font-extrabold text-white transition-colors hover:bg-[#A91D2A] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C92232]"
             >
               <Ticket className="w-3.5 h-3.5 text-white" />
               <span>{isSupervisorOrCounter ? (language === 'bn' ? 'সিট মনিটর' : 'Seat Monitor') : (language === 'bn' ? 'আসন বুকিং' : 'Book Ticket')}</span>
