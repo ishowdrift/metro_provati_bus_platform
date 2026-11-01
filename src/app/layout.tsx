@@ -7,10 +7,9 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { FloatingCallWidget } from '@/components/FloatingCallWidget';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
-import { ServiceAlertsBanner } from '@/components/ServiceAlertsBanner';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://metro-probati-platform.vercel.app'),
+  metadataBase: new URL('https://metroprovatibusplatform.vercel.app'),
   title: {
     default: 'মেট্রো প্রভাতী | Metro Probati — Chattogram Digital Transit Service',
     template: '%s | Metro Probati',
@@ -45,7 +44,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'bn_BD',
     alternateLocale: 'en_US',
-    url: 'https://metro-probati-platform.vercel.app',
+    url: 'https://metroprovatibusplatform.vercel.app',
     title: 'মেট্রো প্রভাতী | Metro Probati — Chattogram Express Transit',
     description:
       'কাপ্তাই রাস্তার মাথা ↔ কাঠগড় করিডোরে পরিচালিত চট্টগ্রামের আধুনিক এক্সপ্রেস বাস। সরাসরি উপগ্রহ জিপিএস, আসন বুকিং ও কাউন্টার সেবা।',
@@ -96,7 +95,6 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-red-600 selection:text-white">
         <LanguageProvider>
           <AuthProvider>
-            <ServiceAlertsBanner />
             <Navbar />
             <main className="flex-grow pb-14 md:pb-0">{children}</main>
             <FloatingCallWidget />
