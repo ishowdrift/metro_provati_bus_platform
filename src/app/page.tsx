@@ -12,7 +12,6 @@ import {
   ArrowRight,
   ArrowUpRight,
   Building2,
-  BusFront,
   Clock3,
   CreditCard,
   HelpCircle,
