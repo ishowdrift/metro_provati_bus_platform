@@ -261,7 +261,7 @@ export default function AdminDashboardPage() {
               কাউন্টার বুথ ও স্টপেজ ডিরেক্টরি
             </h3>
             <p className="text-xs text-slate-500">
-              ১১টি স্টপ ও ৬টি অফিসিয়াল মাস্টার কাউন্টারের ব্যবস্থাপনা
+              ১২টি অনুমোদিত স্টপ ও কাউন্টারের ব্যবস্থাপনা
             </p>
           </div>
 

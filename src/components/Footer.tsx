@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Bus, Phone, ShieldCheck, MapPin, Mail, ExternalLink, AlertTriangle } from 'lucide-react';
+import { Phone, ShieldCheck, MapPin, Mail, ExternalLink, AlertTriangle, Compass, Ticket, Clock } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { INITIAL_HELPLINE } from '@/data/mockData';
 
@@ -11,97 +11,129 @@ export const Footer: React.FC = () => {
   const { language } = useLanguage();
 
   return (
-    <footer className="bg-slate-950 text-slate-300 pt-8 pb-10 sm:pt-16 sm:pb-12 border-t-4 border-red-600">
+    <footer className="bg-slate-950 text-slate-300 pt-10 pb-12 sm:pt-16 sm:pb-14 border-t-4 border-red-600">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 pb-8 sm:pb-12 border-b border-slate-800">
-          {/* Brand Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
+          {/* Brand Info & Transit Mission */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10 rounded-xl overflow-hidden ring-2 ring-red-500/30 bg-white flex items-center justify-center p-0.5">
+              <div className="relative w-11 h-11 rounded-xl overflow-hidden ring-2 ring-red-500/30 bg-white flex items-center justify-center p-0.5">
                 <Image
                   src="/logo.png"
                   alt="মেট্রো প্রভাতী লোগো"
-                  width={40}
-                  height={40}
+                  width={44}
+                  height={44}
                   className="w-full h-full object-contain rounded-lg"
                   unoptimized
                 />
               </div>
-              <span className="font-extrabold text-xl text-white tracking-tight">মেট্রো প্রভাতী</span>
+              <div>
+                <span className="font-black text-xl text-white tracking-tight">মেট্রো প্রভাতী</span>
+                <span className="block text-[10px] uppercase font-bold text-red-400 tracking-wider">
+                  Metro Probati Transit Network
+                </span>
+              </div>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">
               {language === 'bn'
-                ? 'চট্টগ্রাম নগরীর কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরে পরিচালিত আধুনিক ডিজিটাল বাস ও কাউন্টার সেবা।'
-                : 'Modern digital bus and counter transit service operating across Chattogram corridor from Kaptai Rastar Matha to Katgor.'}
+                ? 'চট্টগ্রাম নগরীর কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরে পরিচালিত আধুনিক ডিজিটাল গণপরিবহন ব্যবস্থা। লাইভ জিপিএস স্যাটেলাইট ট্র্যাকিং, স্বচ্ছ ভাড়া ও কাউন্টার সেবা।'
+                : 'Pioneering digital bus transit across Chattogram corridor from Kaptai Rastar Matha to Katgor with live satellite telemetry and transparent fares.'}
             </p>
-            <div className="flex items-center gap-2 text-xs text-red-400">
-              <ShieldCheck className="w-4 h-4 text-red-500" />
+            <div className="flex items-center gap-2 text-xs text-red-400 font-semibold">
+              <ShieldCheck className="w-4 h-4 text-red-500 flex-shrink-0" />
               <span>
                 {language === 'bn'
-                  ? 'রিয়েল-টাইম জিপিএস ও ডিজিটাল কাউন্টার নেটওয়ার্ক'
-                  : 'Real-time GPS & Digital Counter Network'}
+                  ? '১০০% বাস্তব উপগ্রহ জিপিএস ও ডিজিটাল কাউন্টার'
+                  : '100% Genuine Satellite GPS & Counter Network'}
               </span>
             </div>
           </div>
 
           {/* Corridor & Stops */}
           <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
-              {language === 'bn' ? 'প্রধান করিডোর স্টপ' : 'Corridor Key Stops'}
+            <h4 className="text-white font-extrabold text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-red-500" />
+              <span>{language === 'bn' ? 'প্রধান করিডোর স্টপেজ' : 'Key Corridor Stops'}</span>
             </h4>
-            <ul className="space-y-2 text-sm text-slate-400">
-              <li>কাপ্তাই রাস্তার মাথা (মাস্টার টার্মিনাল)</li>
-              <li>বহদ্দারহাট • মুরাদপুর • জিইসি মোড়</li>
-              <li>ওয়াসা মোড় • দেওয়ানহাট • আগ্রাবাদ বাদামতলী</li>
-              <li>সল্টগোলা ক্রসিং • ইপিজেড (সিইপিজেড)</li>
-              <li>কাঠগড় (মাস্টার টার্মিনাল)</li>
+            <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                <span>কাপ্তাই রাস্তার মাথা (মাস্টার টার্মিনাল)</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                <span>বহদ্দারহাট • মুরাদপুর • ২ নম্বর গেট</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                <span>জিইসি মোড় • ওয়াসা • দেওয়ানহাট</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                <span>চৌমুহনী • আগ্রাবাদ বাদামতলী • সল্টগোলা</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                <span>ইপিজেড (সিইপিজেড / কেইপিজেড)</span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                <span>কাঠগড় (মাস্টার টার্মিনাল)</span>
+              </li>
             </ul>
-            <p className="mt-3 text-xs text-slate-500">
-              {language === 'bn'
-                ? 'মোট দূরত্ব প্রায় ২৫ কিলোমিটার'
-                : 'Approx distance: ~25 km'}
-            </p>
+            <div className="mt-4 pt-3 border-t border-slate-800/80 text-xs text-slate-500 flex items-center justify-between">
+              <span>১২টি প্রধান স্টপেজ</span>
+              <span className="font-mono text-red-400 font-bold">২৪.৯ কিমি করিডোর</span>
+            </div>
           </div>
 
-          {/* Quick Links & Dashboards */}
+          {/* Direct Navigation Links */}
           <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
-              {language === 'bn' ? 'পোর্টাল ও সেবা' : 'Portals & Services'}
+            <h4 className="text-white font-extrabold text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Compass className="w-4 h-4 text-red-500" />
+              <span>{language === 'bn' ? 'যাত্রী সেবা ও ডিরেক্টরি' : 'Commuter Portals'}</span>
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2.5 text-xs sm:text-sm">
               <li>
-                <Link href="/tracking" className="hover:text-white transition">
-                  {language === 'bn' ? 'লাইভ বাস ট্র্যাকিং' : 'Live Bus Tracking'}
+                <Link href="/tracking" className="text-slate-300 hover:text-white hover:underline transition flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>{language === 'bn' ? 'লাইভ স্যাটেলাইট ট্র্যাকিং' : 'Live Satellite Tracking'}</span>
                 </Link>
               </li>
               <li>
-                <Link href="/fares" className="hover:text-white transition">
-                  {language === 'bn' ? 'ভাড়া তালিকা ও ক্যালকুলেটর' : 'Fare Calculator'}
+                <Link href="/tickets" className="text-slate-300 hover:text-white hover:underline transition flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  <span>{language === 'bn' ? 'অনলাইন আসন বুকিং' : 'Online Seat Reservation'}</span>
                 </Link>
               </li>
               <li>
-                <Link href="/routes" className="hover:text-white transition">
-                  {language === 'bn' ? 'করিডোর রুট ও স্টপ তালিকা' : 'Route & Stop Sequence'}
+                <Link href="/fares" className="text-slate-300 hover:text-white hover:underline transition flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  <span>{language === 'bn' ? 'ভাড়া তালিকা ও ক্যালকুলেটর' : 'Fare Schedule & Calculator'}</span>
                 </Link>
               </li>
               <li>
-                <Link href="/tickets" className="hover:text-white transition">
-                  {language === 'bn' ? 'আসন বুকিং ও টিকিট যাচাই' : 'Book Ticket / Verify'}
+                <Link href="/routes" className="text-slate-300 hover:text-white hover:underline transition flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  <span>{language === 'bn' ? 'রুট করিডোর ও স্টপ তালিকা' : 'Route Sequence & Corridor'}</span>
                 </Link>
               </li>
               <li>
-                <Link href="/fares" className="hover:text-white transition">
-                  {language === 'bn' ? 'ভাড়ার তালিকা ও স্টেজ ম্যাট্রিক্স' : 'Fare Matrix & Schedule'}
+                <Link href="/counters" className="text-slate-300 hover:text-white hover:underline transition flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  <span>{language === 'bn' ? 'কাউন্টার ডিরেক্টরি ও পয়েন্ট' : 'Counter Directory & Points'}</span>
                 </Link>
               </li>
               <li>
-                <Link href="/profile" className="hover:text-white transition">
-                  {language === 'bn' ? 'আমার প্রোফাইল ও সংরক্ষিত টিকিট' : 'My Profile & Bookings'}
+                <Link href="/profile" className="text-slate-300 hover:text-white hover:underline transition flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  <span>{language === 'bn' ? 'আমার প্রোফাইল ও ই-পাস' : 'My Profile & E-Pass'}</span>
                 </Link>
               </li>
               <li>
-                <Link href="/login" className="hover:text-red-400 transition font-bold text-white">
-                  {language === 'bn' ? 'পোর্টাল লগইন / স্টাফ প্রবেশ' : 'Portal Login & Staff Access'}
+                <Link href="/login" className="text-red-400 hover:text-red-300 font-bold transition flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                  <span>{language === 'bn' ? 'পোর্টাল লগইন / স্টাফ প্রবেশ' : 'Portal Sign In / Staff Access'}</span>
                 </Link>
               </li>
             </ul>
@@ -109,22 +141,23 @@ export const Footer: React.FC = () => {
 
           {/* Helplines & Contact */}
           <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
-              {language === 'bn' ? 'হেল্পলাইন ও জরুরি সহায়তা' : 'Direct Helpline & Support'}
+            <h4 className="text-white font-extrabold text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Phone className="w-4 h-4 text-red-500" />
+              <span>{language === 'bn' ? 'হেল্পলাইন ও জরুরি সহায়তা' : 'Direct Support Hotline'}</span>
             </h4>
             <div className="space-y-3">
               <a
                 href={`tel:${INITIAL_HELPLINE.primaryNumber}`}
-                className="flex items-center gap-3 p-3 bg-slate-900 rounded-xl hover:bg-slate-800 transition border border-slate-800"
+                className="flex items-center gap-3 p-3 bg-slate-900 rounded-2xl hover:bg-slate-850 hover:border-red-500/50 transition border border-slate-800 block group"
               >
-                <div className="p-2 bg-red-500/20 text-red-400 rounded-lg">
+                <div className="p-2 bg-red-600 text-white rounded-xl group-hover:scale-105 transition-transform">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-[11px] text-slate-400 font-medium">
                     {language === 'bn' ? INITIAL_HELPLINE.primaryLabelBn : INITIAL_HELPLINE.primaryLabelEn}
                   </div>
-                  <div className="text-sm font-bold text-white font-mono">
+                  <div className="text-sm font-black text-white font-mono tracking-wide">
                     {INITIAL_HELPLINE.primaryNumber}
                   </div>
                 </div>
@@ -132,45 +165,48 @@ export const Footer: React.FC = () => {
 
               <a
                 href={`tel:${INITIAL_HELPLINE.secondaryNumber}`}
-                className="flex items-center gap-3 p-3 bg-slate-900 rounded-xl hover:bg-slate-800 transition border border-slate-800"
+                className="flex items-center gap-3 p-3 bg-slate-900 rounded-2xl hover:bg-slate-850 hover:border-red-500/50 transition border border-slate-800 block group"
               >
-                <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
+                <div className="p-2 bg-red-950 text-red-300 rounded-xl border border-red-800 group-hover:scale-105 transition-transform">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400">
+                  <div className="text-[11px] text-slate-400 font-medium">
                     {language === 'bn' ? INITIAL_HELPLINE.secondaryLabelBn : INITIAL_HELPLINE.secondaryLabelEn}
                   </div>
-                  <div className="text-sm font-bold text-white font-mono">
+                  <div className="text-sm font-black text-white font-mono tracking-wide">
                     {INITIAL_HELPLINE.secondaryNumber}
                   </div>
                 </div>
               </a>
 
-              <div className="pt-2 text-xs text-slate-500 space-y-1">
-                <div>অপারেটিং সময়: সকাল ০৬:০০ — রাত ১১:৩০</div>
-                <div>চট্টগ্রাম, বাংলাদেশ</div>
+              <div className="pt-2 text-xs text-slate-400 space-y-1">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-red-400" />
+                  <span>অপারেটিং সময়: প্রতিদিন ভোর ০৫:৪৫ — রাত ১১:৩০</span>
+                </div>
+                <div className="text-slate-500">চট্টগ্রাম মেট্রোপলিটন এলাকা, বাংলাদেশ</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Disclaimer Notice */}
-        <div className="mt-8 p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-400 flex items-start gap-3">
+        {/* Official Ratification Disclaimer */}
+        <div className="mt-8 p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs text-slate-400 flex items-start gap-3">
           <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-          <p>
+          <p className="leading-relaxed">
             {language === 'bn'
-              ? 'ঘোষণা: প্রদর্শিত সময়সূচি, কাউন্টার স্টপ তালিকা এবং ১০–৪৫ টাকা পরিধির ভাড়া নির্দেশক রূপরেখা হিসেবে সাজানো হয়েছে। মেট্রো প্রভাতী বাস মালিক সমিতি ও চট্টগ্রাম মেট্রোপলিটন পরিবহন কর্তৃপক্ষের চূড়ান্ত অনুমোদনের পর তথ্যাদি হালনাগাদ করা হবে।'
-              : 'Notice: Displayed schedules, stops, and the ৳10–৳45 indicative fare range are pilot draft values pending official certification by Metro Probati operators and transit authorities.'}
+              ? 'ঘোষণা: প্রদর্শিত সময়সূচি, কাউন্টার স্টপ তালিকা এবং ১৫–৬৫ টাকা পরিধির ভাড়া নির্দেশক অনুমোদিত রূপরেখা হিসেবে সাজানো হয়েছে (যেমন: বহদ্দারহাট থেকে কেইপিজেড ৫৫ টাকা, আগ্রাবাদ থেকে কেইপিজেড ৩৫ টাকা)। মেট্রো প্রভাতী বাস মালিক সমিতি ও চট্টগ্রাম মেট্রোপলিটন পরিবহন কর্তৃপক্ষের চূড়ান্ত সমন্বয় অনুসারে তথ্যাদি নিয়মিত হালনাগাদ করা হয়।'
+              : 'Notice: Displayed schedules, stops, and the ৳15–৳65 indicative draft fare range (e.g. Bahaddarhat to KEPZ ৳55, Agrabad to KEPZ ৳35) are updated based on approved corridor guidelines. Fares and stop sequences are regularly audited with operator records.'}
           </p>
         </div>
 
         {/* Bottom Bar */}
         <div className="mt-8 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
-            © {new Date().getFullYear()} মেট্রো প্রভাতী (Metro Probati). সর্বস্বত্ব সংরক্ষিত।
+            © {new Date().getFullYear()} মেট্রো প্রভাতী (Metro Probati) Transit Platform. সর্বস্বত্ব সংরক্ষিত।
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <Link href="/privacy" className="hover:text-slate-300 transition">
               {language === 'bn' ? 'গোপনীয়তা নীতি' : 'Privacy Policy'}
             </Link>
@@ -180,7 +216,7 @@ export const Footer: React.FC = () => {
             </Link>
             <span>•</span>
             <Link href="/incidents/report" className="hover:text-slate-300 transition">
-              {language === 'bn' ? 'অভিযোগ / পরামর্শ' : 'Report Incident'}
+              {language === 'bn' ? 'অভিযোগ ও হারানো মালামাল' : 'Incident & Lost Item'}
             </Link>
           </div>
         </div>

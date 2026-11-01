@@ -3,18 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --primary-red: #dc2626;
-  --primary-red-dark: #b91c1c;
-  --primary-red-light: #fee2e2;
-  --accent-red: #ef4444;
+  --primary-red: #D52B35;
+  --primary-red-dark: #B91C1C;
+  --primary-red-light: #FEE2E2;
+  --primary-red-subtle: #FEF2F2;
+  --accent-red: #EF4444;
+  --color-charcoal: #282828;
+  --color-warm-white: #F5F3F0;
+  --color-green: #23866C;
+  --color-amber: #E6A23C;
   --font-bangla: 'Hind Siliguri', 'Noto Sans Bengali', 'SolaimanLipi', 'Kalpurush', system-ui, -apple-system, sans-serif;
   --font-latin: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 body {
   font-family: var(--font-bangla), var(--font-latin), system-ui, -apple-system, sans-serif;
-  color: #0f172a;
-  background-color: #ffffff;
+  color: #282828;
+  background-color: #FFFFFF;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeSpeed;
 }

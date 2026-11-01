@@ -36,7 +36,7 @@ export default function ProfilePage() {
             <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full uppercase">
               <span>{user?.role?.replace('_', ' ')}</span>
               {user?.authProvider === 'google' && (
-                <span className="text-[10px] bg-blue-100 text-blue-700 px-1 rounded font-bold lowercase">
+                <span className="text-[10px] bg-red-50 text-red-700 border border-red-200 px-1.5 py-0.5 rounded font-bold lowercase">
                   google
                 </span>
               )}
