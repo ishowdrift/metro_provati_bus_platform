@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, MessageSquare, Clock, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowUpRight, Clock3, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { INITIAL_HELPLINE } from '@/data/mockData';
 
@@ -10,191 +11,194 @@ export default function ContactPage() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !phone) return;
-    setSubmitted(true);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const rawNumber = (INITIAL_HELPLINE.whatsappNumber || INITIAL_HELPLINE.primaryNumber).replace(/\D/g, '');
+    const whatsappNumber = rawNumber.startsWith('0') ? '88' + rawNumber : rawNumber;
+    const text = [
+      language === 'bn' ? 'মেট্রো প্রভাতী যোগাযোগ' : 'Metro Probati enquiry',
+      (language === 'bn' ? 'নাম: ' : 'Name: ') + name.trim(),
+      (language === 'bn' ? 'ফোন: ' : 'Phone: ') + phone.trim(),
+      (language === 'bn' ? 'বার্তা: ' : 'Message: ') + message.trim(),
+    ].join('\n');
+    const url = 'https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(text);
+    const opened = window.open(url, '_blank', 'noopener,noreferrer');
+    if (!opened) window.location.href = url;
   };
 
+  const contactRows = [
+    {
+      label: language === 'bn' ? INITIAL_HELPLINE.primaryLabelBn : INITIAL_HELPLINE.primaryLabelEn,
+      number: INITIAL_HELPLINE.primaryNumber,
+    },
+    {
+      label: language === 'bn' ? INITIAL_HELPLINE.secondaryLabelBn : INITIAL_HELPLINE.secondaryLabelEn,
+      number: INITIAL_HELPLINE.secondaryNumber,
+    },
+  ];
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
-      <div>
-        <span className="text-xs font-bold text-red-600 uppercase tracking-wider">
-          {language === 'bn' ? 'সরাসরি সহায়তা' : 'Customer Support'}
-        </span>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-1">
-          {language === 'bn' ? 'মেট্রো প্রভাতী যোগাযোগ কেন্দ্র' : 'Metro Probati Contact Center'}
-        </h1>
-        <p className="text-sm text-slate-500 mt-1 max-w-2xl">
-          {language === 'bn'
-            ? 'যে কোনো তথ্য, পরামর্শ, হারানো মালামাল অনুসন্ধান বা অভিযোগ জানাতে আমাদের হেল্পলাইনে কল করুন।'
-            : 'For inquiries, complaints, lost item recovery, or guidance, reach out to our dedicated helplines.'}
-        </p>
-      </div>
+    <main className="min-h-[65vh] bg-[#FAF9F7] pb-20">
+      <section className="bg-[#C92232] text-white">
+        <div className="mx-auto max-w-[1240px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+          <div className="mb-4 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.24em] text-white/75">
+            <span className="h-px w-7 bg-white/75" />
+            <span>{language === 'bn' ? 'সরাসরি সহায়তা' : 'Direct assistance'}</span>
+          </div>
+          <h1 className="max-w-3xl text-3xl font-black leading-[1.08] tracking-[-0.045em] sm:text-5xl">
+            {language === 'bn' ? 'কথা বলুন মেট্রো প্রভাতীর সঙ্গে।' : 'Speak with Metro Probati.'}
+          </h1>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/80">
+            {language === 'bn'
+              ? 'রুট, কাউন্টার, ভাড়া বা যাত্রীসেবা সম্পর্কে জানতে প্রকাশিত হেল্পলাইনে কল করুন অথবা WhatsApp-এ বার্তা পাঠান।'
+              : 'For route, counter, fare or passenger-service information, call a listed helpline or send a message through WhatsApp.'}
+          </p>
+        </div>
+      </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Direct Phone Numbers */}
-        <div className="lg:col-span-5 space-y-4">
-          <a
-            href={`tel:${INITIAL_HELPLINE.primaryNumber}`}
-            className="p-6 rounded-3xl bg-white border border-red-100 shadow-sm hover:border-red-300 hover:shadow-md transition flex items-center justify-between group block"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Phone className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-xs font-semibold text-slate-400 uppercase">
-                  {INITIAL_HELPLINE.primaryLabelBn}
-                </span>
-                <div className="text-lg font-bold text-slate-900 font-mono tracking-wide">
-                  {INITIAL_HELPLINE.primaryNumber}
+      <div className="mx-auto grid max-w-[1240px] gap-10 px-4 pt-10 sm:px-6 sm:pt-14 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+        <section>
+          <div className="mb-4 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C92232]">
+            {language === 'bn' ? 'যোগাযোগের নম্বর' : 'Contact numbers'}
+          </div>
+          <div className="divide-y divide-stone-200 border-y border-stone-300 bg-white">
+            {contactRows.map((item) => (
+              <a key={item.number + item.label} href={'tel:' + item.number} className="group flex items-center justify-between gap-4 px-5 py-5 transition-colors hover:bg-[#FFF7F6] sm:px-6">
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400">{item.label}</div>
+                  <div className="mt-1 font-mono text-lg font-black tracking-tight text-stone-900">{item.number}</div>
                 </div>
-              </div>
-            </div>
-            <span className="text-xs font-bold px-3 py-1 bg-red-50 text-red-700 border border-red-200 rounded-xl">
-              কল করুন
-            </span>
-          </a>
-
-          <a
-            href={`tel:${INITIAL_HELPLINE.secondaryNumber}`}
-            className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm hover:border-red-200 hover:shadow-md transition flex items-center justify-between group block"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Phone className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-xs font-semibold text-slate-400 uppercase">
-                  {INITIAL_HELPLINE.secondaryLabelBn}
+                <span className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232]">
+                  <Phone className="h-4 w-4" />
+                  {language === 'bn' ? 'কল করুন' : 'Call'}
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </span>
-                <div className="text-lg font-bold text-slate-900 font-mono tracking-wide">
-                  {INITIAL_HELPLINE.secondaryNumber}
-                </div>
-              </div>
-            </div>
-            <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-slate-800 rounded-xl">
-              কল করুন
-            </span>
-          </a>
+              </a>
+            ))}
+          </div>
 
-          {INITIAL_HELPLINE.showWhatsapp && (
+          {INITIAL_HELPLINE.showWhatsapp && INITIAL_HELPLINE.whatsappNumber && (
             <a
-              href={`https://wa.me/88${INITIAL_HELPLINE.whatsappNumber}`}
+              href={'https://wa.me/88' + INITIAL_HELPLINE.whatsappNumber.replace(/\D/g, '')}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-6 rounded-3xl bg-white hover:bg-red-50 text-red-600 border border-red-200 shadow-md transition flex items-center justify-between block"
+              className="mt-4 flex items-center justify-between gap-4 border border-[#C92232] bg-white px-5 py-5 text-[#C92232] transition-colors hover:bg-[#FFF7F6] sm:px-6"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6" />
-                </div>
+              <div className="flex items-center gap-3">
+                <MessageCircle className="h-5 w-5" />
                 <div>
-                  <span className="text-xs text-red-700 uppercase font-semibold">
-                    হোয়াটসঅ্যাপ সহায়তা
-                  </span>
-                  <div className="text-lg font-bold font-mono text-slate-900">
-                    {INITIAL_HELPLINE.whatsappNumber}
-                  </div>
+                  <div className="text-xs font-extrabold">{language === 'bn' ? 'WhatsApp সহায়তা' : 'WhatsApp support'}</div>
+                  <div className="mt-1 font-mono text-sm font-bold text-stone-800">{INITIAL_HELPLINE.whatsappNumber}</div>
                 </div>
               </div>
-              <span className="text-xs font-bold px-3 py-1 bg-red-600 text-white rounded-xl shadow-xs">
-                চ্যাট
-              </span>
+              <ArrowUpRight className="h-4 w-4" />
             </a>
           )}
 
-          <div className="p-6 rounded-3xl bg-white border border-red-100 space-y-3 text-xs text-slate-600 shadow-xs">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-red-600" />
-              <span>
-                <strong>সেবা সময়:</strong> প্রতিদিন সকাল ০৬:০০ — রাত ১১:৩০
-              </span>
+          <div className="mt-6 border-l-2 border-amber-500 bg-amber-50 px-4 py-4 text-xs leading-6 text-amber-900">
+            {language === 'bn'
+              ? 'কাউন্টার, ফোন নম্বর ও সেবার সময় পরিবর্তিত হতে পারে। যাওয়ার আগে সরাসরি যোগাযোগ করে নিশ্চিত করুন।'
+              : 'Counter details, phone numbers and service hours may change. Contact the team directly before visiting.'}
+          </div>
+
+          <div className="mt-6 grid gap-4 border-t border-stone-300 pt-5 sm:grid-cols-2">
+            <div className="flex items-start gap-3">
+              <MapPin className="mt-0.5 h-4 w-4 text-[#C92232]" />
+              <div className="text-xs leading-6 text-stone-600">
+                <div className="font-extrabold text-stone-900">{language === 'bn' ? 'সেবা এলাকা' : 'Service area'}</div>
+                Chattogram, Bangladesh
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-red-600" />
-              <span>
-                <strong>কেন্দ্রীয় মাস্টার টার্মিনাল:</strong> কাপ্তাই রাস্তার মাথা, চট্টগ্রাম
-              </span>
+            <div className="flex items-start gap-3">
+              <Clock3 className="mt-0.5 h-4 w-4 text-[#C92232]" />
+              <div className="text-xs leading-6 text-stone-600">
+                <div className="font-extrabold text-stone-900">{language === 'bn' ? 'সেবার সময়' : 'Service hours'}</div>
+                {language === 'bn' ? 'ফোন করে নিশ্চিত করুন' : 'Confirm by phone'}
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Right Column: Contact & Feedback Form */}
-        <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-red-100 shadow-sm space-y-6">
-          <div className="pb-4 border-b border-slate-100">
-            <h3 className="font-extrabold text-slate-900 text-lg">
-              আমাদের সরাসরি বার্তা পাঠান
-            </h3>
-            <p className="text-xs text-slate-500">
-              আপনার মতামত, প্রশ্ন বা অভিজ্ঞতার কথা লিখে পাঠান
+        <section className="border border-stone-200 bg-white p-5 sm:p-8">
+          <div className="mb-6 border-b border-stone-200 pb-5">
+            <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C92232]">
+              {language === 'bn' ? 'WhatsApp বার্তা' : 'WhatsApp message'}
+            </div>
+            <h2 className="mt-2 text-xl font-black tracking-tight text-stone-950 sm:text-2xl">
+              {language === 'bn' ? 'আপনার বার্তা লিখুন।' : 'Write your message.'}
+            </h2>
+            <p className="mt-2 text-xs leading-6 text-stone-500">
+              {language === 'bn'
+                ? 'ফর্ম জমা দিলে WhatsApp খুলবে। পাঠানোর আগে সেখানে বার্তাটি দেখে নিতে পারবেন।'
+                : 'Submitting opens WhatsApp with your message prepared. You can review it before sending.'}
             </p>
           </div>
 
-          {submitted ? (
-            <div className="p-6 rounded-2xl bg-red-50 border border-red-200 text-red-900 text-center space-y-2">
-              <CheckCircle2 className="w-8 h-8 text-red-600 mx-auto" />
-              <h4 className="font-bold text-base">আপনার বার্তা গৃহীত হয়েছে!</h4>
-              <p className="text-xs text-red-800">
-                মেট্রো প্রভাতী কাস্টমার কেয়ার টিম দ্রুত আপনার সাথে যোগাযোগ করবে।
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    আপনার নাম *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-red-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    মোবাইল নম্বর *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-red-500"
-                  />
-                </div>
-              </div>
-
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  বার্তা বা অভিযোগের বিবরণ *
+                <label htmlFor="contact-name" className="mb-2 block text-[11px] font-bold text-stone-500">
+                  {language === 'bn' ? 'আপনার নাম' : 'Your name'}
                 </label>
-                <textarea
+                <input
+                  id="contact-name"
+                  type="text"
                   required
-                  rows={4}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  className="h-12 w-full border border-stone-200 bg-[#FAF9F7] px-3 text-sm text-stone-900 outline-none transition focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15"
                 />
               </div>
+              <div>
+                <label htmlFor="contact-phone" className="mb-2 block text-[11px] font-bold text-stone-500">
+                  {language === 'bn' ? 'মোবাইল নম্বর' : 'Mobile number'}
+                </label>
+                <input
+                  id="contact-phone"
+                  type="tel"
+                  required
+                  value={phone}
+                  onChange={(event) => setPhone(event.target.value)}
+                  className="h-12 w-full border border-stone-200 bg-[#FAF9F7] px-3 text-sm text-stone-900 outline-none transition focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15"
+                />
+              </div>
+            </div>
 
-              <button
-                type="submit"
-                className="w-full py-3.5 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold text-sm rounded-xl transition shadow-md"
-              >
-                বার্তা পাঠান
-              </button>
-            </form>
-          )}
-        </div>
+            <div>
+              <label htmlFor="contact-message" className="mb-2 block text-[11px] font-bold text-stone-500">
+                {language === 'bn' ? 'বার্তা বা প্রশ্ন' : 'Message or question'}
+              </label>
+              <textarea
+                id="contact-message"
+                required
+                rows={6}
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
+                className="w-full border border-stone-200 bg-[#FAF9F7] px-3 py-3 text-sm leading-6 text-stone-900 outline-none transition focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15"
+              />
+            </div>
+
+            <button type="submit" className="inline-flex min-h-12 w-full items-center justify-center gap-2 bg-[#C92232] px-5 py-3 text-sm font-extrabold text-white transition-colors hover:bg-[#A91D2A]">
+              <MessageCircle className="h-4 w-4" />
+              {language === 'bn' ? 'WhatsApp-এ বার্তা তৈরি করুন' : 'Prepare WhatsApp message'}
+              <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </form>
+
+          <p className="mt-4 text-[10px] leading-5 text-stone-400">
+            {language === 'bn'
+              ? 'এই ওয়েবসাইটে বার্তা সংরক্ষণ করা হয় না। WhatsApp-এ পাঠানোর আগে আপনার তথ্য যাচাই করুন।'
+              : 'This website does not store the message. Review your details in WhatsApp before sending.'}
+          </p>
+        </section>
       </div>
-    </div>
+      <div className="mx-auto max-w-[1240px] px-4 pt-10 sm:px-6 lg:px-8">
+        <Link href="/incidents/report" className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] hover:text-[#A91D2A]">
+          {language === 'bn' ? 'অভিযোগ বা হারানো মালামাল রিপোর্ট করুন' : 'Report an incident or lost item'}
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </main>
   );
 }
