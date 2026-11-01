@@ -43,8 +43,8 @@ export const Footer: React.FC = () => {
               <ShieldCheck className="w-4 h-4 text-red-500 flex-shrink-0" />
               <span>
                 {language === 'bn'
-                  ? '১০০% বাস্তব উপগ্রহ জিপিএস ও ডিজিটাল কাউন্টার'
-                  : '100% Genuine Satellite GPS & Counter Network'}
+                  ? 'রুট, কাউন্টার ও যাত্রীসেবার তথ্য'
+                  : 'Route, counter and passenger information'}
               </span>
             </div>
           </div>
