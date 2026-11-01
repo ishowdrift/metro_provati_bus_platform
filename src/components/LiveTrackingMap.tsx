@@ -455,8 +455,8 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                   : 'text-slate-700 hover:text-slate-900'
               }`}
             >
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span>{language === 'bn' ? 'জিপিএস রাডার' : 'Live Radar'}</span>
+              <span className="w-2 h-2 bg-stone-500" />
+              <span>{language === 'bn' ? 'জিপিএস রাডার' : 'GPS radar'}</span>
             </button>
 
             <button
@@ -682,7 +682,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                   onClick={() => setViewMode('radar')}
                   className="text-red-600 font-bold hover:underline flex items-center gap-0.5"
                 >
-                  <span>লাইভ রাডার</span>
+                  <span>জিপিএস রাডার</span>
                   <span>→</span>
                 </button>
               </div>
