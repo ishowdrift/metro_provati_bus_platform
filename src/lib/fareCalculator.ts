@@ -66,9 +66,9 @@ export function calculateFare(fromStopId: string, toStopId: string): FareCalcula
     };
   }
 
-  // Specific approved corridor pair overrides
-  // Bahaddarhat (stop-2) <-> EPZ / KEPZ (stop-9): Officially ৳55
-  // Agrabad (stop-7) <-> EPZ / KEPZ (stop-9): Officially ৳35
+  // Pair-specific indicative overrides configured in the current draft matrix.
+  // Bahaddarhat (stop-2) <-> EPZ / KEPZ (stop-9): indicative draft ৳55
+  // Agrabad (stop-7) <-> EPZ / KEPZ (stop-9): indicative draft ৳35
   const SPECIFIC_CORRIDOR_FARES: Record<string, number> = {
     'stop-2_stop-9': 55,
     'stop-9_stop-2': 55,
@@ -120,9 +120,9 @@ export function calculateFare(fromStopId: string, toStopId: string): FareCalcula
     fareBDT: fare,
     isIndicative: true,
     disclaimerBn:
-      'উক্ত ভাড়া মেট্রো প্রভাতীর হালনাগাদকৃত অনুমোদিত খসড়া (১৫–৬৫ টাকা পরিধি; বহদ্দারহাট থেকে কেইপিজেড ৫৫ টাকা, কেইপিজেড থেকে আগ্রাবাদ ৩৫ টাকা)। কাউন্টার ভিত্তিক অনুমোদিত তালিকা প্রকাশের পর এটি চূড়ান্ত হবে।',
+      'এই ভাড়া বর্তমান সিস্টেমের নির্দেশক খসড়া হিসাব (১৫–৬৫ টাকা পরিধি; বহদ্দারহাট থেকে কেইপিজেড ৫৫ টাকা, কেইপিজেড থেকে আগ্রাবাদ ৩৫ টাকা)। এটি চূড়ান্ত অনুমোদিত ভাড়া নয়; যাত্রার আগে কাউন্টারে নিশ্চিত করুন।',
     disclaimerEn:
-      'This fare is an updated indicative estimate (৳15–৳65 range; Bahaddarhat to KEPZ ৳55, KEPZ to Agrabad ৳35) subject to official counter validation by Metro Probati.',
+      'This is an indicative draft estimate (৳15–৳65 range; Bahaddarhat to KEPZ ৳55, KEPZ to Agrabad ৳35), not a final approved fare. Confirm the final amount at a counter before travelling.',
   };
 }
 
