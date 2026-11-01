@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { INITIAL_BOOTHS } from '@/data/mockData';
+import { toBengaliDigits } from '@/lib/fareCalculator';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import {
