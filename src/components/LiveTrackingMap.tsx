@@ -427,12 +427,12 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
             </div>
             <p className="text-[11px] text-slate-500">
               কাঠগড় ↔ কাপ্তাই রাস্তার মাথা •{' '}
-              {lastSync ? `আপডেট: ${toBengaliDigits(lastSync)}` : 'লোড হচ্ছে...'}
+              {lastSync ? `সর্বশেষ যাচাই: ${toBengaliDigits(lastSync)}` : 'তথ্য যাচাই হচ্ছে...'}
             </p>
           </div>
         </div>
 
-        {/* View Mode Switcher: Google Maps / Live Radar / List */}
+        {/* View Mode Switcher: Google Maps / GPS radar / List */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex bg-slate-100 rounded-none p-1 border border-slate-200">
             <button
@@ -456,7 +456,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span>{language === 'bn' ? 'লাইভ রাডার' : 'Live Radar'}</span>
+              <span>{language === 'bn' ? 'জিপিএস রাডার' : 'Live Radar'}</span>
             </button>
 
             <button
