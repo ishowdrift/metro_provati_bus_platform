@@ -411,7 +411,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
       <div className="p-4 sm:p-5 bg-white border-b border-red-100 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-none bg-red-50 text-red-600 flex items-center justify-center shadow-xs border border-red-100">
-            <Navigation className="w-5 h-5 animate-pulse" />
+            <Navigation className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -421,8 +421,8 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                   : 'Metro Probati Corridor Map'}
               </h3>
               <span className="flex h-2.5 w-2.5 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600" />
+                
+                <span className="relative inline-flex h-2.5 w-2.5 bg-stone-400" />
               </span>
             </div>
             <p className="text-[11px] text-slate-500">
@@ -578,8 +578,8 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                 </div>
 
                 <div className="flex items-center gap-1 shrink-0">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                    লাইভ রুট
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 text-stone-700">
+                    রুট প্রিভিউ
                   </span>
                   <button
                     type="button"
@@ -617,7 +617,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                     <span>🚗</span>
                     <span>{language === 'bn' ? '১২টি তালিকাভুক্ত স্টপ' : '12 listed stops'}</span>
                   </span>
-                  <span className="text-emerald-700 font-extrabold">
+                  <span className="text-stone-700 font-extrabold">
                     ভাড়া: ১৫ ৳ — ৬৫ ৳
                   </span>
                 </div>
@@ -628,8 +628,8 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
 
               {/* Genuine Transit Status Badge - Zero fake ratings */}
               <div className="flex items-center justify-between gap-2 mt-2.5 text-xs bg-slate-50 p-2 rounded-none border border-slate-100">
-                <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px]">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <div className="flex items-center gap-1.5 text-stone-700 font-bold text-[11px]">
+                  <span className="w-2 h-2 bg-stone-500" />
                   <span>{language === 'bn' ? 'ডিভাইস থেকে পাওয়া জিপিএস আপডেট' : 'GPS updates received from devices'}</span>
                 </div>
                 <span className="text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5">
@@ -729,7 +729,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
               <span className="w-2.5 h-2.5 rounded-full border border-red-600 bg-white text-[8px] flex items-center justify-center font-bold text-red-600">
                 •
               </span>
-              <span className="text-slate-600">স্টপ পয়েন্ট (১-১১ ক্রমিক)</span>
+              <span className="text-slate-600">স্টপ পয়েন্ট (১-১২ ক্রমিক)</span>
             </div>
           </div>
         </div>
