@@ -141,7 +141,7 @@ export default function TrackingPage() {
             <ShieldCheck className="h-5 w-5 text-[#C92232]" />
             <h3 className="mt-3 text-sm font-extrabold text-stone-900">{language === 'bn' ? 'বাস্তব আপডেট' : 'Device-reported updates'}</h3>
             <p className="mt-2 text-xs leading-6 text-stone-500">
-              {language === 'bn' ? 'কোনো কৃত্রিম বাস চলাচল বা অনুমানভিত্তিক লাইভ অবস্থান দেখানো উচিত নয়।' : 'The map should not show simulated bus movement or guessed live positions.'}
+              {language === 'bn' ? 'শুধু ডিভাইস থেকে পাওয়া স্থানাঙ্ক দেখানো হয়; অনুমানভিত্তিক বাসের অবস্থান দেখানো হয় না।' : 'Only device-reported coordinates are shown; estimated bus positions are not displayed.'}
             </p>
           </div>
           <div className="border-t border-stone-300 pt-4">
