@@ -3,28 +3,41 @@
 @tailwind utilities;
 
 :root {
-  --primary-red: #D52B35;
-  --primary-red-dark: #B91C1C;
-  --primary-red-light: #FEE2E2;
-  --primary-red-subtle: #FEF2F2;
-  --accent-red: #EF4444;
-  --color-charcoal: #282828;
-  --color-warm-white: #F5F3F0;
-  --color-green: #23866C;
-  --color-amber: #E6A23C;
+  --primary-red: #C92232;
+  --primary-red-dark: #A91D2A;
+  --primary-red-light: #FCEBEC;
+  --primary-red-subtle: #FFF7F6;
+  --color-charcoal: #211F1F;
+  --color-warm-white: #FAF9F7;
+  --color-green: #24775F;
+  --color-amber: #B7791F;
   --font-bangla: 'Hind Siliguri', 'Noto Sans Bengali', 'SolaimanLipi', 'Kalpurush', system-ui, -apple-system, sans-serif;
   --font-latin: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
 }
 
 body {
   font-family: var(--font-bangla), var(--font-latin), system-ui, -apple-system, sans-serif;
   color: #282828;
-  background-color: #FFFFFF;
+  background-color: var(--color-warm-white);
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeSpeed;
+  text-rendering: optimizeLegibility;
 }
 
-/* Custom pulse animations for live radar & bus markers */
+::selection {
+  color: #ffffff;
+  background: #C92232;
+}
+
+:focus-visible {
+  outline-color: #C92232;
+}
+
+/* Restrained pulse for real-time status indicators only. */
 @keyframes radar-ping {
   0% {
     transform: scale(0.95);
@@ -44,23 +57,23 @@ body {
   animation: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-/* Custom scrollbars */
+/* Quiet, low-contrast scrollbars. */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #F3F1EE;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: #D4D0CB;
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #A8A29E;
 }
 
-/* Custom Leaflet Map styling */
+/* Leaflet map styling. */
 .leaflet-container {
   font-family: var(--font-bangla), var(--font-latin), system-ui, sans-serif !important;
   width: 100%;
@@ -74,11 +87,11 @@ body {
 }
 
 .leaflet-popup-content-wrapper {
-  border-radius: 1rem !important;
+  border-radius: 0 !important;
   padding: 0 !important;
   overflow: hidden !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
-  border: 1px solid #fee2e2 !important;
+  box-shadow: 0 12px 28px -12px rgba(28, 25, 23, 0.28) !important;
+  border: 1px solid #E7E5E4 !important;
 }
 
 .leaflet-popup-content {
@@ -88,40 +101,17 @@ body {
 
 .leaflet-popup-tip {
   background: #ffffff !important;
-  border: 1px solid #fee2e2 !important;
+  border: 1px solid #E7E5E4 !important;
 }
 
-/* Smooth lightweight entrance logo zoom-out animation */
-@keyframes logo-zoom-out {
-  0% {
-    transform: scale(1.22);
-    opacity: 0.85;
+/* Honour reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.animate-logo-zoom-out {
-  animation: logo-zoom-out 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
-  transform: translateZ(0);
-}
-
-@keyframes entrance-buttons-fade {
-  0% {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-entrance-buttons {
-  animation: entrance-buttons-fade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s backwards;
-  will-change: transform, opacity;
-  transform: translateZ(0);
 }
