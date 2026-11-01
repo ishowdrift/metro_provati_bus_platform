@@ -42,7 +42,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
   const [buses, setBuses] = useState<Bus[]>([]);
   const [activeBus, setActiveBus] = useState<Bus | null>(null);
   // View mode: 'google' (Official Google Maps embed route), 'radar' (interactive live telemetry), 'list'
-  const [viewMode, setViewMode] = useState<'google' | 'radar' | 'list'>('google');
+  const [viewMode, setViewMode] = useState<'google' | 'radar' | 'list'>('radar');
   const [loading, setLoading] = useState(true);
   const [lastSync, setLastSync] = useState<string>('');
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -285,6 +285,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
     busesLayer.clearLayers();
 
     buses.forEach((bus) => {
+      if (bus.freshness === 'unavailable' || bus.status === 'offline' || bus.status === 'maintenance') return;
       const isSelected = activeBus?.id === bus.id;
       const isLive =
         bus.isLiveSharing !== false &&
@@ -405,11 +406,11 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
   ).length;
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-red-100 overflow-hidden flex flex-col">
+    <div className="overflow-hidden border border-stone-200 bg-white flex flex-col">
       {/* 1. Header Bar with Mode Toggles */}
       <div className="p-4 sm:p-5 bg-white border-b border-red-100 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center shadow-xs border border-red-100">
+          <div className="w-10 h-10 rounded-none bg-red-50 text-red-600 flex items-center justify-center shadow-xs border border-red-100">
             <Navigation className="w-5 h-5 animate-pulse" />
           </div>
           <div>
@@ -433,22 +434,22 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
 
         {/* View Mode Switcher: Google Maps / Live Radar / List */}
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="flex bg-slate-100 rounded-xl p-1 border border-slate-200">
+          <div className="flex bg-slate-100 rounded-none p-1 border border-slate-200">
             <button
               onClick={() => setViewMode('google')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
+              className={`px-3 py-1.5 rounded-none text-xs font-bold flex items-center gap-1.5 transition ${
                 viewMode === 'google'
                   ? 'bg-red-600 text-white shadow-xs'
                   : 'text-slate-700 hover:text-slate-900'
               }`}
             >
               <span>🗺️</span>
-              <span>{language === 'bn' ? 'গুগল ম্যাপস' : 'Google Maps'}</span>
+              <span>{language === 'bn' ? 'রুট প্রিভিউ' : 'Route preview'}</span>
             </button>
 
             <button
               onClick={() => setViewMode('radar')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
+              className={`px-3 py-1.5 rounded-none text-xs font-bold flex items-center gap-1.5 transition ${
                 viewMode === 'radar'
                   ? 'bg-red-600 text-white shadow-xs'
                   : 'text-slate-700 hover:text-slate-900'
@@ -460,7 +461,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
 
             <button
               onClick={() => setViewMode('list')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition ${
+              className={`px-3 py-1.5 rounded-none text-xs font-bold flex items-center gap-1.5 transition ${
                 viewMode === 'list'
                   ? 'bg-slate-900 text-white shadow-xs'
                   : 'text-slate-700 hover:text-slate-900'
@@ -475,7 +476,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
             onClick={fetchBuses}
             disabled={loading}
             title="রিফ্রেশ"
-            className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl border border-slate-200 transition"
+            className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-none border border-slate-200 transition"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
@@ -524,22 +525,22 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                 e.stopPropagation();
                 setIsCardMinimized(false);
               }}
-              className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 max-w-[340px] w-[calc(100%-1.5rem)] sm:w-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/90 px-3 py-2 cursor-pointer hover:bg-white active:scale-98 transition-all duration-200 flex items-center justify-between gap-2.5 group select-none animate-in fade-in slide-in-from-top-2"
+              className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 max-w-[340px] w-[calc(100%-1.5rem)] sm:w-auto bg-white/95 backdrop-blur-md rounded-none shadow-xl border border-slate-200/90 px-3 py-2 cursor-pointer hover:bg-white active:scale-98 transition-all duration-200 flex items-center justify-between gap-2.5 group select-none animate-in fade-in slide-in-from-top-2"
               title={language === 'bn' ? 'রুট বিবরণ দেখতে ট্যাপ করুন' : 'Tap to expand route details'}
             >
               <div className="flex items-center gap-2 truncate">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                 <div className="truncate text-left">
                   <div className="font-extrabold text-slate-900 text-xs sm:text-sm flex items-center gap-1.5 truncate">
-                    <span>{language === 'bn' ? 'মেট্রো প্রভাতী এক্সপ্রেস' : 'Metro Probati Express'}</span>
-                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 shrink-0">
-                      {language === 'bn' ? 'লাইভ রুট' : 'Live'}
+                    <span>{language === 'bn' ? 'মেট্রো প্রভাতী করিডোর' : 'Metro Probati corridor'}</span>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 bg-stone-100 text-stone-700 shrink-0">
+                      {language === 'bn' ? 'রুট প্রিভিউ' : 'Route preview'}
                     </span>
                   </div>
                   <div className="text-[10px] sm:text-[11px] font-bold text-red-700 flex items-center gap-1 truncate">
-                    <span>৫২ মি. • ২৪.৯ কিমি</span>
+                    <span>{language === 'bn' ? '১২টি তালিকাভুক্ত স্টপ' : '12 listed stops'}</span>
                     <span className="text-slate-300">•</span>
-                    <span className="text-emerald-700">১৫–৬৫ ৳</span>
+                    <span className="text-stone-600">{language === 'bn' ? 'খসড়া ভাড়া' : 'Draft fares'}</span>
                   </div>
                 </div>
               </div>
@@ -550,7 +551,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                   e.stopPropagation();
                   setIsCardMinimized(false);
                 }}
-                className="px-2.5 py-1 rounded-xl bg-red-50 hover:bg-red-100 group-hover:bg-red-100 text-red-600 border border-red-200 text-[10px] sm:text-[11px] font-bold flex items-center gap-1 shrink-0 transition"
+                className="px-2.5 py-1 rounded-none bg-red-50 hover:bg-red-100 group-hover:bg-red-100 text-red-600 border border-red-200 text-[10px] sm:text-[11px] font-bold flex items-center gap-1 shrink-0 transition"
               >
                 <span>{language === 'bn' ? 'বিস্তারিত' : 'Details'}</span>
                 <ChevronDown className="w-3.5 h-3.5" />
@@ -560,7 +561,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
             /* FULL DETAILED CARD */
             <div
               onClick={(e) => e.stopPropagation()}
-              className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 max-w-[340px] w-[calc(100%-1.5rem)] sm:w-[340px] bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200 p-3.5 sm:p-4 select-none transition-all duration-200 animate-in zoom-in-95"
+              className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 max-w-[340px] w-[calc(100%-1.5rem)] sm:w-[340px] bg-white/95 backdrop-blur-md rounded-none shadow-2xl border border-slate-200 p-3.5 sm:p-4 select-none transition-all duration-200 animate-in zoom-in-95"
             >
               <div className="flex items-start justify-between gap-2">
                 <div
@@ -586,7 +587,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                       e.stopPropagation();
                       setIsCardMinimized(true);
                     }}
-                    className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-600 border border-slate-200 transition"
+                    className="p-1 rounded-none bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-600 border border-slate-200 transition"
                     title={language === 'bn' ? 'ম্যাপ দেখতে কার্ড ছোট করুন' : 'Minimize to view map'}
                     aria-label="Minimize"
                   >
@@ -602,7 +603,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                   e.stopPropagation();
                   setIsCardMinimized(true);
                 }}
-                className="w-full mt-2 py-1 px-2 rounded-lg bg-slate-100/90 hover:bg-slate-200 active:scale-98 text-slate-600 text-[10px] sm:text-[11px] font-semibold flex items-center justify-center gap-1.5 transition border border-slate-200"
+                className="w-full mt-2 py-1 px-2 rounded-none bg-slate-100/90 hover:bg-slate-200 active:scale-98 text-slate-600 text-[10px] sm:text-[11px] font-semibold flex items-center justify-center gap-1.5 transition border border-slate-200"
               >
                 <Maximize2 className="w-3 h-3 text-slate-500" />
                 <span>{language === 'bn' ? 'ম্যাপ বড় করে দেখতে ট্যাপ করুন (কার্ড ছোট করুন)' : 'Tap map or here to minimize card'}</span>
@@ -610,29 +611,29 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
               </button>
 
               {/* Route Stats from verified corridor profile */}
-              <div className="mt-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1 text-xs">
+              <div className="mt-2.5 p-2.5 rounded-none bg-slate-50 border border-slate-100 space-y-1 text-xs">
                 <div className="flex items-center justify-between font-bold text-slate-800">
                   <span className="flex items-center gap-1 text-red-700">
                     <span>🚗</span>
-                    <span>৫২ মিনিট • ২৪.৯ কিমি</span>
+                    <span>{language === 'bn' ? '১২টি তালিকাভুক্ত স্টপ' : '12 listed stops'}</span>
                   </span>
                   <span className="text-emerald-700 font-extrabold">
                     ভাড়া: ১৫ ৳ — ৬৫ ৳
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 leading-tight">
-                  ভায়া চট্টগ্রাম এলিভেটেড এক্সপ্রেসওয়ে / শহীদ ওয়াসিম আকরাম ফ্লাইওভার (দ্রুততম এক্সপ্রেস রুট)
+                  {language === 'bn' ? 'গুগল ম্যাপস রুট নির্দেশনা দেখায়। যাত্রার সময় ও যানজট পরিবর্তিত হতে পারে।' : 'Google Maps provides route directions. Travel time and traffic may vary.'}
                 </p>
               </div>
 
               {/* Genuine Transit Status Badge - Zero fake ratings */}
-              <div className="flex items-center justify-between gap-2 mt-2.5 text-xs bg-slate-50 p-2 rounded-xl border border-slate-100">
+              <div className="flex items-center justify-between gap-2 mt-2.5 text-xs bg-slate-50 p-2 rounded-none border border-slate-100">
                 <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px]">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>{language === 'bn' ? 'সরাসরি উপগ্রহ জিপিএস ট্র্যাকিং' : 'Real Satellite Telemetry'}</span>
+                  <span>{language === 'bn' ? 'ডিভাইস থেকে পাওয়া জিপিএস আপডেট' : 'GPS updates received from devices'}</span>
                 </div>
-                <span className="text-[10px] font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
-                  {language === 'bn' ? '৫% শিক্ষার্থী ছাড়' : '5% Student Discount'}
+                <span className="text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5">
+                  {language === 'bn' ? 'ভাড়া নির্দেশক খসড়া' : 'Indicative draft fare'}
                 </span>
               </div>
 
@@ -641,7 +642,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                   href={googleMapsExternalLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition shadow-xs"
+                  className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-none text-xs font-bold transition shadow-xs"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Open in Maps</span>
@@ -650,7 +651,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                 <button
                   onClick={handleCopyLink}
                   title="রুট লিংক কপি করুন"
-                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition flex items-center justify-center"
+                  className="p-2 rounded-none bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition flex items-center justify-center"
                 >
                   {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                 </button>
@@ -660,22 +661,22 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   title="Directions"
-                  className="p-2 rounded-xl bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 transition"
+                  className="p-2 rounded-none bg-red-50 text-red-700 hover:bg-red-100 border border-red-200 transition"
                 >
                   <Navigation className="w-4 h-4" />
                 </a>
               </div>
 
               {copied && (
-                <div className="mt-1.5 text-[11px] text-center font-bold text-emerald-700 bg-emerald-50 py-1 rounded-lg">
+                <div className="mt-1.5 text-[11px] text-center font-bold text-emerald-700 bg-emerald-50 py-1 rounded-none">
                   ✓ গুগল ম্যাপস রুট লিংক কপি করা হয়েছে!
                 </div>
               )}
 
               <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                <span className="flex items-center gap-1 font-semibold text-emerald-700">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  রুটে {toBengaliDigits(liveCount)}টি বাস চলছে
+                <span className="flex items-center gap-1 font-semibold text-stone-600">
+                  <span className="w-2 h-2 bg-[#24775F]" />
+                  {language === 'bn' ? 'এখন লাইভ জিপিএস: ' : 'Live GPS now: '}{toBengaliDigits(liveCount)}
                 </span>
                 <button
                   onClick={() => setViewMode('radar')}
@@ -694,7 +695,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
           <div ref={mapContainerRef} className="w-full h-full z-10" />
 
           {/* Quick Corridor & Locate Controls */}
-          <div className="absolute right-4 bottom-14 z-20 flex flex-col bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+          <div className="absolute right-4 bottom-14 z-20 flex flex-col bg-white rounded-none shadow-lg border border-slate-200 overflow-hidden">
             <button
               onClick={handleLocateMe}
               title="আমার অবস্থান"
@@ -715,7 +716,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
           </div>
 
           {/* Legend */}
-          <div className="absolute bottom-3 left-3 z-20 bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-3 text-[11px] text-slate-700 shadow-xl space-y-1.5">
+          <div className="absolute bottom-3 left-3 z-20 bg-white/95 backdrop-blur-md border border-slate-200 rounded-none p-3 text-[11px] text-slate-700 shadow-xl space-y-1.5">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
               <span className="font-bold text-slate-900">🔴 লাইভ বাস (সক্রিয় জিপিএস)</span>
@@ -735,7 +736,11 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
       ) : (
         /* LIST VIEW */
         <div className="p-4 sm:p-6 divide-y divide-slate-100 max-h-[520px] overflow-y-auto">
-          {buses.map((bus) => {
+          {buses.filter((bus) => bus.freshness !== 'unavailable').length === 0 ? (
+            <div className="px-5 py-12 text-center text-xs leading-6 text-stone-500">
+              {language === 'bn' ? 'এখনো কোনো বাসের জিপিএস আপডেট পাওয়া যায়নি।' : 'No bus GPS updates have been received yet.'}
+            </div>
+          ) : buses.filter((bus) => bus.freshness !== 'unavailable').map((bus) => {
             const isLive =
               bus.isLiveSharing !== false &&
               bus.freshness === 'active' &&
@@ -745,12 +750,12 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
               <div
                 key={bus.id}
                 onClick={() => handleBusClick(bus)}
-                className="py-4 first:pt-0 last:pb-0 cursor-pointer rounded-2xl p-3.5 hover:bg-slate-50 transition"
+                className="py-4 first:pt-0 last:pb-0 cursor-pointer rounded-none p-3.5 hover:bg-slate-50 transition"
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`p-2.5 rounded-xl ${
+                      className={`p-2.5 rounded-none ${
                         isLive ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-800'
                       }`}
                     >
@@ -821,7 +826,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
             {activeBus.supervisorPhone && (
               <a
                 href={`tel:${activeBus.supervisorPhone}`}
-                className="inline-flex items-center gap-1.5 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-none text-xs font-bold transition shadow-xs"
               >
                 <Phone className="w-3.5 h-3.5" />
                 <span>সুপারভাইজার কল</span>
@@ -829,7 +834,7 @@ export const LiveTrackingMap: React.FC<LiveTrackingMapProps> = ({
             )}
             <button
               onClick={() => setActiveBus(null)}
-              className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition"
+              className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-none text-xs font-bold transition"
             >
               বন্ধ করুন
             </button>
