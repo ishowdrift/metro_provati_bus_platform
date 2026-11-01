@@ -17,13 +17,13 @@ export const Footer: React.FC = () => {
           {/* Brand Info & Transit Mission */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="relative w-11 h-11 rounded-xl overflow-hidden ring-2 ring-red-500/30 bg-white flex items-center justify-center p-0.5">
+              <div className="relative w-11 h-11 rounded-none overflow-hidden ring-2 ring-red-500/30 bg-white flex items-center justify-center p-0.5">
                 <Image
                   src="/logo.png"
                   alt="মেট্রো প্রভাতী লোগো"
                   width={44}
                   height={44}
-                  className="w-full h-full object-contain rounded-lg"
+                  className="w-full h-full object-contain rounded-none"
                   unoptimized
                 />
               </div>
@@ -148,9 +148,9 @@ export const Footer: React.FC = () => {
             <div className="space-y-3">
               <a
                 href={`tel:${INITIAL_HELPLINE.primaryNumber}`}
-                className="flex items-center gap-3 p-3 bg-slate-900 rounded-2xl hover:bg-slate-850 hover:border-red-500/50 transition border border-slate-800 block group"
+                className="flex items-center gap-3 p-3 bg-slate-900 rounded-none hover:bg-slate-850 hover:border-red-500/50 transition border border-slate-800 block group"
               >
-                <div className="p-2 bg-red-600 text-white rounded-xl group-hover:scale-105 transition-transform">
+                <div className="p-2 bg-red-600 text-white rounded-none group-hover:scale-105 transition-transform">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
@@ -165,9 +165,9 @@ export const Footer: React.FC = () => {
 
               <a
                 href={`tel:${INITIAL_HELPLINE.secondaryNumber}`}
-                className="flex items-center gap-3 p-3 bg-slate-900 rounded-2xl hover:bg-slate-850 hover:border-red-500/50 transition border border-slate-800 block group"
+                className="flex items-center gap-3 p-3 bg-slate-900 rounded-none hover:bg-slate-850 hover:border-red-500/50 transition border border-slate-800 block group"
               >
-                <div className="p-2 bg-red-950 text-red-300 rounded-xl border border-red-800 group-hover:scale-105 transition-transform">
+                <div className="p-2 bg-red-950 text-red-300 rounded-none border border-red-800 group-hover:scale-105 transition-transform">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
