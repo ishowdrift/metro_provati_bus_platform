@@ -112,7 +112,7 @@ export default function HomePage() {
     {
       qBn: 'বাসের জিপিএস অবস্থান কখন দেখা যাবে?',
       qEn: 'When will a bus GPS location appear?',
-      aBn: 'সুপারভাইজারের ডিভাইস থেকে জিপিএস আপডেট সার্ভারে পৌঁছালে অবস্থান দেখা যাবে। আপডেট না থাকলে সিস্টেমের উচিত সেটিকে লাইভ হিসেবে না দেখানো।',
+      aBn: 'সুপারভাইজারের ডিভাইস থেকে জিপিএস আপডেট পাওয়া গেলে অবস্থান দেখা যাবে। নতুন আপডেট না থাকলে বাসকে লাইভ হিসেবে দেখানো হবে না।',
       aEn: 'A location can appear after a supervisor device sends a GPS update to the service. Without a fresh update, the system should not present a bus as live.',
     },
     {
@@ -192,7 +192,7 @@ export default function HomePage() {
             <p className="mt-5 max-w-lg text-sm leading-7 text-white/65">
               {language === 'bn'
                 ? 'জিপিএস তথ্য পাওয়া গেলে ট্র্যাকিং পেজে অবস্থান ও আপডেটের সময় দেখুন। কোনো নতুন তথ্য না থাকলে সেটিকে লাইভ হিসেবে ধরে নেবেন না।'
-                : 'When GPS data is received, the tracking page shows the location and update time. When no fresh data is available, do not assume a bus is live.'}
+                : 'When GPS data is received, the tracking page shows the location and update time. When no fresh update is available, the bus will not be shown as live.'}
             </p>
             <Link
               href="/tracking"
