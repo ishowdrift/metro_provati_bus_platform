@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -93,10 +94,10 @@ export const BusCarousel: React.FC = () => {
             <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400">
               {language === 'bn' ? 'বাসের ছবি' : 'Fleet gallery'}
             </span>
-            <a href="/routes" className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] transition-colors hover:text-[#A91D2A]">
+            <Link href="/routes" className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] transition-colors hover:text-[#A91D2A]">
               {language === 'bn' ? 'রুট দেখুন' : 'Explore route'}
               <ArrowUpRight className="h-4 w-4" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
