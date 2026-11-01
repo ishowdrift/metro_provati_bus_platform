@@ -43,10 +43,10 @@ export const FareCalculatorCard: React.FC<FareCalculatorCardProps> = ({
   };
 
   const fieldClass =
-    'h-12 w-full min-w-0 border border-stone-200 bg-[#FAF9F7] px-3 text-sm font-bold text-stone-900 outline-none transition focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15';
+    'h-12 w-full min-w-0 border border-stone-300 bg-[#FAF9F7] px-3 text-sm font-bold text-stone-900 outline-none transition focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15';
 
   return (
-    <div className="border border-stone-200 bg-white p-5 shadow-xs transition-shadow duration-300 hover:shadow-transit sm:p-7">
+    <div className="border border-stone-300 bg-white p-5 shadow-xs transition-shadow duration-300 hover:shadow-transit sm:p-7">
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-stone-200 pb-5">
         <div>
           <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C92232]">

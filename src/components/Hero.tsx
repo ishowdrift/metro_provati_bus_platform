@@ -79,12 +79,14 @@ export const Hero: React.FC = () => {
 
         <div className="relative mx-auto grid max-w-[1440px] grid-cols-1 items-stretch lg:grid-cols-[0.92fr_1.08fr]">
           <div className="flex flex-col justify-center px-5 pb-12 pt-14 sm:px-10 sm:pb-16 sm:pt-20 lg:px-16 xl:px-24 lg:py-24">
-            <div className="mb-7 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.28em] text-white/80 sm:text-xs">
+            <div className="mb-6 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-white/80 sm:text-xs">
               <span className="h-px w-8 bg-white/70" />
-              <span>{language === 'bn' ? 'চট্টগ্রামের নগর পরিবহন' : 'Chattogram urban transit'}</span>
+              <span>LINE MP-01</span>
+              <span className="text-white/40">/</span>
+              <span>{language === 'bn' ? 'চট্টগ্রাম আর্টেরিয়াল করিডোর' : 'Chattogram Arterial Transit'}</span>
             </div>
 
-            <h1 className="max-w-[720px] text-[clamp(2.55rem,6vw,5.6rem)] font-black leading-[1.06] tracking-[-0.045em] text-white">
+            <h1 className="max-w-[720px] text-[clamp(2.55rem,6vw,5.6rem)] font-black leading-[1.05] tracking-[-0.045em] text-white">
               {language === 'bn' ? (
                 <>
                   চট্টগ্রামের পথে,
@@ -100,13 +102,28 @@ export const Hero: React.FC = () => {
               )}
             </h1>
 
-            <p className="mt-7 max-w-[470px] text-sm font-medium leading-7 text-white/85 sm:text-base sm:leading-8">
+            <p className="mt-6 max-w-[480px] text-sm font-medium leading-7 text-white/85 sm:text-base sm:leading-8">
               {language === 'bn'
                 ? 'কাপ্তাই রাস্তার মাথা থেকে কাঠগড়—আপনার প্রতিদিনের যাত্রার জন্য রুট, ভাড়া ও প্রয়োজনীয় তথ্য এক জায়গায়।'
                 : 'From Kaptai Rastar Matha to Katgor. Find route information, indicative fares and the services you need for your everyday journey.'}
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            {/* Swiss Transport Linear Route Strip */}
+            <div className="mt-8 flex max-w-[540px] items-center gap-2 border-y border-white/20 py-2.5 font-mono text-[10px] uppercase tracking-wider text-white/90">
+              <span className="flex items-center gap-1.5 font-bold">
+                <span className="h-1.5 w-1.5 bg-white" />
+                {language === 'bn' ? 'কাপ্তাই মাথা' : 'Kaptai Matha'}
+              </span>
+              <span className="h-px flex-1 bg-white/35" />
+              <span className="text-[9px] text-white/60">24.9 KM CORRIDOR</span>
+              <span className="h-px flex-1 bg-white/35" />
+              <span className="flex items-center gap-1.5 font-bold">
+                <span className="h-1.5 w-1.5 bg-white" />
+                {language === 'bn' ? 'কাঠগড়' : 'Katgor'}
+              </span>
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href="/tickets"
                 className="group inline-flex min-h-12 items-center justify-center gap-3 bg-white px-6 py-3 text-sm font-extrabold text-[#A91D2A] transition-all duration-200 hover:bg-[#FFF4F4] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
@@ -126,21 +143,21 @@ export const Hero: React.FC = () => {
 
             <div className="mt-12 grid max-w-[520px] grid-cols-3 border-t border-white/25 pt-5">
               <div className="pr-3">
-                <div className="text-2xl font-black tracking-tight sm:text-3xl">{toBengaliDigits(12)}</div>
+                <div className="font-mono text-2xl font-black tracking-tight sm:text-3xl">{toBengaliDigits(12)}</div>
                 <div className="mt-1 text-[10px] font-semibold leading-4 text-white/70 sm:text-xs">
                   {language === 'bn' ? 'তালিকাভুক্ত স্টপ' : 'Listed stops'}
                 </div>
               </div>
               <div className="border-l border-white/25 px-4">
-                <div className="text-2xl font-black tracking-tight sm:text-3xl">01</div>
+                <div className="font-mono text-2xl font-black tracking-tight sm:text-3xl">01</div>
                 <div className="mt-1 text-[10px] font-semibold leading-4 text-white/70 sm:text-xs">
                   {language === 'bn' ? 'প্রধান করিডোর' : 'Main corridor'}
                 </div>
               </div>
               <div className="border-l border-white/25 pl-4">
-                <div className="text-2xl font-black tracking-tight sm:text-3xl">৳</div>
+                <div className="font-mono text-2xl font-black tracking-tight sm:text-3xl">৳</div>
                 <div className="mt-1 text-[10px] font-semibold leading-4 text-white/70 sm:text-xs">
-                  {language === 'bn' ? 'ভাড়া আগে জানুন' : 'Know the fare first'}
+                  {language === 'bn' ? 'স্বচ্ছ খসড়া ভাড়া' : 'Clear draft fare'}
                 </div>
               </div>
             </div>
@@ -161,8 +178,8 @@ export const Hero: React.FC = () => {
               <span>{language === 'bn' ? 'মেট্রো প্রভাতী' : 'Metro Probati'}</span>
             </div>
             <div className="absolute bottom-7 left-5 right-5 text-white sm:bottom-10 sm:left-8 sm:right-8">
-              <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-white/75">
-                {language === 'bn' ? 'আমাদের করিডোর' : 'The corridor'}
+              <div className="mb-2 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-white/75">
+                {language === 'bn' ? 'করিডোর এমপি-০১' : 'CORRIDOR MP-01'}
               </div>
               <div className="flex flex-wrap items-end justify-between gap-3 border-t border-white/40 pt-4">
                 <div>
@@ -193,11 +210,12 @@ export const Hero: React.FC = () => {
         </div>
       </section>
 
+      {/* Transit Departure & Fare Calculation Console */}
       <section className="relative z-10 mx-auto -mt-1 max-w-7xl px-4 pt-7 sm:px-6 sm:pt-10 lg:px-8">
-        <div className="border border-stone-200 bg-white shadow-transit-lg transition-all duration-300">
+        <div className="border border-stone-300 bg-white shadow-transit-lg transition-all duration-300">
           <div className="grid grid-cols-1 gap-0 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="border-b border-stone-200 px-5 py-5 sm:px-7 lg:border-b-0 lg:border-r">
-              <div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#C92232]">
+              <div className="flex items-center gap-2 font-mono text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#C92232]">
                 <span className="h-px w-5 bg-[#C92232]" />
                 <span>{language === 'bn' ? 'যাত্রা পরিকল্পনা' : 'Journey planner'}</span>
               </div>
@@ -289,7 +307,7 @@ export const Hero: React.FC = () => {
                     </span>
                   </div>
                   <div className="text-right">
-                    <span className="mr-2 text-[10px] font-semibold uppercase tracking-wider text-stone-400">
+                    <span className="mr-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-stone-400">
                       {language === 'bn' ? 'জনপ্রতি' : 'Per passenger'}
                     </span>
                     <strong className="text-lg font-black tracking-tight text-[#C92232]">
