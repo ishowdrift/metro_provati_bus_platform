@@ -67,7 +67,7 @@ export const Navbar: React.FC = () => {
                 alt="মেট্রো প্রভাতী লোগো"
                 width={48}
                 height={48}
-                className="w-full h-full object-contain rounded-lg"
+                className="w-full h-full object-contain rounded-none"
                 priority
                 unoptimized
               />
@@ -113,7 +113,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={toggleLanguage}
               aria-label="Toggle language"
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-none border border-slate-200 text-xs font-bold text-slate-700 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition focus:outline-none focus:ring-2 focus:ring-red-500"
             >
               <Languages className="w-3.5 h-3.5 text-red-600" />
               <span>{language === 'bn' ? 'EN' : 'বাং'}</span>
@@ -125,7 +125,7 @@ export const Navbar: React.FC = () => {
                 {role === 'passenger' && (
                   <Link
                     href="/profile"
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100/80 border border-red-200 text-xs font-bold text-slate-800 transition"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-none bg-red-50 hover:bg-red-100/80 border border-red-200 text-xs font-bold text-slate-800 transition"
                   >
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <User className="w-3.5 h-3.5 text-red-600" />
@@ -136,7 +136,7 @@ export const Navbar: React.FC = () => {
                 {(role === 'bus_supervisor' || role === 'operations_admin') && (
                   <Link
                     href="/supervisor"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-xs"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-xs"
                   >
                     <ShieldCheck className="w-3.5 h-3.5 text-white" />
                     <span>{language === 'bn' ? 'সুপারভাইজার' : 'Supervisor'}</span>
@@ -146,7 +146,7 @@ export const Navbar: React.FC = () => {
                 {(role === 'counter_representative' || role === 'counter_manager') && (
                   <Link
                     href="/counter"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition shadow-xs"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition shadow-xs"
                   >
                     <Building2 className="w-3.5 h-3.5 text-white" />
                     <span>{language === 'bn' ? 'কাউন্টার পিওএস' : 'Counter POS'}</span>
@@ -156,7 +156,7 @@ export const Navbar: React.FC = () => {
                 {role === 'super_admin' && (
                   <Link
                     href="/admin"
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold transition shadow-xs"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-none bg-slate-900 hover:bg-black text-white text-xs font-bold transition shadow-xs"
                   >
                     <Shield className="w-3.5 h-3.5 text-white" />
                     <span>{language === 'bn' ? 'অ্যাডমিন' : 'Admin'}</span>
@@ -166,7 +166,7 @@ export const Navbar: React.FC = () => {
                 <button
                   onClick={logout}
                   title={language === 'bn' ? 'লগআউট করুন' : 'Logout'}
-                  className="p-1.5 rounded-xl border border-slate-200 hover:bg-red-50 hover:text-red-700 hover:border-red-200 text-slate-600 transition"
+                  className="p-1.5 rounded-none border border-slate-200 hover:bg-red-50 hover:text-red-700 hover:border-red-200 text-slate-600 transition"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                 </button>
@@ -174,7 +174,7 @@ export const Navbar: React.FC = () => {
             ) : (
               <Link
                 href="/login"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 hover:bg-red-50 hover:border-red-200 text-slate-700 hover:text-red-600 text-xs font-bold transition"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-none border border-slate-200 hover:bg-red-50 hover:border-red-200 text-slate-700 hover:text-red-600 text-xs font-bold transition"
               >
                 <UserCheck className="w-3.5 h-3.5 text-red-600" />
                 <span>{language === 'bn' ? 'প্রবেশ' : 'Sign In'}</span>
@@ -195,7 +195,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={toggleLanguage}
-              className="px-2 py-1 rounded-lg border border-slate-200 text-xs font-bold text-slate-700"
+              className="px-2 py-1 rounded-none border border-slate-200 text-xs font-bold text-slate-700"
               aria-label="Toggle language"
             >
               {language === 'bn' ? 'EN' : 'বাং'}
@@ -203,7 +203,7 @@ export const Navbar: React.FC = () => {
 
             <Link
               href="/tickets"
-              className="px-3 py-1.5 rounded-xl bg-red-600 text-white text-xs font-bold shadow-xs flex items-center gap-1"
+              className="px-3 py-1.5 rounded-none bg-red-600 text-white text-xs font-bold shadow-xs flex items-center gap-1"
             >
               <Ticket className="w-3 h-3 text-white" />
               <span>{language === 'bn' ? 'টিকেট' : 'Book'}</span>
@@ -211,7 +211,7 @@ export const Navbar: React.FC = () => {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-slate-700 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="p-2 rounded-none text-slate-700 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -232,7 +232,7 @@ export const Navbar: React.FC = () => {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`px-3 py-2.5 rounded-xl text-xs font-bold text-center transition ${
+                  className={`px-3 py-2.5 rounded-none text-xs font-bold text-center transition ${
                     isActive
                       ? 'bg-red-600 text-white shadow-xs'
                       : 'bg-slate-50 text-slate-700 hover:bg-red-50 hover:text-red-700'
@@ -246,7 +246,7 @@ export const Navbar: React.FC = () => {
 
           {/* User Info or Login */}
           {user ? (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-2xl flex items-center justify-between">
+            <div className="p-3 bg-red-50 border border-red-200 rounded-none flex items-center justify-between">
               <div className="flex items-center gap-2 min-w-0">
                 <div className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
                   {user.name ? user.name.charAt(0) : 'P'}
@@ -263,7 +263,7 @@ export const Navbar: React.FC = () => {
                 <Link
                   href={role === 'bus_supervisor' ? '/supervisor' : role === 'counter_representative' ? '/counter' : '/profile'}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-2.5 py-1 bg-white border border-red-200 text-red-700 rounded-lg text-xs font-bold"
+                  className="px-2.5 py-1 bg-white border border-red-200 text-red-700 rounded-none text-xs font-bold"
                 >
                   ড্যাশবোর্ড
                 </Link>
@@ -272,7 +272,7 @@ export const Navbar: React.FC = () => {
                     logout();
                     setMobileMenuOpen(false);
                   }}
-                  className="p-1 rounded-lg text-slate-500 hover:text-red-600"
+                  className="p-1 rounded-none text-slate-500 hover:text-red-600"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -282,7 +282,7 @@ export const Navbar: React.FC = () => {
             <Link
               href="/login"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-2.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition"
+              className="w-full py-2.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-bold rounded-none flex items-center justify-center gap-2 transition"
             >
               <UserCheck className="w-4 h-4 text-red-600" />
               <span>{language === 'bn' ? 'প্রবেশ / লগইন করুন' : 'Sign In / Account'}</span>
