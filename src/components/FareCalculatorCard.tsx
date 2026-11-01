@@ -21,6 +21,7 @@ export const FareCalculatorCard: React.FC<FareCalculatorCardProps> = ({
   const { language } = useLanguage();
   const [fromStopId, setFromStopId] = useState(initialFromStopId);
   const [toStopId, setToStopId] = useState(initialToStopId);
+  const [isSwapping, setIsSwapping] = useState(false);
   const fareResult = calculateFare(fromStopId, toStopId);
 
   const handleOriginChange = (value: string) => {
@@ -34,16 +35,18 @@ export const FareCalculatorCard: React.FC<FareCalculatorCardProps> = ({
   };
 
   const handleSwap = () => {
+    setIsSwapping(true);
     setFromStopId(toStopId);
     setToStopId(fromStopId);
     onSelectRoute?.(toStopId, fromStopId);
+    setTimeout(() => setIsSwapping(false), 260);
   };
 
   const fieldClass =
     'h-12 w-full min-w-0 border border-stone-200 bg-[#FAF9F7] px-3 text-sm font-bold text-stone-900 outline-none transition focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15';
 
   return (
-    <div className="border border-stone-200 bg-white p-5 sm:p-7">
+    <div className="border border-stone-200 bg-white p-5 shadow-xs transition-shadow duration-300 hover:shadow-transit sm:p-7">
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-stone-200 pb-5">
         <div>
           <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C92232]">
@@ -56,7 +59,7 @@ export const FareCalculatorCard: React.FC<FareCalculatorCardProps> = ({
             {language === 'bn' ? 'দুটি স্টপ নির্বাচন করুন' : 'Choose two stops along the corridor'}
           </p>
         </div>
-        <span className="border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-800">
+        <span className="border border-[#B7791F]/30 bg-[#FEF7EC] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#B7791F]">
           {language === 'bn' ? 'খসড়া' : 'Draft'}
         </span>
       </div>
@@ -81,7 +84,7 @@ export const FareCalculatorCard: React.FC<FareCalculatorCardProps> = ({
           aria-label={language === 'bn' ? 'শুরু ও গন্তব্য অদলবদল করুন' : 'Swap origin and destination'}
           className="mx-auto flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-500 transition hover:border-[#C92232] hover:text-[#C92232] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C92232] sm:mb-1"
         >
-          <ArrowLeftRight className="h-4 w-4" />
+          <ArrowLeftRight className={'h-4 w-4 transition-transform duration-300 ' + (isSwapping ? 'rotate-180 text-[#C92232]' : '')} />
         </button>
 
         <div className="min-w-0">
@@ -134,12 +137,12 @@ export const FareCalculatorCard: React.FC<FareCalculatorCardProps> = ({
 
               <div className="mt-5 flex flex-col gap-4 border-t border-stone-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex max-w-md items-start gap-2 text-[11px] leading-5 text-stone-500">
-                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#B7791F]" />
                   <p>{language === 'bn' ? fareResult.disclaimerBn : fareResult.disclaimerEn}</p>
                 </div>
                 <Link
                   href={'/tickets?from=' + encodeURIComponent(fromStopId) + '&to=' + encodeURIComponent(toStopId)}
-                  className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 bg-[#C92232] px-5 py-3 text-xs font-extrabold text-white transition-colors hover:bg-[#A91D2A]"
+                  className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 bg-[#C92232] px-5 py-3 text-xs font-extrabold text-white transition-all duration-200 hover:bg-[#A91D2A] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C92232]"
                 >
                   <Ticket className="h-4 w-4" />
                   <span>{language === 'bn' ? 'আসন নির্বাচন করুন' : 'Choose seats'}</span>

@@ -153,14 +153,14 @@ export default function HomePage() {
                 <Link
                   href={service.href}
                   key={service.number}
-                  className="group grid grid-cols-[42px_1fr_auto] items-start gap-4 border-t border-stone-300 py-6 transition-colors hover:border-[#C92232]"
+                  className="group grid grid-cols-[42px_1fr_auto] items-start gap-4 border-t border-stone-300 py-6 transition-all duration-200 hover:border-[#C92232] hover:bg-white/50 -mx-3 px-3 sm:-mx-4 sm:px-4"
                 >
-                  <span className="pt-1 font-mono text-xs font-bold tracking-wider text-stone-400">
+                  <span className="pt-1 font-mono text-xs font-bold tracking-wider text-stone-400 group-hover:text-[#C92232] transition-colors">
                     {service.number}
                   </span>
                   <div>
                     <div className="mb-2 flex items-center gap-2">
-                      <Icon className="h-4 w-4 text-[#C92232]" strokeWidth={1.8} />
+                      <Icon className="h-4 w-4 text-[#C92232] transition-transform duration-200 group-hover:scale-110" strokeWidth={1.8} />
                       <h3 className="text-base font-extrabold tracking-tight text-stone-900 transition-colors group-hover:text-[#C92232] sm:text-lg">
                         {language === 'bn' ? service.titleBn : service.titleEn}
                       </h3>
@@ -170,18 +170,23 @@ export default function HomePage() {
                     </p>
                     <span className="mt-3 inline-flex items-center gap-2 text-[11px] font-extrabold text-[#C92232]">
                       {language === 'bn' ? service.labelBn : service.labelEn}
-                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </span>
                   </div>
-                  <ArrowRight className="mt-1 h-4 w-4 text-stone-300 transition-all group-hover:translate-x-1 group-hover:text-[#C92232]" />
+                  <ArrowRight className="mt-1 h-4 w-4 text-stone-300 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#C92232]" />
                 </Link>
               );
             })}
           </div>
         </section>
 
-        <section className="grid overflow-hidden bg-[#211F1F] text-white lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
+        <section className="relative isolate grid overflow-hidden bg-[#211F1F] text-white lg:grid-cols-[0.95fr_1.05fr]">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-32 -top-32 h-[380px] w-[380px] rounded-full bg-[#C92232]/15 blur-[90px] animate-ambient-drift"
+          />
+
+          <div className="relative z-10 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
             <div className="mb-4 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F18A91]">
               <span className="h-px w-7 bg-[#F18A91]" />
               <span>{language === 'bn' ? 'অবস্থান ও আপডেট' : 'Location & updates'}</span>
@@ -189,35 +194,41 @@ export default function HomePage() {
             <h2 className="max-w-lg text-3xl font-black leading-[1.12] tracking-[-0.04em] sm:text-4xl">
               {language === 'bn' ? 'যাত্রার আগে সর্বশেষ তথ্য জেনে নিন।' : 'Know what is available before you travel.'}
             </h2>
-            <p className="mt-5 max-w-lg text-sm leading-7 text-white/65">
+            <p className="mt-5 max-w-lg text-sm leading-7 text-white/70">
               {language === 'bn'
                 ? 'জিপিএস তথ্য পাওয়া গেলে ট্র্যাকিং পেজে অবস্থান ও আপডেটের সময় দেখুন। কোনো নতুন তথ্য না থাকলে সেটিকে লাইভ হিসেবে ধরে নেবেন না।'
                 : 'When GPS data is received, the tracking page shows the location and update time. When no fresh update is available, the bus will not be shown as live.'}
             </p>
             <Link
               href="/tracking"
-              className="mt-8 inline-flex min-h-12 w-fit items-center gap-3 bg-white px-5 py-3 text-sm font-extrabold text-[#B91F2D] transition-colors hover:bg-[#FFF4F4]"
+              className="mt-8 inline-flex min-h-12 w-fit items-center gap-3 bg-white px-5 py-3 text-sm font-extrabold text-[#A91D2A] transition-all duration-200 hover:bg-[#FFF4F4] active:scale-[0.99]"
             >
               <Navigation className="h-4 w-4" />
               <span>{language === 'bn' ? 'ট্র্যাকিং পেজ খুলুন' : 'Open bus tracking'}</span>
               <ArrowUpRight className="h-4 w-4" />
             </Link>
-            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-5 text-xs text-white/55">
-              <span className="inline-flex items-center gap-2"><Clock3 className="h-4 w-4 text-[#F18A91]" />{language === 'bn' ? 'আপডেটের সময় দেখুন' : 'Check update time'}</span>
-              <span className="inline-flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-[#F18A91]" />{language === 'bn' ? 'লাইভ ও পুরোনো তথ্য আলাদা' : 'Live and older data distinguished'}</span>
+            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/15 pt-5 text-xs text-white/60">
+              <span className="inline-flex items-center gap-2">
+                <Clock3 className="h-4 w-4 text-[#F18A91]" />
+                {language === 'bn' ? 'আপডেটের সময় দেখুন' : 'Check update time'}
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-[#F18A91]" />
+                {language === 'bn' ? 'লাইভ ও পুরোনো তথ্য আলাদা' : 'Live and older data distinguished'}
+              </span>
             </div>
           </div>
-          <div className="relative min-h-[300px] sm:min-h-[420px]">
+          <div className="relative min-h-[300px] overflow-hidden sm:min-h-[420px]">
             <Image
               src="/images/bus-2.jpg"
               alt={language === 'bn' ? 'মেট্রো প্রভাতী বাসের ছবি' : 'Metro Probati bus photograph'}
               fill
               sizes="(max-width: 1024px) 100vw, 52vw"
-              className="object-cover object-center"
+              className="object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#211F1F]/35 via-transparent to-black/10" />
-            <div className="absolute bottom-5 left-5 border-l-2 border-[#D52B35] bg-black/45 px-4 py-3 backdrop-blur-sm sm:bottom-8 sm:left-8">
-              <div className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/65">{language === 'bn' ? 'মেট্রো প্রভাতী' : 'Metro Probati'}</div>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#211F1F]/45 via-transparent to-black/10" />
+            <div className="absolute bottom-5 left-5 border-l-2 border-[#C92232] bg-black/50 px-4 py-3 backdrop-blur-sm sm:bottom-8 sm:left-8">
+              <div className="text-[9px] font-bold uppercase tracking-[0.22em] text-white/70">{language === 'bn' ? 'মেট্রো প্রভাতী' : 'Metro Probati'}</div>
               <div className="mt-1 text-lg font-extrabold text-white">{language === 'bn' ? 'চট্টগ্রাম করিডোর' : 'Chattogram corridor'}</div>
             </div>
           </div>
@@ -240,11 +251,11 @@ export default function HomePage() {
               </p>
             </div>
             <Link href="/routes" className="inline-flex items-center gap-2 border-b border-[#C92232] pb-2 text-xs font-extrabold text-[#C92232] transition-colors hover:text-[#A91D2A]">
-              {language === 'bn' ? 'সম্পূর্ণ রুট দেখুন' : 'View full route'}
+              <span>{language === 'bn' ? 'সম্পূর্ণ রুট দেখুন' : 'View full route'}</span>
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid gap-8 border-y border-stone-300 bg-white p-5 sm:p-8 lg:grid-cols-[0.38fr_0.62fr] lg:gap-14 lg:p-10">
+          <div className="grid gap-8 border-y border-stone-300 bg-white p-5 sm:p-8 lg:grid-cols-[0.38fr_0.62fr] lg:gap-14 lg:p-10 shadow-xs">
             <div className="flex flex-col justify-between gap-8">
               <div>
                 <div className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400">MP — 01</div>
@@ -301,8 +312,8 @@ export default function HomePage() {
                   ? 'এটি নির্দেশক খসড়া হিসাব। চূড়ান্ত ভাড়া ও প্রযোজ্য নিয়ম কাউন্টার থেকে নিশ্চিত করুন।'
                   : 'This is an indicative draft calculation. Confirm the final fare and applicable rules at a counter.'}
               </p>
-              <Link href="/fares" className="mt-6 inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] hover:text-[#A91D2A]">
-                {language === 'bn' ? 'সম্পূর্ণ ভাড়া তথ্য' : 'Full fare information'}
+              <Link href="/fares" className="mt-6 inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] hover:text-[#A91D2A] transition-colors">
+                <span>{language === 'bn' ? 'সম্পূর্ণ ভাড়া তথ্য' : 'Full fare information'}</span>
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
@@ -340,8 +351,8 @@ export default function HomePage() {
             <p className="mt-4 text-sm leading-7 text-stone-500">
               {language === 'bn' ? 'আরও সহায়তার জন্য আমাদের সঙ্গে যোগাযোগ করুন।' : 'For additional help, contact the team.'}
             </p>
-            <Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232]">
-              {language === 'bn' ? 'যোগাযোগ করুন' : 'Contact us'}
+            <Link href="/contact" className="mt-6 inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] hover:text-[#A91D2A] transition-colors">
+              <span>{language === 'bn' ? 'যোগাযোগ করুন' : 'Contact us'}</span>
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
@@ -351,9 +362,9 @@ export default function HomePage() {
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-sm font-extrabold text-stone-900 marker:hidden">
                   <span className="flex items-start gap-3">
                     <HelpCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#C92232]" />
-                    {language === 'bn' ? faq.qBn : faq.qEn}
+                    <span>{language === 'bn' ? faq.qBn : faq.qEn}</span>
                   </span>
-                  <span className="text-xl font-light text-stone-400 transition-transform group-open:rotate-45">+</span>
+                  <span className="text-xl font-light text-stone-400 transition-transform duration-200 group-open:rotate-45">+</span>
                 </summary>
                 <p className="pl-7 pr-7 pt-4 text-xs leading-7 text-stone-500 sm:text-sm">
                   {language === 'bn' ? faq.aBn : faq.aEn}
@@ -363,7 +374,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-[#C92232] px-6 py-9 text-white sm:px-10 sm:py-12">
+        <section className="relative isolate overflow-hidden bg-[#C92232] px-6 py-9 text-white sm:px-10 sm:py-12">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-32 -bottom-32 h-[340px] w-[340px] rounded-full bg-white/10 blur-[80px] animate-ambient-drift"
+          />
+
           <div className="relative z-10 flex flex-col justify-between gap-7 md:flex-row md:items-center">
             <div className="max-w-2xl">
               <div className="mb-3 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.24em] text-white/70">
@@ -373,16 +389,22 @@ export default function HomePage() {
               <h2 className="text-2xl font-black tracking-[-0.035em] sm:text-3xl">
                 {language === 'bn' ? 'যাত্রা সম্পর্কে প্রশ্ন আছে?' : 'Have a question about your journey?'}
               </h2>
-              <p className="mt-2 text-xs leading-6 text-white/75 sm:text-sm">
+              <p className="mt-2 text-xs leading-6 text-white/80 sm:text-sm">
                 {language === 'bn' ? 'ভাড়া, রুট বা কাউন্টার সম্পর্কে জানতে যোগাযোগ করুন।' : 'Get in touch for route, fare or counter information.'}
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href={'tel:' + INITIAL_HELPLINE.primaryNumber} className="inline-flex min-h-12 items-center gap-2 bg-white px-5 py-3 text-sm font-extrabold text-[#B91F2D] transition-colors hover:bg-[#FFF4F4]">
+              <a
+                href={'tel:' + INITIAL_HELPLINE.primaryNumber}
+                className="inline-flex min-h-12 items-center gap-2 bg-white px-5 py-3 text-sm font-extrabold text-[#A91D2A] transition-all duration-200 hover:bg-[#FFF4F4] active:scale-[0.99]"
+              >
                 <Phone className="h-4 w-4" />
                 <span>{language === 'bn' ? 'কল করুন' : 'Call us'}</span>
               </a>
-              <Link href="/contact" className="inline-flex min-h-12 items-center gap-2 border border-white/60 px-5 py-3 text-sm font-extrabold text-white transition-colors hover:bg-white/10">
+              <Link
+                href="/contact"
+                className="inline-flex min-h-12 items-center gap-2 border border-white/60 px-5 py-3 text-sm font-extrabold text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.99]"
+              >
                 <span>{language === 'bn' ? 'যোগাযোগ পেজ' : 'Contact page'}</span>
                 <ArrowUpRight className="h-4 w-4" />
               </Link>

@@ -64,21 +64,21 @@ export default function TrackingPage() {
               type="button"
               onClick={fetchStatus}
               disabled={loading}
-              className="inline-flex h-11 items-center gap-2 border border-stone-300 bg-white px-4 text-xs font-extrabold text-stone-700 transition hover:border-[#C92232] hover:text-[#C92232] disabled:opacity-50"
+              className="inline-flex h-11 items-center gap-2 border border-stone-300 bg-white px-4 text-xs font-extrabold text-stone-700 transition hover:border-[#C92232] hover:text-[#C92232] active:scale-[0.99] disabled:opacity-50"
             >
               <RefreshCw className={'h-4 w-4 ' + (loading ? 'animate-spin' : '')} />
-              {language === 'bn' ? 'রিফ্রেশ' : 'Refresh'}
+              <span>{language === 'bn' ? 'রিফ্রেশ' : 'Refresh'}</span>
             </button>
           </div>
         </header>
 
-        <section className="grid grid-cols-1 border-y border-stone-300 bg-white sm:grid-cols-3">
+        <section className="grid grid-cols-1 border-y border-stone-300 bg-white sm:grid-cols-3 shadow-xs">
           <div className="px-5 py-5 sm:px-7">
             <div className="text-[10px] font-bold uppercase tracking-[0.17em] text-stone-400">
               {language === 'bn' ? 'এখন লাইভ' : 'Live now'}
             </div>
             <div className="mt-2 flex items-center gap-2">
-              <span className="h-2 w-2 bg-[#24775F]" />
+              <span className="h-2 w-2 rounded-full bg-[#24775F] animate-radar-ping" />
               <span className="text-3xl font-black tracking-tight text-stone-950">{toBengaliDigits(activeCount)}</span>
             </div>
             <p className="mt-1 text-[11px] text-stone-500">{language === 'bn' ? '৩ মিনিটের মধ্যে পাওয়া আপডেট' : 'Updates received within 3 minutes'}</p>
@@ -88,7 +88,7 @@ export default function TrackingPage() {
               {language === 'bn' ? 'বিলম্বিত আপডেট' : 'Delayed updates'}
             </div>
             <div className="mt-2 flex items-center gap-2">
-              <span className="h-2 w-2 bg-amber-500" />
+              <span className="h-2 w-2 rounded-full bg-[#B7791F]" />
               <span className="text-3xl font-black tracking-tight text-stone-950">{toBengaliDigits(staleCount)}</span>
             </div>
             <p className="mt-1 text-[11px] text-stone-500">{language === 'bn' ? '৩–১০ মিনিট আগের অবস্থান' : 'Last received 3–10 minutes ago'}</p>
@@ -103,13 +103,13 @@ export default function TrackingPage() {
         </section>
 
         {buses.length === 0 && !loading && (
-          <div className="flex items-start gap-3 border-l-2 border-amber-500 bg-amber-50 px-5 py-4 text-sm leading-7 text-amber-950">
-            <AlertCircle className="mt-1 h-5 w-5 shrink-0 text-amber-700" />
+          <div className="flex items-start gap-3 border-l-2 border-[#B7791F] bg-[#FEF7EC] px-5 py-4 text-sm leading-7 text-[#523307]">
+            <AlertCircle className="mt-1 h-5 w-5 shrink-0 text-[#B7791F]" />
             <div>
               <div className="font-extrabold">
                 {language === 'bn' ? 'এই মুহূর্তে কোনো জিপিএস অবস্থান পাওয়া যায়নি।' : 'No GPS positions are available right now.'}
               </div>
-              <p className="mt-1 text-xs text-amber-900">
+              <p className="mt-1 text-xs text-[#7C5010]">
                 {language === 'bn'
                   ? 'কোনো বাসকে লাইভ দেখানোর মতো নতুন আপডেট এখনো পাওয়া যায়নি। ডিভাইস থেকে জিপিএস পাঠানো হলে এখানে অবস্থান দেখা যাবে।'
                   : 'No fresh device update has been received to display a bus as live. A location will appear here after a device sends GPS data.'}
@@ -118,19 +118,19 @@ export default function TrackingPage() {
           </div>
         )}
 
-        <section className="overflow-hidden border border-stone-200 bg-white">
+        <section className="overflow-hidden border border-stone-200 bg-white shadow-xs">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 px-5 py-4 sm:px-6">
             <div>
               <h2 className="text-sm font-extrabold text-stone-900">
                 {language === 'bn' ? 'করিডোর ম্যাপ' : 'Corridor map'}
               </h2>
               <p className="mt-1 text-[11px] text-stone-500">
-                {language === 'bn' ? 'লাল পিন: লাইভ জিপিএস · অ্যাম্বার: বিলম্বিত জিপিএস' : 'Red marker: live GPS · amber marker: delayed GPS'}
+                {language === 'bn' ? 'সবুজ পিন: লাইভ জিপিএস · অ্যাম্বার: বিলম্বিত জিপিএস' : 'Green marker: live GPS · amber marker: delayed GPS'}
               </p>
             </div>
             <div className="flex items-center gap-4 text-[10px] font-bold text-stone-500">
-              <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 bg-[#24775F]" />{language === 'bn' ? 'লাইভ' : 'Live'}</span>
-              <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 bg-amber-500" />{language === 'bn' ? 'বিলম্বিত' : 'Delayed'}</span>
+              <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#24775F]" />{language === 'bn' ? 'লাইভ' : 'Live'}</span>
+              <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#B7791F]" />{language === 'bn' ? 'বিলম্বিত' : 'Delayed'}</span>
             </div>
           </div>
           <LiveTrackingMap />

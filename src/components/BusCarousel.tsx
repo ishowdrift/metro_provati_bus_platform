@@ -31,30 +31,30 @@ export const BusCarousel: React.FC = () => {
           fill
           priority={currentIndex === 0}
           sizes="(max-width: 1024px) 100vw, 65vw"
-          className="object-cover object-center transition-opacity duration-300"
+          className="object-cover object-center transition-all duration-500 ease-out"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
         <div className="absolute left-5 top-5 flex items-center gap-2 bg-white px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-stone-900 sm:left-7 sm:top-7">
           <span className="h-1.5 w-1.5 rounded-full bg-[#C92232]" />
           <span>{language === 'bn' ? 'বহরের ছবি' : 'Fleet photography'}</span>
         </div>
-        <div className="absolute bottom-5 left-5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/85 sm:bottom-7 sm:left-7">
+        <div className="absolute bottom-5 left-5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/90 sm:bottom-7 sm:left-7">
           METRO PROBATI / {String(currentIndex + 1).padStart(2, '0')}
         </div>
         <div className="absolute bottom-4 right-4 flex items-center gap-2 sm:bottom-6 sm:right-6">
           <button
             type="button"
             onClick={showPrevious}
-            aria-label="Previous fleet photograph"
-            className="flex h-10 w-10 items-center justify-center border border-white/60 bg-black/20 text-white backdrop-blur-sm transition hover:bg-white hover:text-stone-900"
+            aria-label={language === 'bn' ? 'পূর্ববর্তী বাসের ছবি' : 'Previous fleet photograph'}
+            className="flex h-10 w-10 items-center justify-center border border-white/60 bg-black/30 text-white backdrop-blur-sm transition-all duration-200 hover:bg-white hover:text-stone-900 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
           <button
             type="button"
             onClick={showNext}
-            aria-label="Next fleet photograph"
-            className="flex h-10 w-10 items-center justify-center border border-white/60 bg-black/20 text-white backdrop-blur-sm transition hover:bg-white hover:text-stone-900"
+            aria-label={language === 'bn' ? 'পরবর্তী বাসের ছবি' : 'Next fleet photograph'}
+            className="flex h-10 w-10 items-center justify-center border border-white/60 bg-black/30 text-white backdrop-blur-sm transition-all duration-200 hover:bg-white hover:text-stone-900 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
@@ -86,7 +86,7 @@ export const BusCarousel: React.FC = () => {
                 onClick={() => setCurrentIndex(index)}
                 aria-label={'Show fleet photograph ' + (index + 1)}
                 aria-current={index === currentIndex ? 'true' : undefined}
-                className={'h-1.5 transition-all ' + (index === currentIndex ? 'w-10 bg-[#C92232]' : 'w-5 bg-stone-200 hover:bg-stone-400')}
+                className={'h-1.5 transition-all duration-200 ' + (index === currentIndex ? 'w-10 bg-[#C92232]' : 'w-5 bg-stone-200 hover:bg-stone-400')}
               />
             ))}
           </div>
@@ -95,7 +95,7 @@ export const BusCarousel: React.FC = () => {
               {language === 'bn' ? 'বাসের ছবি' : 'Fleet gallery'}
             </span>
             <Link href="/routes" className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] transition-colors hover:text-[#A91D2A]">
-              {language === 'bn' ? 'রুট দেখুন' : 'Explore route'}
+              <span>{language === 'bn' ? 'রুট দেখুন' : 'Explore route'}</span>
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>

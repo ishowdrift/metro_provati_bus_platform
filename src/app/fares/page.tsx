@@ -47,7 +47,7 @@ export default function FaresPage() {
             <p className="text-sm leading-7 text-stone-500">
               {language === 'bn' ? 'ক্যালকুলেটরটি স্টেজ ও দূরত্বের একটি ধারণা দেবে। চূড়ান্ত ভাড়া কাউন্টারে নিশ্চিত করুন।' : 'The calculator provides a stage and distance estimate. Confirm the final fare at a counter.'}
             </p>
-            <div className="border-l-2 border-amber-500 bg-amber-50 px-4 py-3 text-xs leading-6 text-amber-900">
+            <div className="border-l-2 border-[#B7791F] bg-[#FEF7EC] px-4 py-3 text-xs leading-6 text-[#7C5010]">
               {language === 'bn' ? 'খসড়া তালিকা · পরিবর্তন হতে পারে' : 'Draft tariff · subject to change'}
             </div>
           </div>
@@ -65,16 +65,16 @@ export default function FaresPage() {
                 {language === 'bn' ? 'কয়েকটি পরিচিত যাত্রা।' : 'A few common journeys.'}
               </h2>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-amber-800">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#B7791F]">
               {language === 'bn' ? 'সবগুলোই নির্দেশক' : 'All figures indicative'}
             </span>
           </div>
 
-          <div className="grid gap-0 border-y border-stone-300 bg-white sm:grid-cols-3">
+          <div className="grid gap-0 border-y border-stone-300 bg-white sm:grid-cols-3 shadow-xs">
             {examples.map((example, index) => {
               const fare = calculateFare(example.from, example.to);
               return (
-                <div key={example.from + '-' + example.to} className={'flex items-center justify-between gap-4 px-5 py-5 sm:px-6 ' + (index > 0 ? 'border-t border-stone-200 sm:border-l sm:border-t-0' : '')}>
+                <div key={example.from + '-' + example.to} className={'flex items-center justify-between gap-4 px-5 py-5 sm:px-6 transition-colors hover:bg-[#FFF7F6] ' + (index > 0 ? 'border-t border-stone-200 sm:border-l sm:border-t-0' : '')}>
                   <div className="min-w-0">
                     <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400">
                       {language === 'bn' ? 'উদাহরণ ' + toBengaliDigits(index + 1) : 'Example ' + (index + 1)}
@@ -92,7 +92,7 @@ export default function FaresPage() {
           </div>
         </section>
 
-        <section className="border-y border-stone-300 bg-white py-6 sm:py-8">
+        <section className="border-y border-stone-300 bg-white py-6 sm:py-8 shadow-xs">
           <div className="flex flex-col gap-5 px-5 sm:flex-row sm:items-end sm:justify-between sm:px-8">
             <div>
               <div className="mb-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C92232]">
@@ -113,7 +113,7 @@ export default function FaresPage() {
                 id="fare-matrix-origin"
                 value={selectedOrigin}
                 onChange={(event) => setSelectedOrigin(event.target.value)}
-                className="h-12 w-full border border-stone-200 bg-[#FAF9F7] px-3 text-sm font-bold text-stone-900 outline-none focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15"
+                className="h-12 w-full border border-stone-200 bg-[#FAF9F7] px-3 text-sm font-bold text-stone-900 outline-none transition focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15"
               >
                 {INITIAL_STOPS.map((stop) => (
                   <option key={stop.id} value={stop.id}>
@@ -126,7 +126,7 @@ export default function FaresPage() {
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[680px] border-collapse text-left text-xs sm:text-sm">
-              <thead className="border-y border-stone-200 bg-[#F8F7F5] text-[10px] font-extrabold uppercase tracking-wider text-stone-500">
+              <thead className="border-y border-stone-200 bg-[#FAF9F7] text-[10px] font-extrabold uppercase tracking-wider text-stone-500">
                 <tr>
                   <th className="px-5 py-3 sm:px-8">#</th>
                   <th className="px-5 py-3">{language === 'bn' ? 'গন্তব্য' : 'Destination'}</th>
@@ -150,7 +150,7 @@ export default function FaresPage() {
                       <td className="px-5 py-4 font-mono font-black text-[#C92232]">{sameStop ? '—' : formatBDT(result.fareBDT)}</td>
                       <td className="px-5 py-4 text-right sm:px-8">
                         {!sameStop && (
-                          <Link href={'/tickets?from=' + encodeURIComponent(selectedOrigin) + '&to=' + encodeURIComponent(destination.id)} className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-[#C92232] hover:text-[#A91D2A]">
+                          <Link href={'/tickets?from=' + encodeURIComponent(selectedOrigin) + '&to=' + encodeURIComponent(destination.id)} className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-[#C92232] hover:text-[#A91D2A] transition-colors">
                             <Ticket className="h-3.5 w-3.5" />
                             {language === 'bn' ? 'বাছাই' : 'Select'}
                             <ArrowUpRight className="h-3 w-3" />
@@ -165,8 +165,8 @@ export default function FaresPage() {
           </div>
         </section>
 
-        <div className="flex items-start gap-3 border-l-2 border-amber-500 bg-amber-50 px-5 py-4 text-xs leading-6 text-amber-900">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+        <div className="flex items-start gap-3 border-l-2 border-[#B7791F] bg-[#FEF7EC] px-5 py-4 text-xs leading-6 text-[#7C5010]">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#B7791F]" />
           <p>
             {language === 'bn'
               ? 'গুরুত্বপূর্ণ: এই ভাড়া তালিকা নির্দেশক খসড়া হিসাব। এটি সরকারি বা অপারেটর কর্তৃক চূড়ান্ত অনুমোদিত তালিকা নয়। যাত্রার আগে কাউন্টারে চূড়ান্ত ভাড়া নিশ্চিত করুন।'

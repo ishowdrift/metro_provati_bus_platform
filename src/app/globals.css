@@ -5,12 +5,18 @@
 :root {
   --primary-red: #C92232;
   --primary-red-dark: #A91D2A;
+  --primary-red-deep: #8B1621;
   --primary-red-light: #FCEBEC;
   --primary-red-subtle: #FFF7F6;
   --color-charcoal: #211F1F;
   --color-warm-white: #FAF9F7;
+  --color-stone: #E7E5E4;
+  --color-grey-muted: #78716C;
+  --color-grey-deep: #44403C;
   --color-green: #24775F;
+  --color-green-light: #E6F4F0;
   --color-amber: #B7791F;
+  --color-amber-light: #FEF7EC;
   --font-bangla: 'Hind Siliguri', 'Noto Sans Bengali', 'SolaimanLipi', 'Kalpurush', system-ui, -apple-system, sans-serif;
   --font-latin: 'Inter', system-ui, -apple-system, sans-serif;
 }
@@ -22,7 +28,7 @@ html {
 
 body {
   font-family: var(--font-bangla), var(--font-latin), system-ui, -apple-system, sans-serif;
-  color: #282828;
+  color: var(--color-charcoal);
   background-color: var(--color-warm-white);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -37,7 +43,49 @@ body {
   outline-color: #C92232;
 }
 
-/* Restrained pulse for real-time status indicators only. */
+/* Ambient subtle background drift */
+@keyframes ambient-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.16;
+  }
+  50% {
+    transform: translate3d(3%, 4%, 0) scale(1.06);
+    opacity: 0.24;
+  }
+  100% {
+    transform: translate3d(-3%, 2%, 0) scale(0.97);
+    opacity: 0.18;
+  }
+}
+
+.animate-ambient-drift {
+  animation: ambient-drift 20s ease-in-out infinite alternate;
+}
+
+/* Subtle route line travel flow */
+@keyframes route-travel {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(200%);
+    opacity: 0;
+  }
+}
+
+.animate-route-travel {
+  animation: route-travel 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Restrained pulse for genuine real-time status indicators only. */
 @keyframes radar-ping {
   0% {
     transform: scale(0.95);
@@ -55,6 +103,29 @@ body {
 
 .animate-radar-ping {
   animation: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Subtle entrance fade */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Restrained interactive transitions (150-250ms) */
+.transition-standard {
+  transition-property: color, background-color, border-color, transform, opacity, box-shadow;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-duration: 200ms;
 }
 
 /* Quiet, low-contrast scrollbars. */

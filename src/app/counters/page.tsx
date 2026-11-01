@@ -49,8 +49,19 @@ export default function CountersPage() {
 
   return (
     <main className="min-h-[65vh] bg-[#FAF9F7] pb-20">
-      <div className="bg-[#C92232] text-white">
-        <div className="mx-auto flex max-w-[1240px] flex-col gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:flex-row lg:items-end lg:justify-between lg:px-8">
+      <div className="relative isolate overflow-hidden bg-[#C92232] text-white">
+        {/* Subtle Ambient Light Drifts */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-36 -top-36 h-[440px] w-[440px] rounded-full bg-[#E5384B]/25 blur-[100px] animate-ambient-drift"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-32 right-1/4 h-[380px] w-[380px] rounded-full bg-[#8B1621]/45 blur-[90px] animate-ambient-drift"
+          style={{ animationDelay: '-12s' }}
+        />
+
+        <div className="relative mx-auto flex max-w-[1240px] flex-col gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:flex-row lg:items-end lg:justify-between lg:px-8">
           <div className="max-w-2xl">
             <div className="mb-4 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.24em] text-white/75">
               <span className="h-px w-7 bg-white/75" />
@@ -59,7 +70,7 @@ export default function CountersPage() {
             <h1 className="text-3xl font-black tracking-[-0.045em] sm:text-5xl">
               {language === 'bn' ? 'কাউন্টার খুঁজুন।' : 'Find a counter.'}
             </h1>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-white/80">
+            <p className="mt-4 max-w-xl text-sm leading-7 text-white/85">
               {language === 'bn'
                 ? 'কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরে তালিকাভুক্ত কাউন্টার পয়েন্ট, ঠিকানা ও যোগাযোগের তথ্য দেখুন। ফোন নম্বরের পাশে যাচাইয়ের অবস্থা উল্লেখ করা হয়েছে।'
                 : 'Browse the listed counter points, addresses and contact details along the Kaptai Rastar Matha to Katgor corridor. Phone verification status is shown beside each number.'}
@@ -69,19 +80,19 @@ export default function CountersPage() {
           {isStaff ? (
             <Link
               href="/counter"
-              className="inline-flex min-h-11 w-fit items-center gap-2 bg-white px-5 py-3 text-xs font-extrabold text-[#B91F2D] transition-colors hover:bg-[#FFF4F4]"
+              className="inline-flex min-h-11 w-fit items-center gap-2 bg-white px-5 py-3 text-xs font-extrabold text-[#A91D2A] transition-all duration-200 hover:bg-[#FFF4F4] active:scale-[0.99]"
             >
               <Building2 className="h-4 w-4" />
-              {language === 'bn' ? 'কাউন্টার পিওএস খুলুন' : 'Open counter POS'}
+              <span>{language === 'bn' ? 'কাউন্টার পিওএস খুলুন' : 'Open counter POS'}</span>
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           ) : (
             <Link
               href="/login"
-              className="inline-flex min-h-11 w-fit items-center gap-2 border border-white/55 px-5 py-3 text-xs font-extrabold text-white transition-colors hover:bg-white/10"
+              className="inline-flex min-h-11 w-fit items-center gap-2 border border-white/55 px-5 py-3 text-xs font-extrabold text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.99]"
             >
               <LogIn className="h-4 w-4" />
-              {language === 'bn' ? 'স্টাফ লগইন' : 'Staff sign in'}
+              <span>{language === 'bn' ? 'স্টাফ লগইন' : 'Staff sign in'}</span>
             </Link>
           )}
         </div>
@@ -104,7 +115,7 @@ export default function CountersPage() {
           </div>
         </div>
 
-        <div className="flex h-12 items-center gap-3 border border-stone-200 bg-white px-4">
+        <div className="flex h-12 items-center gap-3 border border-stone-200 bg-white px-4 shadow-xs">
           <Search className="h-4 w-4 shrink-0 text-[#C92232]" />
           <input
             type="search"
@@ -130,13 +141,13 @@ export default function CountersPage() {
         </div>
 
         {filteredBooths.length > 0 ? (
-          <div className="divide-y divide-stone-200 border-y border-stone-300 bg-white">
+          <div className="divide-y divide-stone-200 border-y border-stone-300 bg-white shadow-xs">
             {filteredBooths.map((booth, index) => {
               const mapUrl = 'https://www.google.com/maps/search/?api=1&query=' + booth.lat + ',' + booth.lng;
               return (
-                <article key={booth.id} className="grid gap-5 px-5 py-6 sm:grid-cols-[1fr_auto] sm:items-center sm:px-7">
+                <article key={booth.id} className="grid gap-5 px-5 py-6 sm:grid-cols-[1fr_auto] sm:items-center sm:px-7 transition-colors hover:bg-[#FFF7F6]">
                   <div className="flex min-w-0 gap-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-[#F2C4C7] bg-[#FFF3F3] text-xs font-black text-[#B91F2D]">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-[#FCEBEC] bg-[#FFF7F6] text-xs font-black text-[#A91D2A]">
                       {String(index + 1).padStart(2, '0')}
                     </div>
                     <div className="min-w-0">
@@ -150,7 +161,7 @@ export default function CountersPage() {
                             {language === 'bn' ? 'ফোন যাচাইকৃত' : 'Phone verified'}
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#B7791F]">
                             <AlertCircle className="h-3 w-3" />
                             {language === 'bn' ? 'ফোন যাচাই হয়নি' : 'Phone not verified'}
                           </span>
@@ -189,7 +200,7 @@ export default function CountersPage() {
                       className="inline-flex min-h-10 items-center gap-2 border border-stone-300 px-3.5 py-2 text-[11px] font-extrabold text-stone-700 transition-colors hover:border-[#C92232] hover:text-[#C92232]"
                     >
                       <MapPin className="h-3.5 w-3.5" />
-                      {language === 'bn' ? 'ম্যাপ' : 'Map'}
+                      <span>{language === 'bn' ? 'ম্যাপ' : 'Map'}</span>
                       <ArrowUpRight className="h-3 w-3" />
                     </a>
                     <Link
@@ -197,7 +208,7 @@ export default function CountersPage() {
                       className="inline-flex min-h-10 items-center gap-2 bg-[#C92232] px-3.5 py-2 text-[11px] font-extrabold text-white transition-colors hover:bg-[#A91D2A]"
                     >
                       <Ticket className="h-3.5 w-3.5" />
-                      {language === 'bn' ? 'টিকিট' : 'Ticket'}
+                      <span>{language === 'bn' ? 'টিকিট' : 'Ticket'}</span>
                     </Link>
                   </div>
                 </article>
@@ -216,7 +227,7 @@ export default function CountersPage() {
           </div>
         )}
 
-        <p className="border-l-2 border-amber-500 bg-amber-50 px-4 py-3 text-xs leading-6 text-amber-900">
+        <p className="border-l-2 border-[#B7791F] bg-[#FEF7EC] px-4 py-3 text-xs leading-6 text-[#7C5010]">
           {language === 'bn'
             ? 'নোট: কাউন্টারের ঠিকানা, ফোন নম্বর ও তালিকাভুক্ত সময় পরিবর্তিত হতে পারে। ফোন যাচাই করা না থাকলে যাওয়ার আগে হেল্পলাইনে নিশ্চিত করুন।'
             : 'Note: Counter addresses, phone numbers and listed hours may change. Where a phone number is unverified, confirm details with the main helpline before visiting.'}

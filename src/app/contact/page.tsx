@@ -39,8 +39,19 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-[65vh] bg-[#FAF9F7] pb-20">
-      <section className="bg-[#C92232] text-white">
-        <div className="mx-auto max-w-[1240px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+      <section className="relative isolate overflow-hidden bg-[#C92232] text-white">
+        {/* Subtle Ambient Light Drifts */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-36 -top-36 h-[440px] w-[440px] rounded-full bg-[#E5384B]/25 blur-[100px] animate-ambient-drift"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-32 right-1/4 h-[380px] w-[380px] rounded-full bg-[#8B1621]/45 blur-[90px] animate-ambient-drift"
+          style={{ animationDelay: '-12s' }}
+        />
+
+        <div className="relative mx-auto max-w-[1240px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <div className="mb-4 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.24em] text-white/75">
             <span className="h-px w-7 bg-white/75" />
             <span>{language === 'bn' ? 'সরাসরি সহায়তা' : 'Direct assistance'}</span>
@@ -48,7 +59,7 @@ export default function ContactPage() {
           <h1 className="max-w-3xl text-3xl font-black leading-[1.08] tracking-[-0.045em] sm:text-5xl">
             {language === 'bn' ? 'কথা বলুন মেট্রো প্রভাতীর সঙ্গে।' : 'Speak with Metro Probati.'}
           </h1>
-          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/80">
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/85">
             {language === 'bn'
               ? 'রুট, কাউন্টার, ভাড়া বা যাত্রীসেবা সম্পর্কে জানতে প্রকাশিত হেল্পলাইনে কল করুন অথবা WhatsApp-এ বার্তা পাঠান।'
               : 'For route, counter, fare or passenger-service information, call a listed helpline or send a message through WhatsApp.'}
@@ -61,16 +72,20 @@ export default function ContactPage() {
           <div className="mb-4 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C92232]">
             {language === 'bn' ? 'যোগাযোগের নম্বর' : 'Contact numbers'}
           </div>
-          <div className="divide-y divide-stone-200 border-y border-stone-300 bg-white">
+          <div className="divide-y divide-stone-200 border-y border-stone-300 bg-white shadow-xs">
             {contactRows.map((item) => (
-              <a key={item.number + item.label} href={'tel:' + item.number} className="group flex items-center justify-between gap-4 px-5 py-5 transition-colors hover:bg-[#FFF7F6] sm:px-6">
+              <a
+                key={item.number + item.label}
+                href={'tel:' + item.number}
+                className="group flex items-center justify-between gap-4 px-5 py-5 transition-colors hover:bg-[#FFF7F6] sm:px-6"
+              >
                 <div>
                   <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-stone-400">{item.label}</div>
                   <div className="mt-1 font-mono text-lg font-black tracking-tight text-stone-900">{item.number}</div>
                 </div>
                 <span className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232]">
                   <Phone className="h-4 w-4" />
-                  {language === 'bn' ? 'কল করুন' : 'Call'}
+                  <span>{language === 'bn' ? 'কল করুন' : 'Call'}</span>
                   <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </span>
               </a>
@@ -82,7 +97,7 @@ export default function ContactPage() {
               href={'https://wa.me/88' + INITIAL_HELPLINE.whatsappNumber.replace(/\D/g, '')}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex items-center justify-between gap-4 border border-[#C92232] bg-white px-5 py-5 text-[#C92232] transition-colors hover:bg-[#FFF7F6] sm:px-6"
+              className="mt-4 flex items-center justify-between gap-4 border border-[#C92232] bg-white px-5 py-5 text-[#C92232] transition-colors hover:bg-[#FFF7F6] sm:px-6 shadow-xs"
             >
               <div className="flex items-center gap-3">
                 <MessageCircle className="h-5 w-5" />
@@ -95,7 +110,7 @@ export default function ContactPage() {
             </a>
           )}
 
-          <div className="mt-6 border-l-2 border-amber-500 bg-amber-50 px-4 py-4 text-xs leading-6 text-amber-900">
+          <div className="mt-6 border-l-2 border-[#B7791F] bg-[#FEF7EC] px-4 py-4 text-xs leading-6 text-[#7C5010]">
             {language === 'bn'
               ? 'কাউন্টার, ফোন নম্বর ও সেবার সময় পরিবর্তিত হতে পারে। যাওয়ার আগে সরাসরি যোগাযোগ করে নিশ্চিত করুন।'
               : 'Counter details, phone numbers and service hours may change. Contact the team directly before visiting.'}
@@ -119,7 +134,7 @@ export default function ContactPage() {
           </div>
         </section>
 
-        <section className="border border-stone-200 bg-white p-5 sm:p-8">
+        <section className="border border-stone-200 bg-white p-5 sm:p-8 shadow-xs">
           <div className="mb-6 border-b border-stone-200 pb-5">
             <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C92232]">
               {language === 'bn' ? 'WhatsApp বার্তা' : 'WhatsApp message'}
@@ -178,9 +193,12 @@ export default function ContactPage() {
               />
             </div>
 
-            <button type="submit" className="inline-flex min-h-12 w-full items-center justify-center gap-2 bg-[#C92232] px-5 py-3 text-sm font-extrabold text-white transition-colors hover:bg-[#A91D2A]">
+            <button
+              type="submit"
+              className="inline-flex min-h-12 w-full items-center justify-center gap-2 bg-[#C92232] px-5 py-3 text-sm font-extrabold text-white transition-all duration-200 hover:bg-[#A91D2A] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C92232]"
+            >
               <MessageCircle className="h-4 w-4" />
-              {language === 'bn' ? 'WhatsApp-এ বার্তা তৈরি করুন' : 'Prepare WhatsApp message'}
+              <span>{language === 'bn' ? 'WhatsApp-এ বার্তা তৈরি করুন' : 'Prepare WhatsApp message'}</span>
               <ArrowUpRight className="h-4 w-4" />
             </button>
           </form>
@@ -192,9 +210,10 @@ export default function ContactPage() {
           </p>
         </section>
       </div>
+
       <div className="mx-auto max-w-[1240px] px-4 pt-10 sm:px-6 lg:px-8">
-        <Link href="/incidents/report" className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] hover:text-[#A91D2A]">
-          {language === 'bn' ? 'অভিযোগ বা হারানো মালামাল রিপোর্ট করুন' : 'Report an incident or lost item'}
+        <Link href="/incidents/report" className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] hover:text-[#A91D2A] transition-colors">
+          <span>{language === 'bn' ? 'অভিযোগ বা হারানো মালামাল রিপোর্ট করুন' : 'Report an incident or lost item'}</span>
           <ArrowUpRight className="h-4 w-4" />
         </Link>
       </div>

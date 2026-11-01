@@ -24,13 +24,16 @@ export const Hero: React.FC = () => {
   const [fromStopId, setFromStopId] = useState('stop-1');
   const [toStopId, setToStopId] = useState('stop-10');
   const [routeError, setRouteError] = useState('');
+  const [isSwapping, setIsSwapping] = useState(false);
 
   const fareResult = calculateFare(fromStopId, toStopId);
 
   const handleSwapStops = () => {
+    setIsSwapping(true);
     setFromStopId(toStopId);
     setToStopId(fromStopId);
     setRouteError('');
+    setTimeout(() => setIsSwapping(false), 260);
   };
 
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -52,12 +55,24 @@ export const Hero: React.FC = () => {
   return (
     <>
       <section className="relative isolate overflow-hidden bg-[#C92232] text-white">
+        {/* Native Ambient Motion Lights */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.08]"
+          className="pointer-events-none absolute -left-36 -top-36 h-[520px] w-[520px] rounded-full bg-[#E5384B]/25 blur-[110px] animate-ambient-drift"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-36 right-1/4 h-[440px] w-[440px] rounded-full bg-[#8B1621]/45 blur-[100px] animate-ambient-drift"
+          style={{ animationDelay: '-10s' }}
+        />
+
+        {/* Crisp Architectural Grid Accent */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
           style={{
             backgroundImage:
-              'linear-gradient(115deg, transparent 0 49.8%, rgba(255,255,255,.8) 50%, transparent 50.2%), linear-gradient(25deg, transparent 0 79.8%, rgba(255,255,255,.7) 80%, transparent 80.2%)',
+              'linear-gradient(115deg, transparent 0 49.8%, rgba(255,255,255,.9) 50%, transparent 50.2%), linear-gradient(25deg, transparent 0 79.8%, rgba(255,255,255,.8) 80%, transparent 80.2%)',
             backgroundSize: '100% 100%, 100% 100%',
           }}
         />
@@ -94,7 +109,7 @@ export const Hero: React.FC = () => {
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link
                 href="/tickets"
-                className="group inline-flex min-h-12 items-center justify-center gap-3 bg-white px-6 py-3 text-sm font-extrabold text-[#B91F2D] transition-colors duration-200 hover:bg-[#FFF4F4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                className="group inline-flex min-h-12 items-center justify-center gap-3 bg-white px-6 py-3 text-sm font-extrabold text-[#A91D2A] transition-all duration-200 hover:bg-[#FFF4F4] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
                 <Ticket className="h-4 w-4" />
                 <span>{language === 'bn' ? 'টিকিট বুক করুন' : 'Book a ticket'}</span>
@@ -102,7 +117,7 @@ export const Hero: React.FC = () => {
               </Link>
               <Link
                 href="/tracking"
-                className="inline-flex min-h-12 items-center justify-center gap-2 border border-white/45 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                className="inline-flex min-h-12 items-center justify-center gap-2 border border-white/45 px-5 py-3 text-sm font-bold text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
               >
                 <MapPin className="h-4 w-4" />
                 <span>{language === 'bn' ? 'বাসের অবস্থান' : 'Bus location'}</span>
@@ -138,10 +153,10 @@ export const Hero: React.FC = () => {
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 54vw"
-              className="object-cover object-center"
+              className="object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-black/10" />
-            <div className="absolute left-5 top-5 flex items-center gap-2 border border-white/50 bg-black/20 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:left-8 sm:top-8">
+            <div className="absolute left-5 top-5 flex items-center gap-2 border border-white/50 bg-black/25 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:left-8 sm:top-8">
               <BusFront className="h-4 w-4" />
               <span>{language === 'bn' ? 'মেট্রো প্রভাতী' : 'Metro Probati'}</span>
             </div>
@@ -170,8 +185,8 @@ export const Hero: React.FC = () => {
           </div>
         </div>
 
-        <div className="relative border-t border-white/20 bg-[#B91F2D]">
-          <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-3 text-[10px] font-semibold text-white/75 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-16 xl:px-24 sm:text-xs">
+        <div className="relative border-t border-white/20 bg-[#A91D2A]">
+          <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-3 text-[10px] font-semibold text-white/80 sm:flex-row sm:items-center sm:justify-between sm:px-10 lg:px-16 xl:px-24 sm:text-xs">
             <span>{language === 'bn' ? 'আপনার যাত্রা, আরও সহজভাবে।' : 'A clearer way to plan your everyday journey.'}</span>
             <span>{language === 'bn' ? 'রুট ও ভাড়ার তথ্য নির্দেশক; চূড়ান্ত তথ্য কাউন্টারে নিশ্চিত করুন।' : 'Route and fare details are indicative; confirm final information at the counter.'}</span>
           </div>
@@ -179,7 +194,7 @@ export const Hero: React.FC = () => {
       </section>
 
       <section className="relative z-10 mx-auto -mt-1 max-w-7xl px-4 pt-7 sm:px-6 sm:pt-10 lg:px-8">
-        <div className="border border-stone-200 bg-white shadow-[0_18px_55px_-38px_rgba(27,27,27,0.38)]">
+        <div className="border border-stone-200 bg-white shadow-transit-lg transition-all duration-300">
           <div className="grid grid-cols-1 gap-0 lg:grid-cols-[0.8fr_1.2fr]">
             <div className="border-b border-stone-200 px-5 py-5 sm:px-7 lg:border-b-0 lg:border-r">
               <div className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#C92232]">
@@ -223,7 +238,9 @@ export const Hero: React.FC = () => {
                 title={language === 'bn' ? 'শুরু ও গন্তব্য অদলবদল করুন' : 'Swap stops'}
                 className="mx-auto flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-500 transition hover:border-[#C92232] hover:text-[#C92232] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C92232] md:mb-1"
               >
-                <ArrowRightLeft className="h-4 w-4" />
+                <ArrowRightLeft
+                  className={'h-4 w-4 transition-transform duration-300 ' + (isSwapping ? 'rotate-180 text-[#C92232]' : '')}
+                />
               </button>
 
               <div className="min-w-0">
@@ -249,14 +266,14 @@ export const Hero: React.FC = () => {
 
               <button
                 type="submit"
-                className="inline-flex h-12 items-center justify-center gap-2 bg-[#C92232] px-6 text-sm font-extrabold text-white transition-colors hover:bg-[#A91D2A] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C92232] md:mb-0.5"
+                className="inline-flex h-12 items-center justify-center gap-2 bg-[#C92232] px-6 text-sm font-extrabold text-white transition-all duration-200 hover:bg-[#A91D2A] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C92232] md:mb-0.5"
               >
                 <Search className="h-4 w-4" />
                 <span>{language === 'bn' ? 'যাত্রা খুঁজুন' : 'Find journey'}</span>
               </button>
 
               {routeError && (
-                <p role="alert" className="text-xs font-semibold text-[#B91F2D] md:col-span-4">
+                <p role="alert" className="text-xs font-semibold text-[#A91D2A] md:col-span-4">
                   {routeError}
                 </p>
               )}
