@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s | Metro Probati',
   },
   description:
-    'কাপ্তাই রাস্তার মাথা ↔ কাঠগড় করিডোরে পরিচালিত চট্টগ্রাম নগরীর আধুনিক এক্সপ্রেস বাস সার্ভিস। লাইভ উপগ্রহ জিপিএস ট্র্যাকিং, অনলাইন আসন বুকিং, কাউন্টার ডিরেক্টরি ও স্বচ্ছ ভাড়া।',
+    'কাপ্তাই রাস্তার মাথা ↔ কাঠগড় করিডোরের রুট তথ্য, নির্দেশক ভাড়া হিসাব, কাউন্টার ডিরেক্টরি ও যাত্রীসেবা।',
   keywords: [
     'Metro Probati',
     'মেট্রো প্রভাতী',
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     url: 'https://metroprovatibusplatform.vercel.app',
     title: 'মেট্রো প্রভাতী | Metro Probati — Chattogram Express Transit',
     description:
-      'কাপ্তাই রাস্তার মাথা ↔ কাঠগড় করিডোরে পরিচালিত চট্টগ্রামের আধুনিক এক্সপ্রেস বাস। সরাসরি উপগ্রহ জিপিএস, আসন বুকিং ও কাউন্টার সেবা।',
+      'কাপ্তাই রাস্তার মাথা ↔ কাঠগড় করিডোরের রুট তথ্য, নির্দেশক ভাড়া হিসাব ও যাত্রীসেবা।',
     siteName: 'Metro Probati Transit',
     images: [
       {
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'মেট্রো প্রভাতী | Metro Probati — Chattogram Transit Service',
     description:
-      'কাপ্তাই রাস্তার মাথা ↔ কাঠগড় করিডোরে পরিচালিত চট্টগ্রামের আধুনিক এক্সপ্রেস বাস। লাইভ স্যাটেলাইট জিপিএস ও ডিজিটাল কাউন্টার।',
+      'কাপ্তাই রাস্তার মাথা ↔ কাঠগড় করিডোরের রুট তথ্য, নির্দেশক ভাড়া হিসাব ও যাত্রীসেবা।',
     images: ['/images/bus-1.jpg'],
   },
   robots: {
