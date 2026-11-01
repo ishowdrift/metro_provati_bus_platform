@@ -125,6 +125,12 @@ test('4. Chattogram Corridor Geofencing', () => {
 });
 
 test('5. Bus Telemetry Ingestion & Duty Status', () => {
+  // Seeded coordinates must not be treated as live telemetry before a device ping.
+  const unreportedBus = getLiveBuses().find((bus) => bus.id === 'bus-mp-102');
+  assert.ok(unreportedBus);
+  assert.equal(unreportedBus.freshness, 'unavailable');
+  assert.equal(unreportedBus.status, 'offline');
+
   // Valid telemetry ping in GEC Mor
   const result = recordDriverPing({
     busId: 'bus-mp-101',
