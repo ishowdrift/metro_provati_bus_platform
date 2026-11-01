@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
             </ul>
             <div className="mt-4 pt-3 border-t border-slate-800/80 text-xs text-slate-500 flex items-center justify-between">
               <span>১২টি প্রধান স্টপেজ</span>
-              <span className="font-mono text-red-400 font-bold">২৪.৯ কিমি করিডোর</span>
+              <span className="font-mono text-red-400 font-bold">প্রায় প্রায় প্রায় ২৪.৯ কিমি করিডোর</span>
             </div>
           </div>
 
@@ -96,8 +96,8 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2.5 text-xs sm:text-sm">
               <li>
                 <Link href="/tracking" className="text-slate-300 hover:text-white hover:underline transition flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>{language === 'bn' ? 'লাইভ স্যাটেলাইট ট্র্যাকিং' : 'Live Satellite Tracking'}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  <span>{language === 'bn' ? 'বাসের জিপিএস আপডেট' : 'Bus GPS updates'}</span>
                 </Link>
               </li>
               <li>
@@ -183,7 +183,7 @@ export const Footer: React.FC = () => {
               <div className="pt-2 text-xs text-slate-400 space-y-1">
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-red-400" />
-                  <span>অপারেটিং সময়: প্রতিদিন ভোর ০৫:৪৫ — রাত ১১:৩০</span>
+                  <span>কাউন্টারে যোগাযোগ করে বর্তমান সেবার সময় নিশ্চিত করুন</span>
                 </div>
                 <div className="text-slate-500">চট্টগ্রাম মেট্রোপলিটন এলাকা, বাংলাদেশ</div>
               </div>
