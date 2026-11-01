@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
             </ul>
             <div className="mt-4 pt-3 border-t border-slate-800/80 text-xs text-slate-500 flex items-center justify-between">
               <span>১২টি প্রধান স্টপেজ</span>
-              <span className="font-mono text-red-400 font-bold">প্রায় প্রায় প্রায় ২৪.৯ কিমি করিডোর</span>
+              <span className="font-mono text-red-400 font-bold">প্রায় ২৪.৯ কিমি করিডোর</span>
             </div>
           </div>
 
