@@ -1,158 +1,165 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { LiveTrackingMap } from '@/components/LiveTrackingMap';
 import { useLanguage } from '@/context/LanguageContext';
-import { Bus, GpsFreshness } from '@/types';
+import { Bus } from '@/types';
 import { toBengaliDigits } from '@/lib/fareCalculator';
-import {
-  Navigation,
-  Compass,
-  ShieldCheck,
-  Smartphone,
-  AlertTriangle,
-  RefreshCw,
-  Phone,
-  Info,
-} from 'lucide-react';
+import { AlertCircle, Clock3, Navigation, RefreshCw, ShieldCheck } from 'lucide-react';
 
 export default function TrackingPage() {
   const { language, t } = useLanguage();
   const [buses, setBuses] = useState<Bus[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lastChecked, setLastChecked] = useState('');
 
-  const fetchStatus = async () => {
+  const fetchStatus = useCallback(async () => {
     try {
-      const res = await fetch('/api/tracking/buses');
-      const data = await res.json();
-      if (data.success) {
+      const response = await fetch('/api/tracking/buses', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Tracking request failed');
+      const data = await response.json();
+      if (data.success && Array.isArray(data.buses)) {
         setBuses(data.buses);
+        setLastChecked(new Date().toLocaleTimeString());
       }
     } catch {
-      // Ignore
+      // Keep the last successfully received result visible.
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchStatus();
     const interval = setInterval(fetchStatus, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchStatus]);
 
-  const onDutyCount = buses.filter((b) => b.status === 'on_duty').length;
-  const liveGpsCount = buses.filter(
-    (b) => b.isLiveSharing !== false && b.freshness === 'active' && b.status === 'on_duty'
-  ).length;
-  const lastKnownCount = buses.filter(
-    (b) => b.isLiveSharing === false || b.freshness !== 'active'
-  ).length;
+  const activeCount = buses.filter((bus) => bus.freshness === 'active' && bus.status === 'on_duty' && bus.isLiveSharing !== false).length;
+  const staleCount = buses.filter((bus) => bus.freshness === 'stale').length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-      {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 text-red-700 border border-red-200 text-xs font-bold mb-2">
-          <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-          <span>{language === 'bn' ? 'স্যাটেলাইট জিপিএস সংযুক্ত' : 'Satellite GPS Connected'}</span>
-        </div>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          {t('tracking.title')}
-        </h1>
-        <p className="text-sm text-slate-500 mt-1 max-w-3xl">
-          {t('tracking.subtitle')}
-        </p>
+    <main className="bg-[#FAF9F7] pb-20">
+      <div className="mx-auto max-w-[1240px] space-y-8 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <header className="flex flex-col justify-between gap-6 border-b border-stone-300 pb-8 sm:flex-row sm:items-end">
+          <div className="max-w-2xl">
+            <div className="mb-4 flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#C92232]">
+              <span className="h-px w-7 bg-[#C92232]" />
+              <span>{language === 'bn' ? 'জিপিএস আপডেট' : 'GPS updates'}</span>
+            </div>
+            <h1 className="text-3xl font-black leading-[1.08] tracking-[-0.045em] text-stone-950 sm:text-5xl">
+              {t('tracking.title')}
+            </h1>
+            <p className="mt-4 text-sm leading-7 text-stone-500">
+              {language === 'bn'
+                ? 'বাসের অবস্থান কেবল ড্রাইভার বা সুপারভাইজারের ডিভাইস থেকে পাওয়া জিপিএস আপডেটের ভিত্তিতে দেখানো হয়।'
+                : 'Bus locations are shown only from GPS updates received from a driver or supervisor device.'}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="text-[10px] font-semibold text-stone-400">
+              {lastChecked ? (language === 'bn' ? 'সর্বশেষ যাচাই: ' : 'Checked: ') + lastChecked : loading ? (language === 'bn' ? 'তথ্য লোড হচ্ছে' : 'Loading data') : (language === 'bn' ? 'এখনো কোনো আপডেট নেই' : 'No update yet')}
+            </div>
+            <button
+              type="button"
+              onClick={fetchStatus}
+              disabled={loading}
+              className="inline-flex h-11 items-center gap-2 border border-stone-300 bg-white px-4 text-xs font-extrabold text-stone-700 transition hover:border-[#C92232] hover:text-[#C92232] disabled:opacity-50"
+            >
+              <RefreshCw className={'h-4 w-4 ' + (loading ? 'animate-spin' : '')} />
+              {language === 'bn' ? 'রিফ্রেশ' : 'Refresh'}
+            </button>
+          </div>
+        </header>
+
+        <section className="grid grid-cols-1 border-y border-stone-300 bg-white sm:grid-cols-3">
+          <div className="px-5 py-5 sm:px-7">
+            <div className="text-[10px] font-bold uppercase tracking-[0.17em] text-stone-400">
+              {language === 'bn' ? 'এখন লাইভ' : 'Live now'}
+            </div>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="h-2 w-2 bg-[#24775F]" />
+              <span className="text-3xl font-black tracking-tight text-stone-950">{toBengaliDigits(activeCount)}</span>
+            </div>
+            <p className="mt-1 text-[11px] text-stone-500">{language === 'bn' ? '৩ মিনিটের মধ্যে পাওয়া আপডেট' : 'Updates received within 3 minutes'}</p>
+          </div>
+          <div className="border-t border-stone-200 px-5 py-5 sm:border-l sm:border-t-0 sm:px-7">
+            <div className="text-[10px] font-bold uppercase tracking-[0.17em] text-stone-400">
+              {language === 'bn' ? 'বিলম্বিত আপডেট' : 'Delayed updates'}
+            </div>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="h-2 w-2 bg-amber-500" />
+              <span className="text-3xl font-black tracking-tight text-stone-950">{toBengaliDigits(staleCount)}</span>
+            </div>
+            <p className="mt-1 text-[11px] text-stone-500">{language === 'bn' ? '৩–১০ মিনিট আগের অবস্থান' : 'Last received 3–10 minutes ago'}</p>
+          </div>
+          <div className="border-t border-stone-200 px-5 py-5 sm:border-l sm:border-t-0 sm:px-7">
+            <div className="text-[10px] font-bold uppercase tracking-[0.17em] text-stone-400">
+              {language === 'bn' ? 'অবস্থান পাওয়া গেছে' : 'Locations received'}
+            </div>
+            <div className="mt-2 text-3xl font-black tracking-tight text-stone-950">{toBengaliDigits(buses.length)}</div>
+            <p className="mt-1 text-[11px] text-stone-500">{language === 'bn' ? 'লাইভ ও বিলম্বিত উভয় আপডেট' : 'Live and delayed updates combined'}</p>
+          </div>
+        </section>
+
+        {buses.length === 0 && !loading && (
+          <div className="flex items-start gap-3 border-l-2 border-amber-500 bg-amber-50 px-5 py-4 text-sm leading-7 text-amber-950">
+            <AlertCircle className="mt-1 h-5 w-5 shrink-0 text-amber-700" />
+            <div>
+              <div className="font-extrabold">
+                {language === 'bn' ? 'এই মুহূর্তে কোনো জিপিএস অবস্থান পাওয়া যায়নি।' : 'No GPS positions are available right now.'}
+              </div>
+              <p className="mt-1 text-xs text-amber-900">
+                {language === 'bn'
+                  ? 'কোনো বাসকে লাইভ দেখানোর মতো নতুন আপডেট এখনো পাওয়া যায়নি। ডিভাইস থেকে জিপিএস পাঠানো হলে এখানে অবস্থান দেখা যাবে।'
+                  : 'No fresh device update has been received to display a bus as live. A location will appear here after a device sends GPS data.'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <section className="overflow-hidden border border-stone-200 bg-white">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 px-5 py-4 sm:px-6">
+            <div>
+              <h2 className="text-sm font-extrabold text-stone-900">
+                {language === 'bn' ? 'করিডোর ম্যাপ' : 'Corridor map'}
+              </h2>
+              <p className="mt-1 text-[11px] text-stone-500">
+                {language === 'bn' ? 'লাল পিন: লাইভ জিপিএস · অ্যাম্বার: বিলম্বিত জিপিএস' : 'Red marker: live GPS · amber marker: delayed GPS'}
+              </p>
+            </div>
+            <div className="flex items-center gap-4 text-[10px] font-bold text-stone-500">
+              <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 bg-[#24775F]" />{language === 'bn' ? 'লাইভ' : 'Live'}</span>
+              <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 bg-amber-500" />{language === 'bn' ? 'বিলম্বিত' : 'Delayed'}</span>
+            </div>
+          </div>
+          <LiveTrackingMap />
+        </section>
+
+        <section className="grid gap-5 md:grid-cols-3">
+          <div className="border-t border-stone-300 pt-4">
+            <ShieldCheck className="h-5 w-5 text-[#C92232]" />
+            <h3 className="mt-3 text-sm font-extrabold text-stone-900">{language === 'bn' ? 'বাস্তব আপডেট' : 'Device-reported updates'}</h3>
+            <p className="mt-2 text-xs leading-6 text-stone-500">
+              {language === 'bn' ? 'কোনো কৃত্রিম বাস চলাচল বা অনুমানভিত্তিক লাইভ অবস্থান দেখানো উচিত নয়।' : 'The map should not show simulated bus movement or guessed live positions.'}
+            </p>
+          </div>
+          <div className="border-t border-stone-300 pt-4">
+            <Clock3 className="h-5 w-5 text-[#C92232]" />
+            <h3 className="mt-3 text-sm font-extrabold text-stone-900">{language === 'bn' ? 'আপডেটের সময়' : 'Update freshness'}</h3>
+            <p className="mt-2 text-xs leading-6 text-stone-500">
+              {language === 'bn' ? '৩ মিনিটের মধ্যে পাওয়া তথ্য লাইভ, ৩–১০ মিনিটের তথ্য বিলম্বিত হিসেবে চিহ্নিত।' : 'Updates under 3 minutes are live; updates between 3 and 10 minutes are marked delayed.'}
+            </p>
+          </div>
+          <div className="border-t border-stone-300 pt-4">
+            <Navigation className="h-5 w-5 text-[#C92232]" />
+            <h3 className="mt-3 text-sm font-extrabold text-stone-900">{language === 'bn' ? 'ডিভাইস সংযোগ' : 'Device connection'}</h3>
+            <p className="mt-2 text-xs leading-6 text-stone-500">
+              {language === 'bn' ? 'জিপিএস পাঠাতে ড্রাইভার বা সুপারভাইজারের ডিভাইসে লোকেশন অনুমতি ও নেটওয়ার্ক প্রয়োজন।' : 'A driver or supervisor device needs location permission and a network connection to send GPS updates.'}
+            </p>
+          </div>
+        </section>
       </div>
-
-      {/* Fleet Live Metric Chips */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-white border border-red-100 shadow-xs">
-          <div className="text-xs text-slate-500 font-semibold">
-            {language === 'bn' ? 'মোট বহর' : 'Total Fleet'}
-          </div>
-          <div className="text-2xl font-extrabold text-slate-900 font-mono mt-1">
-            {toBengaliDigits(buses.length)}
-          </div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white border border-red-100 shadow-xs">
-          <div className="text-xs text-slate-500 font-semibold">
-            {language === 'bn' ? 'রুটে কর্মরত বাস' : 'On-Duty Buses'}
-          </div>
-          <div className="text-2xl font-extrabold text-red-600 font-mono mt-1">
-            {toBengaliDigits(onDutyCount)}
-          </div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white border border-red-100 shadow-xs">
-          <div className="text-xs text-slate-500 font-semibold">
-            {language === 'bn' ? 'লাইভ জিপিএস সক্রিয় (🔴 লাইভ)' : 'Live Telemetry (<3m)'}
-          </div>
-          <div className="text-2xl font-extrabold text-red-600 font-mono mt-1 flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
-            {toBengaliDigits(liveGpsCount)}
-          </div>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-white border border-amber-200 shadow-xs bg-amber-50/40">
-          <div className="text-xs text-amber-800 font-semibold flex items-center gap-1">
-            <span>⏱️</span>
-            <span>{language === 'bn' ? 'সর্বশেষ অবস্থান প্রদর্শিত' : 'Last Known Location'}</span>
-          </div>
-          <div className="text-2xl font-extrabold text-amber-700 font-mono mt-1">
-            {toBengaliDigits(lastKnownCount)}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Map */}
-      <LiveTrackingMap />
-
-      {/* Genuine Telemetry & Transparency Architecture Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 rounded-3xl bg-gradient-to-r from-red-600 to-red-700 text-white shadow-md space-y-3">
-          <div className="flex items-center gap-2 text-white font-bold text-sm">
-            <ShieldCheck className="w-5 h-5 text-red-200" />
-            <span>
-              {language === 'bn' ? 'জেনুইন জিপিএস গ্যারান্টি' : 'Genuine GPS Guarantee'}
-            </span>
-          </div>
-          <p className="text-xs text-red-100 leading-relaxed">
-            {language === 'bn'
-              ? 'মেট্রো প্রভাতী প্ল্যাটফর্ম কোনো কৃত্রিম অ্যানিমেশন, অনুমানমূলক গতিপথ বা ফেক সিমুলেশন প্রদর্শন করে না। বাস শুধুমাত্র তখনই ট্র্যাকিং ম্যাপে অবস্থান বদলায় যখন অন-ডিউটি সুপারভাইজারের মোবাইল ডিভাইস থেকে সরাসরি কার্যকর জিপিএস সংকেত সার্ভারে পৌঁছায়।'
-              : 'Metro Probati strictly prohibits simulated or fictitious movements. A bus position shifts on the map only when authentic GPS hardware coordinates are ingested from active on-duty personnel.'}
-          </p>
-        </div>
-
-        <div className="p-6 rounded-3xl bg-amber-50 border border-amber-200 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-amber-900 font-bold text-sm">
-            <Info className="w-5 h-5 text-amber-600" />
-            <span>
-              {language === 'bn' ? 'যাত্রী আস্থা ও স্বচ্ছতা নীতি' : 'Passenger Trust Policy'}
-            </span>
-          </div>
-          <p className="text-xs text-amber-900 leading-relaxed">
-            {language === 'bn'
-              ? 'সুপারভাইজার সাময়িক জিপিএস সম্প্রচার বন্ধ রাখলে বা যাত্রা বিরতিতে গেলে বাসটি উধাও হয় না; বরং বিশ্বস্ততার সাথে বাসটির সর্বশেষ নিশ্চিত স্টপ ও সময় নিখুঁতভাবে প্রদর্শিত থাকে। ফলে যাত্রীরা সর্বদা সঠিক তথ্য জানতে পারেন।'
-              : 'When a supervisor pauses GPS broadcasting, the bus never disappears. Its exact last confirmed stop and timestamp are prominently displayed to maintain complete passenger transparency.'}
-          </p>
-        </div>
-
-        <div className="p-6 rounded-3xl bg-white border border-red-100 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-            <Smartphone className="w-5 h-5 text-red-600" />
-            <span>
-              {language === 'bn' ? 'মোবাইল ট্র্যাকিং ও PWA' : 'Mobile Telemetry & PWA'}
-            </span>
-          </div>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            {language === 'bn'
-              ? 'মোবাইল ব্রাউজারগুলোর নিরাপত্তা বিধিমালার কারণে স্ক্রিন লক বা ট্যাব বন্ধ থাকলে অবস্থান ট্র্যাকিং সাময়িক স্থগিত হতে পারে। দীর্ঘস্থায়ী অবিচ্ছিন্ন ট্র্যাকিংয়ের জন্য সুপারভাইজারদের ইনস্টলযোগ্য PWA হোমস্ক্রিনে যুক্ত করে ব্যবহারের পরামর্শ দেওয়া হয়।'
-              : 'Due to standard OS power management on mobile web browsers, background tracking may pause when the device sleeps. For persistent duty shifts, the installable PWA provides seamless foreground telemetry.'}
-          </p>
-        </div>
-      </div>
-    </div>
+    </main>
   );
 }
