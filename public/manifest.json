@@ -1,0 +1,23 @@
+{
+  "name": "Metro Probati Chattogram - বাস ট্র্যাকিং ও টিকিট সেবা",
+  "short_name": "Metro Probati",
+  "description": "চট্টগ্রামের নির্ভরযোগ্য মেট্রো প্রভাতী বাস ট্র্যাকিং, রুট, কাউন্টার, সিট বুকিং ও ই-টিকিট সেবা।",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#d32f2f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64 128x128",
+      "type": "image/png"
+    }
+  ]
+}
