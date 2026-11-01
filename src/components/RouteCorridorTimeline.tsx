@@ -4,7 +4,7 @@ import React from 'react';
 import { RouteStop } from '@/types';
 import { INITIAL_STOPS } from '@/data/mockData';
 import { useLanguage } from '@/context/LanguageContext';
-import { MapPin, Phone, Building2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Building2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { toBengaliDigits } from '@/lib/fareCalculator';
 
 interface RouteCorridorTimelineProps {
@@ -21,90 +21,90 @@ export const RouteCorridorTimeline: React.FC<RouteCorridorTimelineProps> = ({
   const { language } = useLanguage();
 
   return (
-    <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-[11px] sm:before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-red-600 before:via-red-500 before:to-red-700">
-      {stops.map((stop, idx) => {
+    <div className="divide-y divide-stone-200">
+      {stops.map((stop, index) => {
         const isSelected = selectedStopId === stop.id;
         const isTerminal = stop.isTerminal;
+        const stopName = language === 'bn' ? stop.nameBn : stop.nameEn;
+        const stopAddress = language === 'bn' ? stop.addressBn : stop.addressEn;
+        const boothName = language === 'bn' ? stop.boothNameBn : stop.boothNameEn;
 
         return (
           <div
             key={stop.id}
-            onClick={() => onSelectStop && onSelectStop(stop)}
-            className={`relative group cursor-pointer transition-all ${
-              onSelectStop ? 'hover:translate-x-1' : ''
-            }`}
+            onClick={onSelectStop ? () => onSelectStop(stop) : undefined}
+            onKeyDown={
+              onSelectStop
+                ? (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      onSelectStop(stop);
+                    }
+                  }
+                : undefined
+            }
+            role={onSelectStop ? 'button' : undefined}
+            tabIndex={onSelectStop ? 0 : undefined}
+            aria-pressed={onSelectStop ? isSelected : undefined}
+            className={
+              'group grid grid-cols-[42px_1fr] gap-3 py-4 first:pt-0 last:pb-0 sm:grid-cols-[50px_1fr] sm:gap-4 ' +
+              (onSelectStop ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C92232] ' : '') +
+              (isSelected ? 'bg-[#FFF7F6] ' : '')
+            }
           >
-            {/* Timeline Node Point */}
-            <div
-              className={`absolute -left-[30px] sm:-left-[35px] top-1.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
-                isTerminal
-                  ? 'bg-red-700 text-white ring-4 ring-red-100 shadow-md scale-110'
-                  : isSelected
-                  ? 'bg-red-600 text-white ring-4 ring-red-100 shadow-md'
-                  : 'bg-white border-2 border-red-500 text-red-700 group-hover:bg-red-50'
-              }`}
-            >
-              {toBengaliDigits(stop.sequence)}
+            <div className="relative flex justify-center">
+              <span
+                className={
+                  'relative z-10 flex h-8 w-8 items-center justify-center border text-[11px] font-black transition-colors ' +
+                  (isTerminal
+                    ? 'border-[#C92232] bg-[#C92232] text-white'
+                    : isSelected
+                    ? 'border-[#C92232] bg-[#C92232] text-white'
+                    : 'border-stone-300 bg-white text-stone-500 group-hover:border-[#C92232] group-hover:text-[#C92232]')
+                }
+              >
+                {toBengaliDigits(stop.sequence)}
+              </span>
+              {index !== stops.length - 1 && (
+                <span aria-hidden="true" className="absolute bottom-[-18px] top-8 w-px bg-stone-200" />
+              )}
             </div>
 
-            {/* Stop Content Box */}
-            <div
-              className={`p-4 rounded-2xl border transition-all ${
-                isSelected
-                  ? 'bg-red-50/70 border-red-300 shadow-sm'
-                  : 'bg-white border-slate-200/90 hover:border-red-200 hover:shadow-sm'
-              }`}
-            >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-extrabold text-slate-900 text-base">
-                    {language === 'bn' ? stop.nameBn : stop.nameEn}
-                  </h4>
-                  {isTerminal && (
-                    <span className="px-2 py-0.5 bg-red-100 text-red-800 text-[10px] font-bold rounded uppercase">
-                      {language === 'bn' ? 'মাস্টার টার্মিনাল' : 'Terminal'}
-                    </span>
-                  )}
-                  {stop.boothAvailable && (
-                    <span className="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 text-[10px] font-bold rounded">
-                      {language === 'bn' ? 'কাউন্টার যুক্ত' : 'Booth'}
-                    </span>
-                  )}
-                </div>
-
-                <div className="text-xs text-slate-400 font-mono">
-                  {stop.lat.toFixed(4)}°N, {stop.lng.toFixed(4)}°E
-                </div>
+            <div className="min-w-0 pb-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <h4 className="text-sm font-extrabold tracking-tight text-stone-900 sm:text-base">
+                  {stopName}
+                </h4>
+                {isTerminal && (
+                  <span className="border border-[#F2C4C7] bg-[#FFF3F3] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-[#B91F2D]">
+                    {language === 'bn' ? 'টার্মিনাল' : 'Terminal'}
+                  </span>
+                )}
               </div>
 
-              {/* Address / Location details */}
-              <p className="mt-1 text-xs text-slate-500">
-                {language === 'bn' ? stop.addressBn : stop.addressEn}
-              </p>
+              {stopAddress && (
+                <p className="mt-1 text-[11px] leading-5 text-stone-500 sm:text-xs">
+                  {stopAddress}
+                </p>
+              )}
 
-              {/* Counter Booth info if present */}
-              {stop.boothAvailable && (
-                <div className="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
-                  <div className="flex items-center gap-1.5 text-slate-700">
-                    <Building2 className="w-3.5 h-3.5 text-red-600" />
-                    <span className="font-semibold">
-                      {language === 'bn' ? stop.boothNameBn : stop.boothNameEn}
+              {stop.boothAvailable && boothName && (
+                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[10px] font-semibold text-stone-500">
+                  <span className="inline-flex items-center gap-1.5 text-stone-600">
+                    <Building2 className="h-3.5 w-3.5 text-[#C92232]" />
+                    {boothName}
+                  </span>
+                  {stop.phoneVerificationStatus === 'verified' ? (
+                    <span className="inline-flex items-center gap-1 text-[#24775F]">
+                      <CheckCircle2 className="h-3 w-3" />
+                      {language === 'bn' ? 'যোগাযোগ যাচাইকৃত' : 'Contact verified'}
                     </span>
-                  </div>
-
-                  <div className="flex items-center gap-1 text-[11px] font-medium text-slate-500">
-                    {stop.phoneVerificationStatus === 'verified' ? (
-                      <span className="flex items-center gap-1 text-red-700 bg-red-50 border border-red-100 px-2 py-0.5 rounded">
-                        <CheckCircle2 className="w-3 h-3 text-red-600" />
-                        {language === 'bn' ? 'যাচাইকৃত হেল্পলাইন' : 'Verified Line'}
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-1 text-amber-700 bg-amber-50 px-2 py-0.5 rounded">
-                        <AlertCircle className="w-3 h-3" />
-                        {language === 'bn' ? 'অফিসিয়াল যোগাযোগ সংযুক্তাধীন' : 'Pending Line Verification'}
-                      </span>
-                    )}
-                  </div>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-amber-700">
+                      <AlertCircle className="h-3 w-3" />
+                      {language === 'bn' ? 'যোগাযোগ যাচাইাধীন' : 'Contact unverified'}
+                    </span>
+                  )}
                 </div>
               )}
             </div>
