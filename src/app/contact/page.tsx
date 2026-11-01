@@ -23,8 +23,7 @@ export default function ContactPage() {
       (language === 'bn' ? 'বার্তা: ' : 'Message: ') + message.trim(),
     ].join('\n');
     const url = 'https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(text);
-    const opened = window.open(url, '_blank', 'noopener,noreferrer');
-    if (!opened) window.location.href = url;
+    window.location.assign(url);
   };
 
   const contactRows = [
