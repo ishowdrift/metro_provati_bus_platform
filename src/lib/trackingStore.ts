@@ -20,7 +20,17 @@ export function isWithinChattogram(lat: number, lng: number): boolean {
 }
 
 // In-memory bus telemetry store
-let busesStore: Bus[] = JSON.parse(JSON.stringify(INITIAL_BUSES));
+// Keep the fleet roster available for driver-device updates, but never treat
+// seeded coordinates as live telemetry. A bus becomes visible to passengers
+// only after recordDriverPing receives an actual device update.
+let busesStore: Bus[] = JSON.parse(JSON.stringify(INITIAL_BUSES)).map((bus: Bus) => ({
+  ...bus,
+  status: 'offline',
+  speedKmh: 0,
+  isLiveSharing: false,
+  freshness: 'unavailable',
+  lastUpdated: new Date(0).toISOString(),
+}));
 
 /**
  * Returns all buses with dynamically updated freshness statuses and nearest stop names
