@@ -14,6 +14,34 @@ export const Footer: React.FC = () => {
   return (
     <footer className="border-t-4 border-[#C92232] bg-[#272524] pt-12 pb-12 text-slate-300 sm:pt-16 sm:pb-14">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Terminal Route Connector Ribbon */}
+        <div className="pb-10 mb-10 border-b border-slate-800">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl bg-black/40 border border-slate-800/80">
+            <div className="flex items-center gap-3">
+              <span className="w-3 h-3 rounded-full bg-[#C92232] animate-pulse flex-shrink-0" />
+              <div>
+                <span className="font-mono text-[10px] font-bold text-[#F2E4E2] uppercase tracking-widest block">
+                  CHATTOGRAM ARTERIAL CORRIDOR · LINE MP-01
+                </span>
+                <span className="text-base sm:text-lg font-black text-white font-display mt-0.5 block">
+                  {language === 'bn' ? 'কাপ্তাই রাস্তার মাথা ⇄ কাঠগড় টার্মিনাল' : 'Kaptai Rastar Matha ⇄ Katgor Terminal'}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-400">
+              <span className="bg-white/10 px-3 py-1 rounded-full text-white font-bold">24.9 KM</span>
+              <span className="text-slate-600">•</span>
+              <span>12 VERIFIED STOPS</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                ACTIVE SERVICE
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
           {/* Brand Info & Transit Mission */}
           <div className="space-y-4">
