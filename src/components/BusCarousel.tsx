@@ -1,153 +1,223 @@
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Bus,
+  Sparkles,
+  ShieldCheck,
+  Ticket,
+  Navigation,
+  Play,
+  Pause,
+  ArrowRight,
+} from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
-const FLEET_PHOTOS = [
+export interface BusSlide {
+  id: string;
+  image: string;
+  regBn: string;
+  regEn: string;
+  modelBn: string;
+  modelEn: string;
+  titleBn: string;
+  titleEn: string;
+  descBn: string;
+  descEn: string;
+  featuresBn: string[];
+  featuresEn: string[];
+}
+
+const BUS_SLIDES: BusSlide[] = [
   {
-    id: 'fleet-01',
+    id: 'bus-1',
     image: '/images/bus-1.jpg',
-    titleBn: 'মেট্রো প্রভাতী কমিউটার কোচ',
-    titleEn: 'Metro Probati Commuter Coach',
-    captionBn: 'চট্টগ্রামের প্রধান রুটে প্রতিদিনের নিয়মিত যাত্রীসেবায় নিয়োজিত বহর।',
-    captionEn: 'Serving daily commuters along Chattogram’s primary east-west arterial corridor.',
-    spec: 'CHATTA-METRO-B / COMMUTER 40-SEAT',
+    regBn: 'চট্ট মেট্রো ব ১১-০১৮৩',
+    regEn: 'Chatto Metro-BA 11-0183',
+    modelBn: 'অশোক লেল্যান্ড ভাইকিং প্রিমিয়াম এক্সপ্রেস',
+    modelEn: 'Ashok Leyland Viking Premium Express',
+    titleBn: 'মেট্রো প্রভাতী এক্সপ্রেস বহর — চট্টগ্রাম নগরী',
+    titleEn: 'Metro Probati Express Fleet — Chattogram City',
+    descBn:
+      'কাপ্তাই রাস্তার মাথা টার্মিনাল থেকে বহদ্দারহাট, মুরাদপুর, জিইসি ও ইপিজেড হয়ে কাঠগড় পর্যন্ত নিরবচ্ছিন্ন আধুনিক গণপরিবহন।',
+    descEn:
+      'Seamless modern transit from Kaptai Rastar Matha Terminal to Katgor via Bahaddarhat, Muradpur, GEC, and EPZ.',
+    featuresBn: ['৪১টি আরামদায়ক পুশব্যাক সিট', 'ডুয়েল গেট দ্রুত প্যাসেঞ্জার এন্ট্রি', 'অনলাইন সিট বুকিং'],
+    featuresEn: ['41 Comfort Pushback Seats', 'Dual-Door Fast Entry/Exit', 'Online Seat Reservation'],
   },
   {
-    id: 'fleet-02',
+    id: 'bus-2',
     image: '/images/bus-2.jpg',
-    titleBn: 'নগর পরিবহন আর্টেরিয়াল ইউনিট',
-    titleEn: 'Urban Arterial Unit',
-    captionBn: 'কাপ্তাই রাস্তার মাথা থেকে বহদ্দারহাট, জিইসি ও আগ্রাবাদ হয়ে কাঠগড় পর্যন্ত সংযোগ।',
-    captionEn: 'Connecting Kaptai Rastar Matha, Bahaddarhat, GEC, and Agrabad onward to Katgor.',
-    spec: 'DUAL-DOOR PASSENGER TRANSIT',
+    regBn: 'চট্ট মেট্রো ব ১১-০১৮৪',
+    regEn: 'Chatto Metro-BA 11-0184',
+    modelBn: 'আলোকিত ফ্রন্টভিউ ও ডিজিটাল রুট ডিসপ্লে',
+    modelEn: 'Illuminated Front Profile & Digital Route Board',
+    titleBn: 'নিরাপদ, পরিচ্ছন্ন ও সুশৃঙ্খল যাত্রীযাত্রা',
+    titleEn: 'Safe, Clean & Disciplined Commuting',
+    descBn:
+      'দক্ষ চালক ও প্রশিক্ষিত বাস সুপারভাইজার কর্তৃক পরিচালিত। যাত্রীদের নির্বিঘ্ন সেবা নিশ্চিতকরণে বিআরটিএ ও ট্রাফিক আইনসম্মত গতিসীমা নিয়ন্ত্রিত।',
+    descEn:
+      'Operated by verified drivers and certified supervisors with strict adherence to BRTA route protocols and commuter comfort.',
+    featuresBn: ['সরাসরি স্যাটেলাইট জিপিএস', 'কাউন্টার ভিত্তিক স্বচ্ছ ভাড়া', 'নিয়মিত পরিচ্ছন্নতা অডিট'],
+    featuresEn: ['Live Satellite GPS', 'Fixed Transparent Fares', 'Daily Hygiene Audited'],
   },
   {
-    id: 'fleet-03',
+    id: 'bus-3',
     image: '/images/bus-3.jpg',
-    titleBn: 'করিডোর প্যাসেঞ্জার ক্যারিয়ার',
-    titleEn: 'Corridor Passenger Carrier',
-    captionBn: 'যাত্রীদের সুবিধার জন্য নির্ধারিত স্টপ ও নিয়মতান্ত্রিক বোর্ডিং ব্যবস্থা।',
-    captionEn: 'Systematic boarding and designated stop alignment for high-density commuter flow.',
-    spec: 'SCHEDULED CORRIDOR DEPLOYMENT',
+    regBn: 'চট্ট মেট্রো ব ১১-০১৮৫',
+    regEn: 'Chatto Metro-BA 11-0185',
+    modelBn: 'দৈনিক অবিরাম সময়সূচি (ভোর ৫:৪৫ - রাত ১০:৪৫)',
+    modelEn: 'Daily Scheduled Operations (5:45 AM - 10:45 PM)',
+    titleBn: 'কাঠগড় থেকে কাপ্তাই মাথা — স্মার্ট সংযোগ',
+    titleEn: 'Katgor to Kaptai Matha — Smart Corridor',
+    descBn:
+      'যাত্রীদের দীর্ঘ অপেক্ষার অবসান। প্রতি ১০-১৫ মিনিট পর পর নির্দিষ্ট কাউন্টার থেকে পরবর্তী বাস যাত্রা শুরু করে।',
+    descEn:
+      'No more endless waiting. Scheduled departures every 10–15 minutes connecting 11 major city hub counters.',
+    featuresBn: ['১০-১৫ মিনিট ফ্রিকোয়েন্সি', 'জরুরি হেল্পলাইন সেবা', 'কাউন্টার ও কিউআর টিকিট'],
+    featuresEn: ['10–15 Min Frequency', 'Direct Helpline Support', 'Counter & QR Tickets'],
   },
 ];
 
 export const BusCarousel: React.FC = () => {
   const { language } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const current = FLEET_PHOTOS[currentIndex];
-  const total = FLEET_PHOTOS.length;
+  const [isPlaying, setIsPlaying] = useState(true);
 
-  const showPrevious = () => setCurrentIndex((index) => (index - 1 + total) % total);
-  const showNext = () => setCurrentIndex((index) => (index + 1) % total);
+  const total = BUS_SLIDES.length;
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % total);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
+  };
+
+  const goToSlide = (idx: number) => {
+    setCurrentIndex(idx);
+  };
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % total);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isPlaying, total]);
+
+  const current = BUS_SLIDES[currentIndex];
 
   return (
-    <div className="border-t border-stone-300 pt-8">
-      {/* Editorial Header & Minimalist Controls */}
-      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <div className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#C92232]">
-            EXHIBIT {String(currentIndex + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+    <div className="bg-white rounded-3xl shadow-xl border border-[#E5E0D8] overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+        {/* Left Column: Authentic Bus Photograph */}
+        <div className="relative min-h-[320px] sm:min-h-[420px] lg:col-span-7 bg-[#272524] overflow-hidden group">
+          <Image
+            src={current.image}
+            alt={language === 'bn' ? current.titleBn : current.titleEn}
+            fill
+            sizes="(max-width: 1024px) 100vw, 58vw"
+            className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            priority={currentIndex === 0}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+          {/* Registration Plate Pill */}
+          <div className="absolute top-5 left-5 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-[#272524] font-mono text-xs font-black shadow-md border border-white/40">
+            {language === 'bn' ? current.regBn : current.regEn}
           </div>
-          <h3 className="mt-1 text-2xl font-black tracking-tight text-stone-950 sm:text-3xl">
-            {language === 'bn' ? current.titleBn : current.titleEn}
-          </h3>
-          <p className="mt-1 text-xs text-stone-500 sm:text-sm">
-            {language === 'bn' ? current.captionBn : current.captionEn}
-          </p>
-        </div>
 
-        {/* Swiss Architectural Navigation Controls */}
-        <div className="flex items-center gap-3 self-start sm:self-end">
-          <div className="flex items-center gap-1 font-mono text-xs font-bold text-stone-400">
-            <span className="text-stone-900">{String(currentIndex + 1).padStart(2, '0')}</span>
-            <span>/</span>
-            <span>{String(total).padStart(2, '0')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={showPrevious}
-              aria-label={language === 'bn' ? 'পূর্ববর্তী বহরের ছবি' : 'Previous fleet photograph'}
-              className="flex h-11 w-11 items-center justify-center border border-stone-300 bg-white text-stone-700 transition hover:border-[#C92232] hover:bg-[#C92232] hover:text-white active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C92232]"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={showNext}
-              aria-label={language === 'bn' ? 'পরবর্তী বহরের ছবি' : 'Next fleet photograph'}
-              className="flex h-11 w-11 items-center justify-center border border-stone-300 bg-white text-stone-700 transition hover:border-[#C92232] hover:bg-[#C92232] hover:text-white active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C92232]"
-            >
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Dramatic Wide Architectural Photographic Spread */}
-      <div className="relative aspect-[16/9] max-h-[560px] w-full overflow-hidden bg-stone-950 sm:aspect-[21/9]">
-        <Image
-          key={current.id}
-          src={current.image}
-          alt={language === 'bn' ? current.titleBn : current.titleEn}
-          fill
-          priority={currentIndex === 0}
-          sizes="(max-width: 1240px) 100vw, 1240px"
-          className="object-cover object-center transition-all duration-700 ease-out hover:scale-[1.02]"
-        />
-
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-
-        {/* Corner Wayfinding Badge */}
-        <div className="absolute left-4 top-4 flex items-center gap-2 bg-[#211F1F]/90 px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:left-6 sm:top-6 sm:text-[10px]">
-          <span className="h-1.5 w-1.5 bg-[#C92232]" />
-          <span>LINE MP-01</span>
-          <span className="text-white/40">•</span>
-          <span className="text-white/70">{current.spec}</span>
-        </div>
-
-        {/* Bottom Editorial Caption */}
-        <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-end justify-between gap-3 text-white sm:bottom-6 sm:left-6 sm:right-6">
-          <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.25em] text-[#F18A91]">
-              {language === 'bn' ? 'বহর পরিচিতি' : 'Fleet Profile'}
+          {/* Slide Indicator Bar */}
+          <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              {BUS_SLIDES.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => goToSlide(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    idx === currentIndex ? 'w-8 bg-[#C92232]' : 'w-2 bg-white/60 hover:bg-white'
+                  }`}
+                />
+              ))}
             </div>
-            <div className="mt-1 text-sm font-extrabold sm:text-lg">
-              {language === 'bn' ? 'কাপ্তাই রাস্তার মাথা — কাঠগড় করিডোর' : 'Kaptai Rastar Matha — Katgor Corridor'}
+
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => setIsPlaying(!isPlaying)}
+                aria-label={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
+                className="p-2 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition"
+              >
+                {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+              </button>
+              <button
+                onClick={prevSlide}
+                aria-label="Previous slide"
+                className="p-2 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={nextSlide}
+                aria-label="Next slide"
+                className="p-2 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
-          <Link
-            href="/routes"
-            className="inline-flex items-center gap-1.5 border-b border-white/60 pb-1 text-xs font-bold text-white transition-colors hover:border-white"
-          >
-            <span>{language === 'bn' ? 'রুট করিডোর দেখুন' : 'Explore route corridor'}</span>
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </Link>
         </div>
-      </div>
 
-      {/* Transit Technical Specification Ledger Bar */}
-      <div className="grid grid-cols-2 gap-4 border-b border-stone-300 py-4 font-mono text-[10px] uppercase text-stone-500 sm:grid-cols-4 sm:text-[11px]">
-        <div>
-          <span className="block text-[9px] text-stone-400">CORRIDOR</span>
-          <span className="font-bold text-stone-800">KAPTAI ⇄ KATGOR</span>
-        </div>
-        <div>
-          <span className="block text-[9px] text-stone-400">STOPS SERVED</span>
-          <span className="font-bold text-stone-800">12 KEY STATIONS</span>
-        </div>
-        <div>
-          <span className="block text-[9px] text-stone-400">DISTANCE</span>
-          <span className="font-bold text-stone-800">24.9 KM ARTERIAL</span>
-        </div>
-        <div>
-          <span className="block text-[9px] text-stone-400">OPERATOR</span>
-          <span className="font-bold text-stone-800">METRO PROBATI LTD</span>
+        {/* Right Column: Vehicle & Fleet Specifications */}
+        <div className="p-6 sm:p-8 lg:p-10 lg:col-span-5 flex flex-col justify-between space-y-6">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F2E4E2] text-[#C92232] text-xs font-black uppercase tracking-wider">
+              <Bus className="w-3.5 h-3.5" />
+              <span>{language === 'bn' ? current.modelBn : current.modelEn}</span>
+            </div>
+
+            <h3 className="text-xl sm:text-2xl font-black text-[#272524] leading-tight">
+              {language === 'bn' ? current.titleBn : current.titleEn}
+            </h3>
+
+            <p className="text-sm text-slate-500 leading-relaxed">
+              {language === 'bn' ? current.descBn : current.descEn}
+            </p>
+
+            {/* Feature Checklist */}
+            <div className="space-y-2 pt-2">
+              {(language === 'bn' ? current.featuresBn : current.featuresEn).map((feature, i) => (
+                <div key={i} className="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-[#272524]">
+                  <span className="w-5 h-5 rounded-full bg-[#EAF1EE] text-[#49665A] flex items-center justify-center flex-shrink-0">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                  </span>
+                  <span>{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center gap-3">
+            <Link
+              href="/tickets"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#C92232] hover:bg-[#A91D2A] text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#C92232]/20 active:scale-95 transition-all"
+            >
+              <Ticket className="w-4 h-4" />
+              <span>{language === 'bn' ? 'এই বাসে টিকিট বুক করুন' : 'Book on this Bus'}</span>
+            </Link>
+            <Link
+              href="/routes"
+              className="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl bg-[#F1EEE8] hover:bg-[#E5E0D8] text-[#272524] font-bold text-xs sm:text-sm transition-all"
+            >
+              <span>{language === 'bn' ? 'করিডোর রুট দেখুন' : 'View Corridor'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </div>
     </div>

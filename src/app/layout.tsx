@@ -92,7 +92,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="bn">
-      <body className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-red-600 selection:text-white">
+      <body className="min-h-screen flex flex-col bg-[#F1EEE8] text-[#272524] selection:bg-[#C92232] selection:text-white">
         <LanguageProvider>
           <AuthProvider>
             <Navbar />

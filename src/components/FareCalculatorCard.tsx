@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, Info, Ticket } from 'lucide-react';
+import { ArrowRightLeft, Calculator, Compass, Info, CheckCircle2, Ticket, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { INITIAL_STOPS } from '@/data/mockData';
 import { calculateFare, formatBDT, toBengaliDigits } from '@/lib/fareCalculator';
@@ -18,140 +18,145 @@ export const FareCalculatorCard: React.FC<FareCalculatorCardProps> = ({
   initialToStopId = 'stop-10',
   onSelectRoute,
 }) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [fromStopId, setFromStopId] = useState(initialFromStopId);
   const [toStopId, setToStopId] = useState(initialToStopId);
-  const [isSwapping, setIsSwapping] = useState(false);
-  const fareResult = calculateFare(fromStopId, toStopId);
-
-  const handleOriginChange = (value: string) => {
-    setFromStopId(value);
-    onSelectRoute?.(value, toStopId);
-  };
-
-  const handleDestinationChange = (value: string) => {
-    setToStopId(value);
-    onSelectRoute?.(fromStopId, value);
-  };
 
   const handleSwap = () => {
-    setIsSwapping(true);
+    const temp = fromStopId;
     setFromStopId(toStopId);
-    setToStopId(fromStopId);
-    onSelectRoute?.(toStopId, fromStopId);
-    setTimeout(() => setIsSwapping(false), 260);
+    setToStopId(temp);
   };
 
-  const fieldClass =
-    'h-12 w-full min-w-0 border border-stone-300 bg-[#FAF9F7] px-3 text-sm font-bold text-stone-900 outline-none transition focus:border-[#C92232] focus:ring-2 focus:ring-[#C92232]/15';
+  const fareResult = calculateFare(fromStopId, toStopId);
 
   return (
-    <div className="border border-stone-300 bg-white p-5 shadow-xs transition-shadow duration-300 hover:shadow-transit sm:p-7">
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-stone-200 pb-5">
-        <div>
-          <div className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#C92232]">
-            {language === 'bn' ? 'ভাড়া ক্যালকুলেটর' : 'Fare calculator'}
+    <div className="bg-white rounded-3xl shadow-xl border border-[#E5E0D8] p-6 md:p-8 transition-all">
+      <div className="flex items-center justify-between pb-6 border-b border-slate-100">
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-[#F2E4E2] rounded-2xl text-[#C92232]">
+            <Calculator className="w-6 h-6 stroke-[2.2]" />
           </div>
-          <h3 className="mt-2 text-lg font-black tracking-tight text-stone-950 sm:text-xl">
-            {language === 'bn' ? 'আপনার যাত্রার ভাড়া' : 'Your journey fare'}
-          </h3>
-          <p className="mt-1 text-xs leading-5 text-stone-500">
-            {language === 'bn' ? 'দুটি স্টপ নির্বাচন করুন' : 'Choose two stops along the corridor'}
-          </p>
+          <div>
+            <h3 className="font-extrabold text-[#272524] text-lg md:text-xl">
+              {language === 'bn' ? 'ভাড়া ও পর্যায় ক্যালকুলেটর' : 'Fare & Stage Calculator'}
+            </h3>
+            <p className="text-xs text-slate-500">
+              {language === 'bn'
+                ? 'চট্টগ্রাম করিডোরের যে কোনো দুটি স্টপের নির্দেশক খসড়া ভাড়া'
+                : 'Indicative draft fare between any two stops along the corridor'}
+            </p>
+          </div>
         </div>
-        <span className="border border-[#B7791F]/30 bg-[#FEF7EC] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#B7791F]">
-          {language === 'bn' ? 'খসড়া' : 'Draft'}
+        <span className="text-xs font-bold px-3 py-1 bg-[#FAF4EB] text-[#A87936] rounded-full border border-[#A87936]/30">
+          {language === 'bn' ? 'খসড়া তালিকা' : 'Draft Matrix'}
         </span>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto_1fr] sm:items-end">
-        <div className="min-w-0">
-          <label htmlFor="fare-origin" className="mb-2 block text-[11px] font-bold text-stone-500">
-            {language === 'bn' ? 'যাত্রা শুরু' : 'From'}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3 items-center">
+        {/* Origin Selector */}
+        <div className="md:col-span-2">
+          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            {language === 'bn' ? 'যাত্রা শুরুর স্টপ' : 'Origin Stop'}
           </label>
-          <select id="fare-origin" value={fromStopId} onChange={(event) => handleOriginChange(event.target.value)} className={fieldClass}>
+          <select
+            value={fromStopId}
+            onChange={(e) => setFromStopId(e.target.value)}
+            className="w-full px-4 py-3 bg-[#F1EEE8] border border-[#E5E0D8] rounded-xl text-sm font-bold text-[#272524] focus:outline-none focus:ring-2 focus:ring-[#C92232] transition"
+          >
             {INITIAL_STOPS.map((stop) => (
               <option key={stop.id} value={stop.id}>
                 {stop.sequence}. {language === 'bn' ? stop.nameBn : stop.nameEn}
+                {stop.isTerminal ? (language === 'bn' ? ' (টার্মিনাল)' : ' (Terminal)') : ''}
               </option>
             ))}
           </select>
         </div>
 
-        <button
-          type="button"
-          onClick={handleSwap}
-          aria-label={language === 'bn' ? 'শুরু ও গন্তব্য অদলবদল করুন' : 'Swap origin and destination'}
-          className="mx-auto flex h-10 w-10 items-center justify-center border border-stone-200 text-stone-500 transition hover:border-[#C92232] hover:text-[#C92232] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C92232] sm:mb-1"
-        >
-          <ArrowLeftRight className={'h-4 w-4 transition-transform duration-300 ' + (isSwapping ? 'rotate-180 text-[#C92232]' : '')} />
-        </button>
+        {/* Swap Button */}
+        <div className="flex justify-center md:col-span-1 pt-2 md:pt-6">
+          <button
+            onClick={handleSwap}
+            aria-label="Swap origin and destination"
+            className="p-3 bg-white hover:bg-[#F2E4E2] hover:text-[#C92232] text-slate-700 rounded-full border border-[#E5E0D8] shadow-sm transition hover:scale-105 active:scale-95"
+          >
+            <ArrowRightLeft className="w-4 h-4" />
+          </button>
+        </div>
 
-        <div className="min-w-0">
-          <label htmlFor="fare-destination" className="mb-2 block text-[11px] font-bold text-stone-500">
-            {language === 'bn' ? 'গন্তব্য' : 'To'}
+        {/* Destination Selector */}
+        <div className="md:col-span-2">
+          <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            {language === 'bn' ? 'গন্তব্য স্টপ' : 'Destination Stop'}
           </label>
-          <select id="fare-destination" value={toStopId} onChange={(event) => handleDestinationChange(event.target.value)} className={fieldClass}>
+          <select
+            value={toStopId}
+            onChange={(e) => setToStopId(e.target.value)}
+            className="w-full px-4 py-3 bg-[#F1EEE8] border border-[#E5E0D8] rounded-xl text-sm font-bold text-[#272524] focus:outline-none focus:ring-2 focus:ring-[#C92232] transition"
+          >
             {INITIAL_STOPS.map((stop) => (
               <option key={stop.id} value={stop.id}>
                 {stop.sequence}. {language === 'bn' ? stop.nameBn : stop.nameEn}
+                {stop.isTerminal ? (language === 'bn' ? ' (টার্মিনাল)' : ' (Terminal)') : ''}
               </option>
             ))}
           </select>
         </div>
       </div>
 
-      {fareResult && (
-        <div className="mt-6 border-t border-stone-200 pt-5">
-          {fromStopId === toStopId ? (
-            <p className="text-sm font-semibold text-stone-600">
-              {language === 'bn' ? 'একই স্টপ নির্বাচন করা হয়েছে। অন্য গন্তব্য বেছে নিন।' : 'You selected the same stop. Choose a different destination.'}
-            </p>
-          ) : (
-            <>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div className="min-w-0">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400">
-                    {language === 'bn' ? 'নির্বাচিত যাত্রা' : 'Selected journey'}
-                  </div>
-                  <div className="mt-2 text-sm font-extrabold leading-6 text-stone-900">
-                    {language === 'bn' ? fareResult.fromStop.nameBn : fareResult.fromStop.nameEn}
-                    <span className="mx-2 text-[#C92232]">→</span>
-                    {language === 'bn' ? fareResult.toStop.nameBn : fareResult.toStop.nameEn}
-                  </div>
-                  <p className="mt-2 text-[11px] text-stone-500">
-                    {language === 'bn'
-                      ? toBengaliDigits(fareResult.stagesCount) + 'টি স্টেজ · প্রায় ' + toBengaliDigits(fareResult.estimatedDistanceKm) + ' কিমি'
-                      : fareResult.stagesCount + ' stages · approx. ' + fareResult.estimatedDistanceKm + ' km'}
-                  </p>
-                </div>
-                <div className="sm:text-right">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400">
-                    {language === 'bn' ? 'জনপ্রতি নির্দেশক ভাড়া' : 'Indicative fare / person'}
-                  </div>
-                  <div className="mt-1 text-3xl font-black tracking-[-0.05em] text-[#C92232]">
-                    {formatBDT(fareResult.fareBDT)}
-                  </div>
-                </div>
-              </div>
+      {/* Fare Result Card */}
+      {fareResult && fromStopId !== toStopId ? (
+        <div className="mt-6 p-5 rounded-2xl bg-[#FFF5F5] border border-[#F2E4E2] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-sm font-extrabold text-[#272524]">
+              <span>{fareResult.fromStop.nameBn}</span>
+              <span className="text-[#C92232]">→</span>
+              <span>{fareResult.toStop.nameBn}</span>
+            </div>
+            <div className="text-xs text-slate-500 font-medium flex items-center gap-2">
+              <span>{toBengaliDigits(fareResult.stagesCount)}টি স্টেজ</span>
+              <span>•</span>
+              <span>আনুমানিক {toBengaliDigits(fareResult.estimatedDistanceKm)} কিমি</span>
+              <span>•</span>
+              <span className="text-[#A87936] font-bold">নির্দেশক রূপরেখা</span>
+            </div>
+          </div>
 
-              <div className="mt-5 flex flex-col gap-4 border-t border-stone-100 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex max-w-md items-start gap-2 text-[11px] leading-5 text-stone-500">
-                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-[#B7791F]" />
-                  <p>{language === 'bn' ? fareResult.disclaimerBn : fareResult.disclaimerEn}</p>
-                </div>
-                <Link
-                  href={'/tickets?from=' + encodeURIComponent(fromStopId) + '&to=' + encodeURIComponent(toStopId)}
-                  className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 bg-[#C92232] px-5 py-3 text-xs font-extrabold text-white transition-all duration-200 hover:bg-[#A91D2A] active:scale-[0.99] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#C92232]"
-                >
-                  <Ticket className="h-4 w-4" />
-                  <span>{language === 'bn' ? 'আসন নির্বাচন করুন' : 'Choose seats'}</span>
-                </Link>
+          <div className="flex items-center gap-4 self-end sm:self-auto">
+            <div className="text-right">
+              <span className="block text-[10px] uppercase font-bold text-[#A91D2A] tracking-wider">
+                {language === 'bn' ? 'জনপ্রতি ভাড়া' : 'Fare / Passenger'}
+              </span>
+              <div className="text-2xl sm:text-3xl font-black text-[#C92232] font-mono">
+                {formatBDT(fareResult.fareBDT)}
               </div>
-            </>
-          )}
+            </div>
+
+            <Link
+              href={`/tickets?from=${encodeURIComponent(fromStopId)}&to=${encodeURIComponent(toStopId)}`}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#C92232] hover:bg-[#A91D2A] text-white font-extrabold text-xs shadow-md transition"
+            >
+              <Ticket className="w-3.5 h-3.5" />
+              <span>{language === 'bn' ? 'আসন বুক করুন' : 'Book Seats'}</span>
+            </Link>
+          </div>
         </div>
-      )}
+      ) : fromStopId === toStopId ? (
+        <div className="mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 font-medium">
+          {language === 'bn'
+            ? 'দয়া করে দুটি ভিন্ন স্টপেজ নির্বাচন করুন।'
+            : 'Please select two different stops.'}
+        </div>
+      ) : null}
+
+      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2 text-[11px] text-slate-500">
+        <ShieldCheck className="w-3.5 h-3.5 text-[#C92232] flex-shrink-0" />
+        <span>
+          {language === 'bn'
+            ? 'ভাড়া বিআরটিএ নির্দেশিকা ও মেট্রো প্রভাতী বাস মালিক সমিতির অনুমোদিত সর্বশেষ খসড়া অনুযায়ী সমন্বয়কৃত।'
+            : 'Fares are indicative and aligned with approved corridor guidelines.'}
+        </span>
+      </div>
     </div>
   );
 };

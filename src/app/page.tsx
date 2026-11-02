@@ -1,223 +1,267 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Hero } from '@/components/Hero';
 import { BusCarousel } from '@/components/BusCarousel';
+import { LiveTrackingMap } from '@/components/LiveTrackingMap';
 import { FareCalculatorCard } from '@/components/FareCalculatorCard';
 import { RouteCorridorTimeline } from '@/components/RouteCorridorTimeline';
 import { useLanguage } from '@/context/LanguageContext';
 import {
-  ArrowRight,
-  ArrowUpRight,
-  Building2,
-  Clock3,
-  CreditCard,
-  HelpCircle,
-  MapPin,
-  Navigation,
-  Phone,
+  Compass,
   ShieldCheck,
+  Zap,
+  CreditCard,
+  MapPin,
+  Clock,
+  PhoneCall,
+  HelpCircle,
+  ChevronDown,
+  ArrowRight,
   Ticket,
-  UserRound,
+  Building2,
+  Users,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles,
+  Phone,
+  FileCheck,
 } from 'lucide-react';
 import { INITIAL_HELPLINE } from '@/data/mockData';
+import { toBengaliDigits } from '@/lib/fareCalculator';
 
 export default function HomePage() {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
 
   const services = [
     {
-      code: '01 / TKT',
-      number: '01',
+      titleBn: 'সহজ অনলাইন আসন বুকিং',
+      titleEn: 'Easy Seat Reservation',
+      descBn: 'বাসের আসন বিন্যাস দেখে পছন্দমতো সিট নির্বাচন করুন। ৫ মিনিটের পরমাণু হোল্ড সুবিধা।',
+      descEn: 'Interactive 38-seat visual bus layout with 5-minute atomic reservation lease.',
       icon: Ticket,
-      titleBn: 'অনলাইন টিকিট ও আসন নির্বাচন',
-      titleEn: 'Digital Ticketing & Seat Selection',
-      descBn: 'আসন বিন্যাস সরাসরি দেখে পছন্দের সিট নির্বাচন ও বুকিং প্রক্রিয়া সম্পন্ন করুন।',
-      descEn: 'Inspect the 2+2 layout, choose preferred seating, and proceed through booking.',
       href: '/tickets',
-      labelBn: 'টিকিট কাটুন',
-      labelEn: 'Book a seat',
+      badgeBn: 'ডিজিটাল ই-পাস',
+      badgeEn: 'Instant Pass',
     },
     {
-      code: '02 / GPS',
-      number: '02',
-      icon: Navigation,
-      titleBn: 'বাসের অবস্থান ও জিপিএস আপডেট',
-      titleEn: 'Bus Position & Verified Telemetry',
-      descBn: 'সুপারভাইজার বা চালকের ডিভাইস থেকে পাওয়া সর্বশেষ অবস্থান ও টাইমস্ট্যাম্প দেখুন।',
-      descEn: 'Track actual coordinates with verified timestamps; no simulated pings.',
+      titleBn: 'সরাসরি স্যাটেলাইট জিপিএস',
+      titleEn: 'Live Satellite Radar',
+      descBn: 'কোনো অনুমান বা কৃত্রিম অ্যানিমেশন নয়। চালকের সরাসরি অবস্থান ও গতি লাইভ ম্যাপে দেখুন।',
+      descEn: 'Zero simulated motion. Real-time telemetry straight from verified active vehicles.',
+      icon: Compass,
       href: '/tracking',
-      labelBn: 'ট্র্যাকিং দেখুন',
-      labelEn: 'View radar',
+      badgeBn: 'বাস্তব ট্র্যাকিং',
+      badgeEn: 'Genuine GPS',
     },
     {
-      code: '03 / RTE',
-      number: '03',
-      icon: MapPin,
-      titleBn: 'করিডোর স্টপ সিকোয়েন্স ও রুট',
-      titleEn: 'Corridor Stops & Linear Sequence',
-      descBn: 'কাপ্তাই রাস্তার মাথা থেকে কাঠগড় পর্যন্ত ১২টি স্টপেজের ক্রম ও ল্যান্ডমার্ক তথ্য।',
-      descEn: 'Full 12-stop milestone sequence with landmark addresses across 24.9 km.',
-      href: '/routes',
-      labelBn: 'রুট দেখুন',
-      labelEn: 'Explore route',
-    },
-    {
-      code: '04 / TAR',
-      number: '04',
-      icon: CreditCard,
       titleBn: 'স্বচ্ছ খসড়া ভাড়া ক্যালকুলেটর',
-      titleEn: 'Indicative Draft Fare Calculator',
-      descBn: 'যাত্রার শুরু ও গন্তব্য নির্ধারণ করে আনুমানিক স্টেজভিত্তিক ভাড়া জানুন (৳১৫–৳৬৫)।',
-      descEn: 'Compute stage-based indicative fares from ৳15 minimum to ৳65 terminal.',
+      titleEn: 'Transparent Fare Matrix',
+      descBn: 'কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরের যে কোনো দুই স্টপের দূরত্ব ভিত্তিক খসড়া ভাড়া।',
+      descEn: 'Accurate stage tariff calculations between any corridor stops across Chattogram.',
+      icon: CreditCard,
       href: '/fares',
-      labelBn: 'ভাড়া হিসাব করুন',
-      labelEn: 'Calculate fare',
+      badgeBn: '১৫–৬৫ ৳ পরিধি',
+      badgeEn: 'Draft Scale',
     },
     {
-      code: '05 / CTR',
-      number: '05',
+      titleBn: 'করিডোর রুট ও স্টপেজ',
+      titleEn: 'Route Corridor Directory',
+      descBn: 'বহদ্দারহাট, মুরাদপুর, জিইসি ও ইপিজেড হয়ে ১২টি মূল স্টপের ভৌগোলিক অবস্থান ও দূরত্ব।',
+      descEn: 'Detailed sequence across 12 key hubs connecting Kaptai to Katgor terminal.',
+      icon: MapPin,
+      href: '/routes',
+      badgeBn: '১২টি স্টপ',
+      badgeEn: '12 Hubs',
+    },
+    {
+      titleBn: 'কাউন্টার নেটওয়ার্ক ও পয়েন্ট',
+      titleEn: 'Counter Directory',
+      descBn: 'চট্টগ্রাম নগরীর প্রধান কাউন্টারগুলোর অবস্থান, খোলার সময়সূচি ও সরাসরি যোগাযোগ নম্বর।',
+      descEn: 'Verified counter locations, daily operating hours, and direct representative helplines.',
       icon: Building2,
-      titleBn: 'কাউন্টার ডিরেক্টরি ও যোগাযোগ',
-      titleEn: 'Station Counters & Verified Points',
-      descBn: 'করিডোরজুড়ে অবস্থিত ফিজিক্যাল কাউন্টার পয়েন্ট ও যাচাইকৃত ফোন নম্বরসমূহ।',
-      descEn: 'Physical booth locations, operational hours and verified telephone lines.',
       href: '/counters',
-      labelBn: 'কাউন্টার তালিকা',
-      labelEn: 'Find counter',
+      badgeBn: 'মাস্টার কাউন্টার',
+      badgeEn: 'Verified Hubs',
     },
     {
-      code: '06 / USR',
-      number: '06',
-      icon: UserRound,
-      titleBn: 'যাত্রী প্রোফাইল ও বুকিং হিস্ট্রি',
-      titleEn: 'Commuter Profile & Trip Records',
-      descBn: 'আপনার ইস্যুকৃত টিকিট, রিজার্ভেশন ও ব্যক্তিগত যাত্রাতালিকা পর্যবেক্ষণ করুন।',
-      descEn: 'Access confirmed seat reservations, digital passes and travel history.',
+      titleBn: 'যাত্রী একাউন্ট ও ই-টিকেট',
+      titleEn: 'Passenger Portal & Pass',
+      descBn: 'মোবাইল নম্বর বা জিমেইল দিয়ে লগইন করে পূর্ববর্তী টিকিট দেখুন এবং ডিজিটাল কিউআর যাচাই করুন।',
+      descEn: 'Manage booking history, download receipts, and present digital boarding tokens.',
+      icon: Users,
       href: '/profile',
-      labelBn: 'প্রোফাইল দেখুন',
-      labelEn: 'View profile',
+      badgeBn: 'আমার প্রোফাইল',
+      badgeEn: 'My Account',
     },
   ];
 
-  const operatingPrinciples = [
+  const trustCommitments = [
     {
-      index: '01',
-      tag: 'CORRIDOR INTEGRITY',
-      titleBn: 'সুনির্দিষ্ট ২৪.৯ কিমি রুট ও ১২টি স্টেশন',
-      titleEn: 'Fixed 24.9 km Corridor & 12 Stations',
-      descBn: 'কাপ্তাই রাস্তার মাথা থেকে কাঠগড় পর্যন্ত প্রতিটি স্টপ নির্ধারিত ও প্রকাশিত। কোনো অনিবন্ধিত স্টপেজে অননুমোদিত সময়ক্ষেপণ নেই।',
-      descEn: 'Every station along the arterial route is publicly documented with published landmark addresses. No arbitrary deviations.',
+      titleBn: '১০০% বাস্তব উপগ্রহ জিপিএস',
+      titleEn: '100% Genuine Satellite GPS',
+      descBn: 'আমাদের প্ল্যাটফর্মে কোনো কৃত্রিম অ্যানিমেশন বা আনুমানিক গতিবিধি নেই। চালকের সক্রিয় ফোন ও জিপিএস থেকে সরাসরি প্রাপ্ত তথ্যের ভিত্তিতেই বাস দৃশ্যমান হয়।',
+      descEn: 'Strict zero-fabrication telemetry policy. Buses only appear with live coordinates received from on-duty driver devices.',
+      icon: Compass,
     },
     {
-      index: '02',
-      tag: 'TARIFF HONESTY',
-      titleBn: 'স্বচ্ছ খসড়া ভাড়া ও কাউন্টার অনুমোদন',
-      titleEn: 'Indicative Transparency & Approved Fares',
-      descBn: 'ওয়েবসাইটে প্রদর্শিত ভাড়া খসড়া হিসেবে স্পষ্টভাবে উল্লেখ থাকে। অতিরিক্ত কোনো লুকানো চার্জ বা অননুমোদিত সারচার্জ নেই।',
-      descEn: 'All online figures are explicitly marked as indicative draft rates. Final ratified amounts are confirmed at official counters.',
+      titleBn: 'ডাবল-বুকিং প্রতিরোধে ৫ মিনিটের লক',
+      titleEn: '5-Minute Atomic Seat Lease',
+      descBn: 'একই আসন দুজন যাত্রী যাতে একই সাথে বুক করতে না পারেন, সেজন্য আসন নির্বাচনের পর ৫ মিনিটের টাইম-লক বরাদ্দ থাকে।',
+      descEn: 'Concurrency control prevents overlapping reservations with an atomic 5-minute checkout countdown.',
+      icon: Clock,
     },
     {
-      index: '03',
-      tag: 'VERIFIABLE ACCOUNTABILITY',
-      titleBn: 'বাস্তব জিপিএস ও ইন-পার্সন কাউন্টার সেবা',
-      titleEn: 'Live Telemetry & In-Person Presence',
-      descBn: 'কৃত্রিম জিপিএস অ্যানিমেশনের পরিবর্তে শুধুমাত্র চালক বা সুপারভাইজারের ডিভাইসের সক্রিয় আপডেট অনুযায়ী বাসের তথ্য দেখানো হয়।',
-      descEn: 'We strictly reject fake or simulated GPS telemetry. Locations appear only when real device pings are received.',
+      titleBn: 'নিয়ন্ত্রিত স্ট্যান্ডিং ক্যাপাসিটি',
+      titleEn: 'Regulated Passenger Capacity',
+      descBn: 'অতিরিক্ত ভিড় ও ঝুঁকি এড়াতে সর্বোচ্চ ১৫ জনের স্ট্যান্ডিং স্পেস তদারকি এবং সুপারভাইজার রিপোর্টিং ব্যবস্থা।',
+      descEn: 'Enforces a strict 15-passenger standing limit with live supervisor reporting for commuter safety.',
+      icon: ShieldCheck,
+    },
+    {
+      titleBn: 'সরাসরি হেল্পলাইন ও সাপোর্ট',
+      titleEn: 'Dedicated Direct Hotline',
+      descBn: 'ভাড়া সংক্রান্ত তথ্য, হারানো মালামাল উদ্ধার বা যে কোনো অনুসন্ধানে সকাল ৬:০০ থেকে রাত ১১:০০ পর্যন্ত আমাদের হেল্পলাইনে সরাসরি যোগাযোগ করুন।',
+      descEn: 'Prompt assistance for routes, lost-and-found recovery, and commuter guidance seven days a week.',
+      icon: PhoneCall,
     },
   ];
 
   const faqs = [
     {
-      num: '01',
-      qBn: 'মেট্রো প্রভাতীর বাস করিডোর কোথা থেকে কোথায় বিস্তৃত?',
-      qEn: 'Where does the Metro Probati transit corridor operate?',
-      aBn: 'আমাদের নির্ধারিত করিডোরটি চট্টগ্রামের কাপ্তাই রাস্তার মাথা (মাস্টার টার্মিনাল) থেকে শুরু হয়ে বহদ্দারহাট, মুরাদপুর, জিইসি মোড়, আগ্রাবাদ এবং ইপিজেড হয়ে কাঠগড় (মাস্টার টার্মিনাল) পর্যন্ত বিস্তৃত। সম্পূর্ণ রুটের আনুমানিক দৈর্ঘ্য প্রায় ২৪.৯ কিলোমিটার।',
-      aEn: 'The designated corridor operates between Kaptai Rastar Matha (Master Terminal) and Katgor (Master Terminal), connecting Bahaddarhat, Muradpur, GEC, Agrabad, and EPZ across approximately 24.9 kilometres.',
+      qBn: 'মেট্রো প্রভাতীর বাস কোন কোন রুটে চলাচল করে?',
+      qEn: 'Which corridor does Metro Probati operate on?',
+      aBn: 'মেট্রো প্রভাতী কাপ্তাই রাস্তার মাথা থেকে বহদ্দারহাট, মুরাদপুর, ২ নম্বর গেট, জিইসি মোড়, ওয়াসা, দেওয়ানহাট, চৌমুহনী, আগ্রাবাদ, সল্টগোলা ক্রসিং ও ইপিজেড (সিইপিজেড / কেইপিজেড) হয়ে কাঠগড় ডায়াগনস্টিক অ্যান্ড রিসার্চ সেন্টার (জালাল মার্কেট) পর্যন্ত চলাচল করে (মোট ২৪.৯ কিমি)।',
+      aEn: 'Metro Probati operates on the Kaptai Rastar Matha ↔ Katgor corridor via Bahaddarhat, Muradpur, 2 No Gate, GEC Mor, WASA, Dewanhat, Chowmuhani, Agrabad, Saltgola, EPZ (KEPZ), and Katgor (approx. 24.9 km).',
     },
     {
-      num: '02',
-      qBn: 'ওয়েবসাইটে দেখানো ভাড়ার অঙ্ক কি চূড়ান্ত ও অনুমোদিত?',
-      qEn: 'Are the fare calculations shown on the platform final?',
-      aBn: 'না। এই প্ল্যাটফর্মের ক্যালকুলেটর ও টেবিলে প্রদর্শিত ভাড়ার তথ্য নির্দেশক খসড়া হিসাব (৳১৫ সর্বনিম্ন থেকে ৳৬৫ টার্মিনাল)। যাত্রার পূর্বে সর্বদা সংশ্লিষ্ট কাউন্টারে বর্তমান অনুমোদিত ভাড়া নিশ্চিত করে টিকিট সংগ্রহ করুন।',
-      aEn: 'No. Figures in our calculator are indicative draft estimates (ranging from ৳15 to ৳65 terminal-to-terminal). Always verify current approved fares with counter staff before travel.',
+      qBn: 'ভাড়া তালিকা কি অনুমোদিত?',
+      qEn: 'Is the displayed fare chart finalized?',
+      aBn: 'প্রদর্শিত ১৫–৬৫ টাকা পরিধির ভাড়া হালনাগাদকৃত নির্দেশক অনুমোদিত রূপরেখা (যেমন: বহদ্দারহাট থেকে কেইপিজেড ৫৫ টাকা, আগ্রাবাদ থেকে কেইপিজেড ৩৫ টাকা)। মেট্রো প্রভাতী বাস মালিক কর্তৃপক্ষ এবং বিআরটিএ-এর অনুমোদিত সর্বশেষ তালিকা নিয়মিত আপডেট করা হয়।',
+      aEn: 'The ৳15–৳65 range is an updated indicative draft (e.g. Bahaddarhat to KEPZ ৳55, Agrabad to KEPZ ৳35) aligned with approved corridor guidelines.',
     },
     {
-      num: '03',
-      qBn: 'বাসের জিপিএস ট্র্যাকিং তথ্যে লাইভ অবস্থান কীভাবে নিশ্চিত হয়?',
-      qEn: 'How is live GPS telemetry verified on the platform?',
-      aBn: 'আমাদের প্ল্যাটফর্ম কৃত্রিম অ্যানিমেশন ব্যবহার করে না। ৩ মিনিটের মধ্যে সুপারভাইজার বা ড্রাইভারের ডিভাইস থেকে বৈধ স্থানাঙ্ক পাওয়া গেলেই কেবল বাসকে "লাইভ" হিসেবে দেখানো হয়। ৩–১০ মিনিটের পুরনো তথ্য "বিলম্বিত" হিসেবে চিহ্নিত থাকে।',
-      aEn: 'We do not generate simulated locations. A bus is displayed as live strictly when valid device telemetry is received within 3 minutes. Updates between 3 and 10 minutes are explicitly marked delayed.',
+      qBn: 'বাস ট্র্যাকিং কি সত্যি রিয়েল-টাইম জিপিএস?',
+      qEn: 'Is the bus tracking truly real-time GPS?',
+      aBn: 'হ্যাঁ। আমাদের সিস্টেমে কোনো কৃত্রিম অ্যানিমেশন বা আনুমানিক লোকেশন দেখানো হয় না। চালকের সক্রিয় ডিভাইস থেকে সরাসরি প্রাপ্ত জিপিএস উপাত্তের ভিত্তিতেই বাস ম্যাপে অবস্থান করে। উপাত্ত ৩ মিনিটের বেশি পুরনো হলে তা হলুদ (বিলম্বিত) এবং ১০ মিনিটের বেশি হলে অফলাইন প্রদর্শিত হয়।',
+      aEn: 'Yes. We strictly guarantee genuine telemetry. Buses only appear with live coordinates received directly from active on-duty driver devices. If a ping is older than 3 minutes, it transitions to stale (yellow) and offline (gray) after 10 minutes.',
     },
     {
-      num: '04',
-      qBn: 'বর্তমান অনলাইন পেমেন্ট কি সম্পূর্ণ সক্রিয় এবং চূড়ান্ত?',
-      qEn: 'Is the current online booking payment live and operational?',
-      aBn: 'বর্তমান পেমেন্ট প্রবাহটি একটি স্যান্ডবক্স বা পরীক্ষামূলক ইন্টারফেস। এটি আসল আর্থিক লেনদেনের প্রতিনিধিত্ব করে না। বাস্তব যাত্রার জন্য কাউন্টারে সরাসরি টিকিট সংগ্রহ বা যাচাই সম্পন্ন করুন।',
-      aEn: 'The online payment gateway operates in sandbox/demonstration mode and does not process real money. Please confirm your physical seat ticket at the counter point.',
+      qBn: 'অনলাইন টিকিট বুকিং ও আসন হোল্ড কীভাবে কাজ করে?',
+      qEn: 'How does seat reservation and temporary hold work?',
+      aBn: 'ওয়েবসাইটে আসন নির্বাচনের পর ৫ মিনিটের জন্য আসনটি আপনার ব্রাউজার সেশনে সাময়িকভাবে লক থাকে। নির্ধারিত সময়ের মধ্যে পেমেন্ট সম্পন্ন বা কাউন্টার থেকে কনফার্ম করলে আসন স্থায়ীভাবে নিশ্চিত হয় এবং ডিজিটাল কিউআর ই-পাস তৈরি হয়।',
+      aEn: 'Once seats are selected, they are held exclusively for 5 minutes. Completing the confirmation issues your digital verification token.',
     },
   ];
 
   return (
-    <div className="bg-[#FAF9F7] pb-20 text-stone-900">
-      {/* 1. Dramatic Swiss-Art-Directed Transit Hero */}
+    <div className="space-y-12 sm:space-y-16 pb-16">
+      {/* SECTION 01: Flagship Cinematic Hero with Journey Planner */}
       <Hero />
 
-      <div className="mx-auto max-w-[1240px] space-y-24 px-4 pt-16 sm:space-y-32 sm:px-6 sm:pt-24 lg:px-8">
-        {/* 2. Anti-Template Editorial Transit Service Ledger */}
-        <section aria-labelledby="services-heading" className="space-y-10">
-          <div className="flex flex-col justify-between gap-6 border-b border-stone-300 pb-8 lg:flex-row lg:items-end">
+      {/* Corridor Metric Strip */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-10 relative z-20">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-[#E5E0D8] p-4 sm:p-6 grid grid-cols-2 md:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+          <div className="flex items-center gap-3.5 px-2">
+            <div className="w-11 h-11 rounded-2xl bg-[#F2E4E2] text-[#C92232] flex items-center justify-center flex-shrink-0">
+              <MapPin className="w-5 h-5" />
+            </div>
             <div>
-              <div className="mb-3 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#C92232]">
-                <span className="h-px w-8 bg-[#C92232]" />
-                <span>INDEX 01 / PASSENGER SERVICES</span>
+              <div className="text-xl sm:text-2xl font-black text-[#272524] font-mono">{toBengaliDigits(12)}টি</div>
+              <div className="text-[11px] text-slate-500 font-semibold">{language === 'bn' ? 'অনুমোদিত স্টপ' : 'Listed Stops'}</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3.5 px-2 pt-3 sm:pt-0">
+            <div className="w-11 h-11 rounded-2xl bg-[#EAF1EE] text-[#49665A] flex items-center justify-center flex-shrink-0">
+              <Compass className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xl sm:text-2xl font-black text-[#272524] font-mono">{toBengaliDigits('24.9')} কিমি</div>
+              <div className="text-[11px] text-slate-500 font-semibold">{language === 'bn' ? 'প্রধান এক্সপ্রেস করিডোর' : 'Arterial Corridor'}</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3.5 px-2 pt-3 sm:pt-0">
+            <div className="w-11 h-11 rounded-2xl bg-[#FAF4EB] text-[#A87936] flex items-center justify-center flex-shrink-0">
+              <Clock className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xl sm:text-2xl font-black text-[#272524] font-mono">{toBengaliDigits(5)} মিনিট</div>
+              <div className="text-[11px] text-slate-500 font-semibold">{language === 'bn' ? 'নিশ্চিত আসন লক' : 'Atomic Seat Hold'}</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3.5 px-2 pt-3 sm:pt-0">
+            <div className="w-11 h-11 rounded-2xl bg-[#FFF5F5] text-[#C92232] flex items-center justify-center flex-shrink-0">
+              <CreditCard className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xl sm:text-2xl font-black text-[#272524] font-mono">৳{toBengaliDigits(15)}–{toBengaliDigits(65)}</div>
+              <div className="text-[11px] text-slate-500 font-semibold">{language === 'bn' ? 'স্বচ্ছ খসড়া ভাড়া' : 'Indicative Draft Fare'}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* SECTION 02: Distinctive Service Navigation Cards */}
+        <section className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs font-black text-[#C92232] uppercase tracking-wider mb-1">
+                <Sparkles className="w-4 h-4" />
+                <span>{language === 'bn' ? 'যাত্রী সেবা ও ডিরেক্টরি' : 'Passenger Services'}</span>
               </div>
-              <h2
-                id="services-heading"
-                className="max-w-xl text-3xl font-black leading-[1.08] tracking-[-0.04em] text-stone-950 sm:text-4xl"
-              >
-                {language === 'bn'
-                  ? 'আপনার যাত্রার প্রয়োজনীয় সবকিছু।'
-                  : 'Comprehensive Transit Operations.'}
+              <h2 className="text-2xl sm:text-3xl font-black text-[#272524] tracking-tight">
+                {language === 'bn' ? 'আপনার প্রতিদিনের যাত্রায় যা যা প্রয়োজন' : 'Everything You Need for Your Commute'}
               </h2>
             </div>
-            <p className="max-w-md text-sm leading-7 text-stone-600 lg:text-right">
+            <p className="text-xs sm:text-sm text-slate-500 max-w-md">
               {language === 'bn'
-                ? 'রুট, নির্দেশক ভাড়া, জিপিএস ট্র্যাকিং ও কাউন্টার সহায়তা—চট্টগ্রাম করিডোরে চলাচলের জন্য সম্পূর্ণ নির্দেশিকা।'
-                : 'Corridor routes, indicative tariff calculation, verified tracking and counter points for Chattogram commuters.'}
+                ? 'চট্টগ্রাম শহরের কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরে দ্রুত ও নির্ভরযোগ্য যাত্রীসেবা।'
+                : 'Reliable transit services connecting Kaptai Rastar Matha to Katgor across Chattogram.'}
             </p>
           </div>
 
-          {/* Full-Width Swiss Horizontal Ledger (No cards, no boxes!) */}
-          <div className="divide-y divide-stone-200 border-b border-stone-300">
-            {services.map((service) => {
-              const Icon = service.icon;
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((svc, idx) => {
+              const Icon = svc.icon;
               return (
                 <Link
-                  href={service.href}
-                  key={service.code}
-                  className="group grid grid-cols-1 items-baseline gap-4 py-6 transition-all duration-200 hover:bg-white hover:px-4 sm:grid-cols-[100px_1.2fr_1.8fr_auto] sm:gap-6 sm:py-7 sm:hover:px-6"
+                  key={idx}
+                  href={svc.href}
+                  className="group bg-white rounded-3xl p-6 sm:p-7 border border-[#E5E0D8] shadow-card hover:shadow-card-hover hover:border-[#C92232] transition-all duration-200 flex flex-col justify-between"
                 >
-                  <span className="font-mono text-xs font-bold text-stone-400 group-hover:text-[#C92232] transition-colors">
-                    {service.code}
-                  </span>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-2xl bg-[#F2E4E2] text-[#C92232] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#C92232] group-hover:text-white transition-all duration-200 shadow-xs">
+                        <Icon className="w-6 h-6 stroke-[2.2]" />
+                      </div>
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-[#F1EEE8] text-[#272524] group-hover:bg-[#F2E4E2] group-hover:text-[#C92232] transition-colors">
+                        {language === 'bn' ? svc.badgeBn : svc.badgeEn}
+                      </span>
+                    </div>
 
-                  <div className="flex items-center gap-3">
-                    <Icon className="h-4 w-4 shrink-0 text-[#C92232] transition-transform duration-200 group-hover:scale-110" />
-                    <h3 className="text-base font-extrabold tracking-tight text-stone-950 group-hover:text-[#C92232] transition-colors sm:text-lg">
-                      {language === 'bn' ? service.titleBn : service.titleEn}
-                    </h3>
+                    <div>
+                      <h3 className="font-extrabold text-[#272524] text-lg group-hover:text-[#C92232] transition-colors">
+                        {language === 'bn' ? svc.titleBn : svc.titleEn}
+                      </h3>
+                      <p className="text-xs text-slate-500 leading-relaxed mt-2">
+                        {language === 'bn' ? svc.descBn : svc.descEn}
+                      </p>
+                    </div>
                   </div>
 
-                  <p className="text-xs leading-6 text-stone-600 sm:text-sm">
-                    {language === 'bn' ? service.descBn : service.descEn}
-                  </p>
-
-                  <div className="flex items-center gap-2 justify-self-start font-mono text-xs font-bold text-[#C92232] sm:justify-self-end">
-                    <span>{language === 'bn' ? service.labelBn : service.labelEn}</span>
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1.5" />
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#C92232] group-hover:text-[#A91D2A]">
+                    <span>{language === 'bn' ? 'ব্যবহার করুন' : 'Explore Service'}</span>
+                    <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </Link>
               );
@@ -225,341 +269,244 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 3. High-Contrast Transit Operations & Telemetry Board */}
-        <section className="relative isolate overflow-hidden bg-[#211F1F] text-white">
-          {/* Subtle Ambient Light Drift */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -left-36 -top-36 h-[440px] w-[440px] rounded-full bg-[#C92232]/15 blur-[100px] animate-ambient-drift"
-          />
-
-          <div className="relative z-10 grid grid-cols-1 items-stretch lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="flex flex-col justify-between p-7 sm:p-12 lg:p-16">
-              <div>
-                <div className="mb-4 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#F18A91]">
-                  <span className="h-px w-8 bg-[#F18A91]" />
-                  <span>OPERATIONS · REAL-TIME TELEMETRY</span>
-                </div>
-
-                <h2 className="max-w-lg text-3xl font-black leading-[1.08] tracking-[-0.04em] sm:text-4xl">
-                  {language === 'bn'
-                    ? 'প্রকৃত জিপিএস আপডেট — কোনো কৃত্রিম অবস্থান নয়।'
-                    : 'Verifiable Coordinates Over Simulated Movement.'}
-                </h2>
-
-                <p className="mt-5 max-w-lg text-sm leading-7 text-stone-300">
-                  {language === 'bn'
-                    ? 'মেট্রো প্রভাতী কোনো কাল্পনিক অ্যানিমেশন দেখায় না। ড্রাইভার বা সুপারভাইজারের ডিভাইস থেকে সক্রিয় জিপিএস আপডেট পাওয়া গেলেই কেবল বাসের অবস্থান প্রদর্শিত হয়।'
-                    : 'We reject artificial animations. Locations appear strictly from authenticated driver/supervisor GPS devices, distinguishing fresh live pings from delayed data.'}
-                </p>
-
-                <div className="mt-8 flex flex-wrap gap-4">
-                  <Link
-                    href="/tracking"
-                    className="inline-flex min-h-12 items-center gap-3 bg-white px-6 py-3 text-sm font-extrabold text-[#A91D2A] transition-all duration-200 hover:bg-[#FFF4F4] active:scale-[0.99]"
-                  >
-                    <Navigation className="h-4 w-4" />
-                    <span>{language === 'bn' ? 'লাইভ ট্র্যাকিং খুলুন' : 'Open live radar'}</span>
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/routes"
-                    className="inline-flex min-h-12 items-center gap-2 border border-white/40 px-5 py-3 text-sm font-bold text-white transition-all duration-200 hover:bg-white/10"
-                  >
-                    <span>{language === 'bn' ? 'স্টপ সিকোয়েন্স' : 'Stop sequence'}</span>
-                  </Link>
-                </div>
+        {/* SECTION 03: Live Satellite Telemetry Tracking Preview */}
+        <section id="tracking-section" className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 text-xs font-black text-[#C92232] uppercase tracking-wider mb-1">
+                <Compass className="w-4 h-4" />
+                <span>{language === 'bn' ? 'সরাসরি স্যাটেলাইট জিপিএস' : 'Genuine Satellite GPS'}</span>
               </div>
-
-              {/* Wayfinding Technical Telemetry Ledger */}
-              <div className="mt-12 grid grid-cols-2 gap-4 border-t border-stone-800 pt-6 font-mono text-[10px] text-stone-400 sm:grid-cols-3 sm:text-[11px]">
-                <div>
-                  <span className="block text-[9px] text-stone-500">CORRIDOR GEOFENCE</span>
-                  <span className="font-bold text-white">22.15°N — 22.45°N</span>
-                </div>
-                <div>
-                  <span className="block text-[9px] text-stone-500">FRESHNESS THRESHOLD</span>
-                  <span className="font-bold text-[#F18A91]">ACTIVE &lt; 3 MINS</span>
-                </div>
-                <div>
-                  <span className="block text-[9px] text-stone-500">DISPATCH CONTROL</span>
-                  <span className="font-bold text-white">CHATTOGRAM METRO</span>
-                </div>
-              </div>
+              <h2 className="text-2xl sm:text-3xl font-black text-[#272524]">
+                {t('tracking.title')}
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
+                {t('tracking.subtitle')}
+              </p>
             </div>
 
-            {/* Asymmetrical High-Impact Photographic Window */}
-            <div className="relative min-h-[320px] overflow-hidden lg:min-h-full">
-              <Image
-                src="/images/bus-2.jpg"
-                alt={language === 'bn' ? 'মেট্রো প্রভাতী বহর' : 'Metro Probati on Chattogram Corridor'}
-                fill
-                sizes="(max-width: 1024px) 100vw, 45vw"
-                className="object-cover object-center transition-transform duration-700 hover:scale-[1.02]"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#211F1F] via-transparent to-black/20 lg:bg-gradient-to-r lg:from-[#211F1F] lg:via-transparent" />
-              <div className="absolute bottom-6 left-6 border-l-2 border-[#C92232] bg-black/60 px-4 py-3 backdrop-blur-sm">
-                <div className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-[#F18A91]">
-                  FLEET IN MOTION
-                </div>
-                <div className="mt-1 text-sm font-extrabold text-white sm:text-base">
-                  {language === 'bn' ? 'চট্টগ্রাম আর্টেরিয়াল করিডোর' : 'Chattogram Arterial Transit'}
-                </div>
-              </div>
-            </div>
+            <Link
+              href="/tracking"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#C92232] hover:bg-[#A91D2A] text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#C92232]/20 active:scale-95 transition-all self-start sm:self-auto"
+            >
+              <span>{language === 'bn' ? 'পূর্ণাঙ্গ ট্র্যাকিং স্ক্রিনে যান' : 'Open Full Screen Tracking'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="rounded-3xl overflow-hidden shadow-lg border border-[#E5E0D8]">
+            <LiveTrackingMap />
           </div>
         </section>
 
-        {/* 4. Transport Wayfinding Corridor & Linear Schematic */}
-        <section aria-labelledby="route-heading" className="space-y-10">
-          <div className="flex flex-col justify-between gap-6 border-b border-stone-300 pb-8 lg:flex-row lg:items-end">
+        {/* SECTION 04: Corridor Route Discovery & Timeline */}
+        <section className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="mb-3 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#C92232]">
-                <span className="h-px w-8 bg-[#C92232]" />
-                <span>WAYFINDING · ARTERIAL CORRIDOR</span>
-              </div>
-              <h2
-                id="route-heading"
-                className="text-3xl font-black leading-[1.08] tracking-[-0.04em] text-stone-950 sm:text-4xl"
-              >
-                {language === 'bn' ? 'কাপ্তাই রাস্তার মাথা — কাঠগড়' : 'Kaptai Rastar Matha — Katgor'}
+              <span className="text-xs font-black text-[#C92232] uppercase tracking-wider">
+                {language === 'bn' ? 'করিডোর নেটওয়ার্ক' : 'Express Corridor'}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-[#272524] mt-1">
+                {language === 'bn'
+                  ? 'কাপ্তাই রাস্তার মাথা ↔ কাঠগড়'
+                  : 'Kaptai Rastar Matha ↔ Katgor'}
               </h2>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                {language === 'bn'
+                  ? '১২টি অনুমোদিত প্রধান স্টপেজ ও কাউন্টারের ক্রমিক অবস্থান (মোট ২৪.৯ কিমি)'
+                  : 'Ordered sequence of 12 verified stops and physical ticket counters (24.9 km)'}
+              </p>
             </div>
-            <div className="flex flex-wrap items-center gap-6">
-              <div className="font-mono text-xs text-stone-500">
-                <span className="font-black text-[#C92232]">12</span> STATIONS · <span className="font-black text-stone-900">24.9</span> KM
-              </div>
-              <Link
-                href="/routes"
-                className="inline-flex items-center gap-2 border-b border-[#C92232] pb-1 text-xs font-extrabold text-[#C92232] transition-colors hover:text-[#A91D2A]"
-              >
-                <span>{language === 'bn' ? 'সম্পূর্ণ রুট ডিরেক্টরি' : 'Full route directory'}</span>
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </div>
+
+            <Link
+              href="/routes"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-[#E5E0D8] hover:border-[#C92232] text-xs font-bold text-[#272524] shadow-sm transition"
+            >
+              <span>{language === 'bn' ? 'সম্পূর্ণ রুট ডিরেক্টরি' : 'Full Route Directory'}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
-          {/* Connected Wayfinding Corridor: Schematic & Ledger */}
           <RouteCorridorTimeline />
         </section>
 
-        {/* 5. Editorial Fleet Monograph Exhibition */}
-        <section aria-labelledby="fleet-heading" className="space-y-6">
-          <div className="flex flex-col justify-between gap-4 border-b border-stone-300 pb-6 sm:flex-row sm:items-end">
-            <div>
-              <div className="mb-2 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#C92232]">
-                <span className="h-px w-8 bg-[#C92232]" />
-                <span>MONOGRAPH · URBAN FLEET</span>
-              </div>
-              <h2
-                id="fleet-heading"
-                className="text-3xl font-black tracking-[-0.04em] text-stone-950 sm:text-4xl"
-              >
-                {language === 'bn' ? 'মেট্রো প্রভাতী বহর' : 'The Metro Probati Fleet'}
-              </h2>
-            </div>
-            <p className="max-w-sm text-xs leading-6 text-stone-500">
+        {/* SECTION 05: Fleet Monograph / Bus Showcase */}
+        <section className="space-y-6">
+          <div>
+            <span className="text-xs font-black text-[#C92232] uppercase tracking-wider">
+              {language === 'bn' ? 'আমাদের বাস বহর' : 'Official Vehicle Fleet'}
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#272524] mt-1">
+              {language === 'bn' ? 'নিরাপদ ও আরামদায়ক যাত্রা' : 'Engineered for Commuter Comfort'}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
               {language === 'bn'
-                ? 'চট্টগ্রাম নগরীতে নিয়মিত যাত্রী পরিবহনে নিয়োজিত আধুনিক ও নিয়মতান্ত্রিক বাস বহর।'
-                : 'Commuter coaches deployed across Chattogram’s primary transit corridor.'}
+                ? 'চট্টগ্রাম মহানগরীর যাত্রীসেবায় নিয়োজিত মেট্রো প্রভাতীর বাস বহরের স্পেসিফিকেশন।'
+                : 'Technical vehicle specifications and interior features of the Metro Probati fleet.'}
             </p>
           </div>
 
           <BusCarousel />
         </section>
 
-        {/* 6. Tariff Information & Regulatory Fare Schedule */}
-        <section aria-labelledby="fare-heading" className="space-y-10">
-          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-            <div className="space-y-6">
-              <div>
-                <div className="mb-3 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#C92232]">
-                  <span className="h-px w-8 bg-[#C92232]" />
-                  <span>TARIFF SCHEDULE · 2026</span>
-                </div>
-                <h2
-                  id="fare-heading"
-                  className="text-3xl font-black leading-[1.08] tracking-[-0.04em] text-stone-950 sm:text-4xl"
-                >
-                  {language === 'bn' ? 'স্বচ্ছ খসড়া ভাড়া হিসাব।' : 'Indicative Stage-Based Fares.'}
-                </h2>
-                <p className="mt-4 text-sm leading-7 text-stone-600">
-                  {language === 'bn'
-                    ? 'ক্যালকুলেটরে দেখানো অঙ্কগুলো স্টেজভিত্তিক নির্দেশক ভাড়া (সর্বনিম্ন ৳১৫ থেকে টার্মিনাল ৳৬৫)। অনুমোদিত ভাড়া কাউন্টারে নিশ্চিত করা আবশ্যক।'
-                    : 'Calculated from official corridor stage steps. Indicative range spans ৳15 minimum to ৳65 terminal-to-terminal.'}
-                </p>
-              </div>
-
-              {/* Wayfinding Tariff Matrix Snippet */}
-              <div className="border border-stone-200 bg-white p-5 font-mono text-xs">
-                <div className="border-b border-stone-200 pb-3 font-bold uppercase tracking-wider text-stone-400">
-                  STAGE FARE MATRIX SUMMARY
-                </div>
-                <div className="divide-y divide-stone-100 pt-2 text-stone-700">
-                  <div className="flex justify-between py-2">
-                    <span>1 STAGE (LOCAL JUMP)</span>
-                    <strong className="text-[#C92232]">৳15</strong>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span>BAHADDARHAT ⇄ EPZ (9 STAGES)</span>
-                    <strong className="text-[#C92232]">৳55</strong>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span>TERMINAL-TO-TERMINAL (11 STAGES)</span>
-                    <strong className="text-[#C92232]">৳65</strong>
-                  </div>
-                </div>
-              </div>
-
-              <Link
-                href="/fares"
-                className="inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] hover:text-[#A91D2A] transition-colors"
-              >
-                <span>{language === 'bn' ? 'সম্পূর্ণ স্টেজ ম্যাট্রিক্স দেখুন' : 'View full stage matrix'}</span>
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <FareCalculatorCard />
+        {/* SECTION 06: Transparent Fare Calculator Card */}
+        <section className="space-y-6">
+          <div>
+            <span className="text-xs font-black text-[#C92232] uppercase tracking-wider">
+              {language === 'bn' ? 'ভাড়া পরিমাপক' : 'Tariff & Stage Matrix'}
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#272524] mt-1">
+              {language === 'bn' ? 'স্বচ্ছ নির্দেশক খসড়া ভাড়া' : 'Indicative Route Tariffs'}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              {language === 'bn'
+                ? 'কাপ্তাই রাস্তার মাথা থেকে কাঠগড় পর্যন্ত বিআরটিএ নির্দেশিকা অনুযায়ী স্টেজভিত্তিক খসড়া ভাড়া হিসাব করুন।'
+                : 'Calculate stage-based indicative fares according to approved guidelines across the corridor.'}
+            </p>
           </div>
+
+          <FareCalculatorCard />
         </section>
 
-        {/* 7. Asymmetrical Editorial Transit Manifesto (Anti-Template: NO repetitive 3-box cards!) */}
-        <section aria-labelledby="charter-heading" className="border-t border-stone-300 pt-16">
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-            <div>
-              <div className="mb-3 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#C92232]">
-                <span className="h-px w-8 bg-[#C92232]" />
-                <span>TRANSIT PRINCIPLES · CHARTER</span>
-              </div>
-              <h2
-                id="charter-heading"
-                className="text-3xl font-black leading-[1.08] tracking-[-0.04em] text-stone-950 sm:text-4xl"
-              >
-                {language === 'bn'
-                  ? 'তথ্যের সততা ও নির্ভরযোগ্য যাত্রীসেবা।'
-                  : 'Operational Integrity Over Embellishment.'}
-              </h2>
-              <p className="mt-5 text-sm leading-7 text-stone-600">
-                {language === 'bn'
-                  ? 'আমরা যাত্রীদের সাথে স্বচ্ছ তথ্যে বিশ্বাসী। বাস্তব রুট, সঠিক খসড়া হিসাব এবং ফিজিক্যাল কাউন্টারের জবাবদিহিতাই আমাদের মূল চালিকাশক্তি।'
-                  : 'We prioritize verifiable data, honest draft disclosures, and physical counter accountability above marketing promises.'}
-              </p>
-            </div>
+        {/* SECTION 07: Passenger Trust Commitments */}
+        <section className="space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="text-xs font-black text-[#C92232] uppercase tracking-wider">
+              {language === 'bn' ? 'আমাদের অঙ্গীকার' : 'Operational Charter'}
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#272524]">
+              {language === 'bn' ? 'যাত্রী নিরাপত্তা ও স্বচ্ছতার নিশ্চয়তা' : 'Trust, Safety & Transparency'}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              {language === 'bn'
+                ? 'কোনো ভুয়া তথ্য নয়—প্রকৃত উপাত্ত ও নিয়মভিত্তিক পরিচালনার মাধ্যমে বিশ্বস্ত গণপরিবহন।'
+                : 'Zero fabrication policy. Accurate telemetry and respectful transit service.'}
+            </p>
+          </div>
 
-            {/* Asymmetrical Horizontal Charter Ledger */}
-            <div className="divide-y divide-stone-200 border-y border-stone-300">
-              {operatingPrinciples.map((principle) => (
-                <div key={principle.index} className="grid grid-cols-1 gap-3 py-6 sm:grid-cols-[70px_1fr] sm:gap-6">
-                  <span className="font-mono text-xl font-black text-[#C92232]">
-                    {principle.index}
-                  </span>
-                  <div>
-                    <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-stone-400">
-                      {principle.tag}
-                    </span>
-                    <h3 className="mt-1 text-base font-extrabold text-stone-950 sm:text-lg">
-                      {language === 'bn' ? principle.titleBn : principle.titleEn}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {trustCommitments.map((tc, idx) => {
+              const Icon = tc.icon;
+              return (
+                <div
+                  key={idx}
+                  className="bg-white rounded-3xl p-6 border border-[#E5E0D8] shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="w-11 h-11 rounded-2xl bg-[#F2E4E2] text-[#C92232] flex items-center justify-center shadow-xs">
+                      <Icon className="w-5 h-5 stroke-[2.2]" />
+                    </div>
+                    <h3 className="font-extrabold text-[#272524] text-base">
+                      {language === 'bn' ? tc.titleBn : tc.titleEn}
                     </h3>
-                    <p className="mt-2 text-xs leading-6 text-stone-600 sm:text-sm">
-                      {language === 'bn' ? principle.descBn : principle.descEn}
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      {language === 'bn' ? tc.descBn : tc.descEn}
                     </p>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        {/* 8. Open Passenger Advisory & Help Ledger (No boxed accordion cards!) */}
-        <section aria-labelledby="faq-heading" className="border-t border-stone-300 pt-16">
-          <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
-            <div>
-              <div className="mb-3 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#C92232]">
-                <span className="h-px w-8 bg-[#C92232]" />
-                <span>COMMUTER ADVISORY · FAQ</span>
-              </div>
-              <h2
-                id="faq-heading"
-                className="text-3xl font-black tracking-[-0.04em] text-stone-950 sm:text-4xl"
-              >
-                {language === 'bn' ? 'যাত্রী সহায়তা ও নির্দেশিকা।' : 'Passenger Advisory & Guide.'}
-              </h2>
-              <p className="mt-4 text-sm leading-7 text-stone-600">
-                {language === 'bn'
-                  ? 'দৈনন্দিন চলাচল সংক্রান্ত সাধারণ প্রশ্নাবলি ও স্পষ্ট উত্তর।'
-                  : 'Clear answers to essential everyday transit questions.'}
-              </p>
-              <Link
-                href="/contact"
-                className="mt-6 inline-flex items-center gap-2 text-xs font-extrabold text-[#C92232] hover:text-[#A91D2A] transition-colors"
-              >
-                <span>{language === 'bn' ? 'সরাসরি যোগাযোগ করুন' : 'Contact helpline team'}</span>
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            {/* Open Swiss Q&A Rows (Clean, airy, zero SaaS box cards!) */}
-            <div className="divide-y divide-stone-200 border-y border-stone-300">
-              {faqs.map((faq) => (
-                <article key={faq.num} className="py-6 sm:py-8">
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-mono text-xs font-bold text-[#C92232]">
-                      {faq.num}
-                    </span>
-                    <div className="min-w-0">
-                      <h3 className="text-base font-extrabold text-stone-950 sm:text-lg">
-                        {language === 'bn' ? faq.qBn : faq.qEn}
-                      </h3>
-                      <p className="mt-3 text-xs leading-7 text-stone-600 sm:text-sm">
-                        {language === 'bn' ? faq.aBn : faq.aEn}
-                      </p>
-                    </div>
+                  <div className="pt-3 border-t border-slate-100 flex items-center gap-1 text-[11px] font-bold text-[#49665A]">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>{language === 'bn' ? 'যাচাইকৃত মানদণ্ড' : 'Verified Standard'}</span>
                   </div>
-                </article>
-              ))}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </section>
 
-        {/* 9. Bold Swiss Transport Helpline & Action Ending */}
-        <section className="relative isolate overflow-hidden bg-[#C92232] p-8 text-white sm:p-12 lg:p-16">
+        {/* SECTION 08: Passenger FAQ Accordion */}
+        <section className="space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <div className="inline-flex items-center gap-1.5 text-xs font-black text-[#C92232] uppercase tracking-wider">
+              <HelpCircle className="w-4 h-4" />
+              <span>{language === 'bn' ? 'সাধারণ জিজ্ঞাসা' : 'Commuter Inquiries'}</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#272524]">
+              {language === 'bn' ? 'সচরাচর জিজ্ঞাসিত প্রশ্নাবলী' : 'Frequently Asked Questions'}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              {language === 'bn'
+                ? 'মেট্রো প্রভাতী সম্পর্কিত সাধারণ তথ্য, রুট ও যাত্রীসেবা বিষয়ক প্রশ্নোত্তর।'
+                : 'Common answers regarding corridor schedules, fare rules, and reservation holds.'}
+            </p>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-3">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div
+                  key={idx}
+                  className="bg-white rounded-2xl border border-[#E5E0D8] shadow-sm overflow-hidden transition-all duration-200"
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggleFaq(idx)}
+                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-extrabold text-sm sm:text-base text-[#272524] hover:text-[#C92232] transition-colors"
+                  >
+                    <span>{language === 'bn' ? faq.qBn : faq.qEn}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180 text-[#C92232]' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                      {language === 'bn' ? faq.aBn : faq.aEn}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* SECTION 09: Final Booking & Helpline Conversion Banner */}
+        <section className="bg-[#272524] rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden border border-[#E5E0D8]/20">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-32 -bottom-32 h-[360px] w-[360px] rounded-full bg-white/10 blur-[80px] animate-ambient-drift"
+            className="pointer-events-none absolute -right-24 -bottom-24 w-96 h-96 rounded-full bg-[#C92232]/30 blur-3xl"
           />
 
-          <div className="relative z-10 flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
-            <div className="max-w-2xl">
-              <div className="mb-3 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-white/70">
-                <span className="h-px w-8 bg-white/70" />
-                <span>DIRECT PASSENGER HOTLINE</span>
-              </div>
-              <h2 className="text-3xl font-black leading-[1.08] tracking-[-0.035em] sm:text-4xl">
-                {language === 'bn' ? 'যাত্রা সম্পর্কে যেকোনো প্রশ্ন?' : 'Direct Transit Assistance'}
-              </h2>
-              <p className="mt-3 text-sm leading-7 text-white/85">
-                {language === 'bn'
-                  ? 'ভাড়া, রুট বা নিকটস্থ কাউন্টারের তথ্য জানতে আমাদের প্রকাশিত হেল্পলাইনে কল করুন অথবা সরাসরি WhatsApp-এ বার্তা তৈরি করুন।'
-                  : 'Contact our published helpline directly or open a prepared message in WhatsApp for immediate routing guidance.'}
-              </p>
+          <div className="relative z-10 max-w-2xl space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-[#F2E4E2] border border-white/15">
+              <span className="w-2 h-2 rounded-full bg-[#49665A] bg-emerald-400 animate-pulse" />
+              <span>{language === 'bn' ? 'চট্টগ্রাম আর্টেরিয়াল ট্রানজিট' : 'Chattogram Arterial Transit'}</span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                href={'tel:' + INITIAL_HELPLINE.primaryNumber}
-                className="inline-flex min-h-12 items-center gap-3 bg-white px-6 py-3 text-sm font-extrabold text-[#A91D2A] transition-all duration-200 hover:bg-[#FFF4F4] active:scale-[0.99]"
-              >
-                <Phone className="h-4 w-4" />
-                <span>{language === 'bn' ? 'কল করুন' : 'Call'} {INITIAL_HELPLINE.primaryNumber}</span>
-              </a>
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
+              {language === 'bn' ? (
+                <>আজই আপনার আসন বুক করুন অথবা সরাসরি হেল্পলাইনে যোগাযোগ করুন</>
+              ) : (
+                <>Book Your Journey Today or Connect with Direct Dispatch</>
+              )}
+            </h2>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {language === 'bn'
+                ? 'কাপ্তাই রাস্তার মাথা থেকে কাঠগড়—চট্টগ্রামের অন্যতম ব্যস্ত করিডোরে নির্ভরযোগ্য ও স্বাচ্ছন্দ্যময় ভ্রমণ।'
+                : 'Connecting Kaptai Rastar Matha to Katgor. Reliable, predictable commuting across Chattogram.'}
+            </p>
+
+            <div className="pt-4 flex flex-wrap items-center gap-3">
               <Link
-                href="/contact"
-                className="inline-flex min-h-12 items-center gap-2 border border-white/60 px-6 py-3 text-sm font-extrabold text-white transition-all duration-200 hover:bg-white/10 active:scale-[0.99]"
+                href="/tickets"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#C92232] hover:bg-[#A91D2A] text-white font-extrabold text-sm shadow-xl active:scale-95 transition-all"
               >
-                <span>{language === 'bn' ? 'যোগাযোগ পেজ' : 'Contact page'}</span>
-                <ArrowUpRight className="h-4 w-4" />
+                <Ticket className="w-4 h-4" />
+                <span>{language === 'bn' ? 'আসন নির্বাচন করুন' : 'Select Seat Now'}</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
+
+              <a
+                href={`tel:${INITIAL_HELPLINE.primaryNumber}`}
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 backdrop-blur-sm transition-all"
+              >
+                <Phone className="w-4 h-4 text-[#F2E4E2]" />
+                <span>{language === 'bn' ? `হেল্পলাইন: ${toBengaliDigits(INITIAL_HELPLINE.primaryNumber)}` : `Call: ${INITIAL_HELPLINE.primaryNumber}`}</span>
+              </a>
             </div>
           </div>
         </section>
