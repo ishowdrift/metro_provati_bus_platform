@@ -217,73 +217,57 @@ export default function HomePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-        {/* SECTION 03: Editorial Passenger Services Index (Swiss Numbered Directory) */}
+        {/* SECTION 02: Passenger Services & Portals (Tactile Rounded Cards) */}
         <section className="space-y-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#E5E0D8]">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 font-mono text-xs font-bold text-[#C92232] tracking-wider uppercase">
-                <span>03</span>
-                <span className="text-[#E5E0D8]">/</span>
-                <span>SERVICES DIRECTORY</span>
+              <div className="inline-flex items-center gap-2 text-xs font-black text-[#C92232] uppercase tracking-wider mb-1">
+                <Sparkles className="w-4 h-4" />
+                <span>{language === 'bn' ? 'যাত্রী সেবা ও ডিরেক্টরি' : 'Passenger Services'}</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#272524] tracking-tight mt-1 font-display">
-                {language === 'bn' ? 'যাত্রী সেবা ও ডিজিটাল ডিরেক্টরি' : 'Passenger Services Directory'}
+              <h2 className="text-2xl sm:text-3xl font-black text-[#272524] tracking-tight">
+                {language === 'bn' ? 'আপনার প্রতিদিনের যাত্রায় যা যা প্রয়োজন' : 'Everything You Need for Your Commute'}
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-slate-500 max-w-md">
               {language === 'bn'
-                ? 'চট্টগ্রামের কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরে দ্রুত ও নির্ভরযোগ্য যাত্রীসেবা।'
-                : 'Essential transit services connecting Kaptai Rastar Matha to Katgor across Chattogram.'}
+                ? 'চট্টগ্রাম শহরের কাপ্তাই রাস্তার মাথা থেকে কাঠগড় করিডোরে দ্রুত ও নির্ভরযোগ্য যাত্রীসেবা।'
+                : 'Reliable transit services connecting Kaptai Rastar Matha to Katgor across Chattogram.'}
             </p>
           </div>
 
-          {/* Numbered Service Rows */}
-          <div className="bg-white rounded-3xl border border-[#E5E0D8] divide-y divide-[#E5E0D8] shadow-sm overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((svc, idx) => {
               const Icon = svc.icon;
-              const indexStr = `0${idx + 1}`;
               return (
                 <Link
                   key={idx}
                   href={svc.href}
-                  className="group flex flex-col md:flex-row md:items-center justify-between p-5 sm:p-6 hover:bg-[#FAF8F5] transition-colors duration-150 gap-4"
+                  className="group bg-white rounded-3xl p-6 sm:p-7 border border-[#E5E0D8] shadow-card hover:shadow-card-hover hover:border-[#C92232] transition-all duration-200 flex flex-col justify-between"
                 >
-                  <div className="flex items-start sm:items-center gap-4 sm:gap-6 min-w-0">
-                    {/* Monospace Index + Transit Code */}
-                    <div className="flex flex-col items-start font-mono text-xs text-slate-400 group-hover:text-[#C92232] transition-colors flex-shrink-0">
-                      <span className="font-black text-sm text-[#272524] group-hover:text-[#C92232]">{indexStr}</span>
-                      <span className="text-[10px] uppercase font-bold tracking-widest">{svc.code}</span>
-                    </div>
-
-                    {/* Icon */}
-                    <div className="w-11 h-11 rounded-2xl bg-[#F1EEE8] text-[#272524] flex items-center justify-center flex-shrink-0 group-hover:bg-[#C92232] group-hover:text-white transition-all duration-200 shadow-2xs">
-                      <Icon className="w-5 h-5 stroke-[2.2]" />
-                    </div>
-
-                    {/* Title & Desc */}
-                    <div className="space-y-1 min-w-0">
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <h3 className="font-extrabold text-[#272524] text-base sm:text-lg group-hover:text-[#C92232] transition-colors truncate">
-                          {language === 'bn' ? svc.titleBn : svc.titleEn}
-                        </h3>
-                        <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-[#F2E4E2] text-[#C92232]">
-                          {language === 'bn' ? svc.badgeBn : svc.badgeEn}
-                        </span>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="w-12 h-12 rounded-2xl bg-[#F2E4E2] text-[#C92232] flex items-center justify-center group-hover:scale-110 group-hover:bg-[#C92232] group-hover:text-white transition-all duration-200 shadow-xs">
+                        <Icon className="w-6 h-6 stroke-[2.2]" />
                       </div>
-                      <p className="text-xs text-slate-500 line-clamp-1 sm:line-clamp-none max-w-2xl leading-relaxed">
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-[#F1EEE8] text-[#272524] group-hover:bg-[#F2E4E2] group-hover:text-[#C92232] transition-colors">
+                        {language === 'bn' ? svc.badgeBn : svc.badgeEn}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-extrabold text-[#272524] text-lg group-hover:text-[#C92232] transition-colors">
+                        {language === 'bn' ? svc.titleBn : svc.titleEn}
+                      </h3>
+                      <p className="text-xs text-slate-500 leading-relaxed mt-2">
                         {language === 'bn' ? svc.descBn : svc.descEn}
                       </p>
                     </div>
                   </div>
 
-                  {/* Directional Wayfinding Arrow */}
-                  <div className="flex items-center gap-2.5 text-xs font-bold text-slate-400 group-hover:text-[#C92232] transition-colors flex-shrink-0 self-end md:self-auto">
-                    <span className="hidden sm:inline font-mono uppercase text-[11px] tracking-wider">
-                      {language === 'bn' ? 'ব্যবহার করুন' : 'EXPLORE'}
-                    </span>
-                    <div className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center group-hover:border-[#C92232] group-hover:bg-[#C92232] group-hover:text-white transition-all shadow-2xs">
-                      <ArrowRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
-                    </div>
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#C92232] group-hover:text-[#A91D2A]">
+                    <span>{language === 'bn' ? 'ব্যবহার করুন' : 'Explore Service'}</span>
+                    <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform" />
                   </div>
                 </Link>
               );
