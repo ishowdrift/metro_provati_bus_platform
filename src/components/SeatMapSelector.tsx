@@ -209,7 +209,7 @@ export const SeatMapSelector: React.FC<SeatMapSelectorProps> = ({
   const rearSeats = seats.filter((s) => s.side === 'rear' || s.row === 9);
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-red-100 p-6 md:p-8">
+    <div className="bg-white rounded-3xl shadow-xl border border-[#E5E0D8] p-6 md:p-8">
       {/* Header & Status */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-100 gap-4">
         <div>
